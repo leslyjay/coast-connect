@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coast Connect | Home</title>
+  <link rel="icon" href="images/coast_logo.png" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS (Animate On Scroll) -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+
+  <!-- Swiper.js for carousels -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+  <!-- Leaflet for interactive maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <!-- Custom Scrollbar Styling -->
+  <style>
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #4f46e5;
+      border-radius: 20px;
+      border: 3px solid transparent;
+      background-clip: content-box;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white shadow-md">
+    <nav class="container mx-auto flex items-center justify-between py-4 px-6">
+      <a href="index.html" class="flex items-center space-x-2">
+        <img src="images/coast_logo.png" alt="Code MORE Logo" class="w-10 h-10" />
+        <span class="font-bold text-2xl text-indigo-600">Coast Connect</span>
+      </a>
+      <ul class="hidden md:flex space-x-8 text-lg font-medium">
+        <li><a href="index.html" class="hover:text-indigo-600 transition">Home</a></li>
+        <li><a href="listings.html" class="hover:text-indigo-600 transition">Listings</a></li>
+        <li><a href="categories.html" class="hover:text-indigo-600 transition">Categories</a></li>
+        <li><a href="about.html" class="hover:text-indigo-600 transition">About</a></li>
+        <li><a href="contact.html" class="hover:text-indigo-600 transition">Contact</a></li>
+      </ul>
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden focus:outline-none focus:ring-2 focus:ring-indigo-600"
+        aria-label="Open mobile menu"
+      >
+        <svg
+          class="w-7 h-7 text-indigo-600"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+    </nav>
+    <!-- Mobile menu -->
+    <div
+      id="mobile-menu"
+      class="hidden md:hidden bg-white shadow-md"
+    >
+      <ul class="flex flex-col space-y-3 py-4 px-6 text-lg font-medium">
+        <li><a href="index.html" class="hover:text-indigo-600 transition">Home</a></li>
+        <li><a href="listings.html" class="hover:text-indigo-600 transition">Listings</a></li>
+        <li><a href="categories.html" class="hover:text-indigo-600 transition">Categories</a></li>
+        <li><a href="about.html" class="hover:text-indigo-600 transition">About</a></li>
+        <li><a href="contact.html" class="hover:text-indigo-600 transition">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+  
+  <!-- 🌅 Hero Section -->
+  <section class="relative h-screen text-white flex items-center justify-center px-6 overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0 bg-cover bg-center z-0 brightness-75" style="background-image: url('images/hero_sunset.jpg');"></div>
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-60 z-0"></div>
+  
+    <!-- Hero Content -->
+    <div class="relative z-10 text-center max-w-3xl">
+      <!-- Logo -->
+      <img src="images/coast_logo.png" alt="Coast Connect" class="w-28 mx-auto mb-6 animate-bounce drop-shadow-xl" />
+  
+      <!-- Headline -->
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-4 overflow-hidden">
+        <span id="typewriter-text" class="inline-block animate-slide-in">Connect. Serve. Uplift the Coast.</span>
+      </h1>      
+  
+      <!-- Subheadline -->
+      <p class="text-lg md:text-2xl text-gray-200">
+        From Watamu to Lamu, we unite the people with opportunity and connection.
+      </p>
+  
+      <!-- CTA Button -->
+      <a href="add-listing.html" class="mt-8 inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-full shadow-xl hover:scale-105 transition">
+        🚀 List Your Service
+      </a>
+    </div>
+  </section>
+  
+
+  <!-- Regions + Search Section -->
+  <section class="container mx-auto px-6 py-16">
+    <h2
+      class="text-3xl font-bold text-center mb-12"
+      data-aos="fade-up"
+    >
+      Explore Our Coastal Regions
+    </h2>
+
+    <!-- Regions Grid -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 mb-16"
+      data-aos="fade-up"
+      data-aos-delay="200"
+    >
+      <!-- Region 1 -->
+      <div
+        class="rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition cursor-pointer"
+        tabindex="0"
+        role="button"
+        aria-pressed="false"
+      >
+        <img
+          src="images/regions/kwale.webp"
+          alt="Kwale Region"
+          class="w-full h-48 object-cover"
+          loading="lazy"
+        />
+        <div class="p-5 bg-white">
+          <h3 class="text-xl font-semibold mb-2">Kwale</h3>
+          <p class="text-gray-600">
+            Discover the serene beaches and vibrant culture of Kwale County.
+          </p>
+        </div>
+      </div>
+
+      <!-- Region 2 -->
+      <div
+        class="rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition cursor-pointer"
+        tabindex="0"
+        role="button"
+        aria-pressed="false"
+      >
+        <img
+          src="images/regions/mombasa.webp"
+          alt="Mombasa Region"
+          class="w-full h-48 object-cover"
+          loading="lazy"
+        />
+        <div class="p-5 bg-white">
+          <h3 class="text-xl font-semibold mb-2">Mombasa</h3>
+          <p class="text-gray-600">
+            The historical port city with beautiful beaches and nightlife.
+          </p>
+        </div>
+      </div>
+
+      <!-- Region 3 -->
+      <div
+        class="rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition cursor-pointer"
+        tabindex="0"
+        role="button"
+        aria-pressed="false"
+      >
+        <img
+          src="images/regions/kilifi.webp"
+          alt="Kilifi Region"
+          class="w-full h-48 object-cover"
+          loading="lazy"
+        />
+        <div class="p-5 bg-white">
+          <h3 class="text-xl font-semibold mb-2">Kilifi</h3>
+          <p class="text-gray-600">
+            Experience the laid-back vibe and beautiful coastline of Kilifi.
+          </p>
+        </div>
+      </div>
+
+      <!-- Region 4 -->
+      <div
+        class="rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition cursor-pointer"
+        tabindex="0"
+        role="button"
+        aria-pressed="false"
+      >
+        <img
+          src="images/regions/lamu.webp"
+          alt="Lamu Region"
+          class="w-full h-48 object-cover"
+          loading="lazy"
+        />
+        <div class="p-5 bg-white">
+          <h3 class="text-xl font-semibold mb-2">Lamu</h3>
+          <p class="text-gray-600">
+            Step back in time in the historic Swahili town of Lamu Island.
+          </p>
+        </div>
+      </div>
+
+      <!-- Region 5 -->
+      <div
+        class="rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition cursor-pointer"
+        tabindex="0"
+        role="button"
+        aria-pressed="false"
+      >
+        <img
+          src="images/regions/tana-river.webp"
+          alt="Tana River Region"
+          class="w-full h-48 object-cover"
+          loading="lazy"
+        />
+        <div class="p-5 bg-white">
+          <h3 class="text-xl font-semibold mb-2">Tana River</h3>
+          <p class="text-gray-600">
+            Discover nature reserves and wildlife along the Tana River.
+          </p>
+        </div>
+      </div>
+
+      <!-- Region 6 -->
+      <div
+        class="rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition cursor-pointer"
+        tabindex="0"
+        role="button"
+        aria-pressed="false"
+      >
+        <img
+          src="images/regions/taita-taveta.webp"
+          alt="Taita Taveta Region"
+          class="w-full h-48 object-cover"
+          loading="lazy"
+        />
+        <div class="p-5 bg-white">
+          <h3 class="text-xl font-semibold mb-2">Taita Taveta</h3>
+          <p class="text-gray-600">
+            Explore mountains, wildlife parks, and rich culture in Taita Taveta.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Form -->
+    <div
+      id="search"
+      class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8"
+      data-aos="fade-up"
+      data-aos-delay="400"
+    >
+      <form action="listings.html" method="GET" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label for="region" class="block text-sm font-semibold mb-2"
+              >Region</label
+            >
+            <select
+              id="region"
+              name="region"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="" selected>All Regions</option>
+              <option value="kwale">Kwale</option>
+              <option value="mombasa">Mombasa</option>
+              <option value="kilifi">Kilifi</option>
+              <option value="lamu">Lamu</option>
+              <option value="tana-river">Tana River</option>
+              <option value="taita-taveta">Taita Taveta</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="category" class="block text-sm font-semibold mb-2"
+              >Category</label
+            >
+            <select
+              id="category"
+              name="category"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">All Categories</option>
+              <option value="accomodation">Accommodation</option>
+              <option value="food-dining">Food & Dining</option>
+              <option value="transport-travel">Transport & Travel</option>
+              <option value="jobs-gigs">Jobs & Gigs</option>
+              <option value="shopping">Shopping</option>
+              <option value="health-wellness">Health & Wellness</option>
+              <option value="beauty-grooming">Beauty & Grooming</option>
+              <option value="financial-services">Financial Services</option>
+              <option value="construction-realestate">Construction & Real Estate</option>
+              <option value="education-learning">Education & Learning</option>
+              <option value="tech-digitalservices">Tech & Digital Services</option>
+              <option value="wifi-localdigitalservices">Wifi & Local Digital Services</option>
+              <option value="entertainment-nightlife">Entertainment & Nightlife</option>
+              <option value="tourism-attractions">Tourism & Attractions</option>
+              <option value="local-services">Local Services</option>
+              <option value="faith-religion">Faith & Religion</option>
+              <option value="emergency-support">Emergency & Support</option>
+              <option value="community-boards">Community Boards</option>
+              <option value="farmers-agribusiness">Farmers & Agribusiness</option>
+              <option value="pet-animalservices">Pet & Animal Services</option>
+              <option value="repair-maintenance">Repair & Maintenance</option>
+              <option value="delivery-errands">Delivery & Errands</option>
+              <option value="professional-services">Professional Services</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="search-query" class="block text-sm font-semibold mb-2"
+              >Search</label
+            >
+            <input
+              type="text"
+              id="search-query"
+              name="q"
+              placeholder="Keyword or listing name"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button
+            type="submit"
+            class="mt-6 inline-block bg-indigo-600 text-white font-semibold px-10 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition"
+          >
+            Search
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+    <!-- Listings Section -->
+  <section class="bg-gray-100 py-16 px-6">
+    <div class="container mx-auto max-w-7xl">
+      <h2 class="text-3xl font-bold text-center mb-12" data-aos="fade-up">
+        Explore Coastal Listings
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10" data-aos="fade-up" data-aos-delay="200">
+        
+        <!-- 1. Nyali Luxury Apartments -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300" role="article" aria-label="Nyali Luxury Apartments">
+          <img src="images/listings/apartment.webp" alt="Nyali Luxury Apartments" class="w-full h-48 object-cover" loading="lazy" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold mb-1 text-gray-800">Nyali Luxury Apartments</h3>
+            <p class="text-gray-600 text-sm mb-2">Modern 3-bedroom units with sea view and fiber Wi-Fi.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Accommodation > Apartments</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Mombasa</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★★☆</span><span class="text-sm text-gray-600">(123 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=1" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 2. Mama Amina’s Kitchen -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300" role="article" aria-label="Mama Amina’s Kitchen">
+          <img src="images/listings/swahili.webp" alt="Mama Amina’s Kitchen" class="w-full h-48 object-cover" loading="lazy" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold mb-1 text-gray-800">Mama Amina’s Kitchen</h3>
+            <p class="text-gray-600 text-sm mb-2">Authentic Swahili dishes and homemade tamarind juice.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Food & Dining > Local Kitchens</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Kilifi</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★★★</span><span class="text-sm text-gray-600">(210 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=2" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 3. Lamu Sunset Cruise -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300" role="article" aria-label="Lamu Sunset Cruise">
+          <img src="images/listings/dhow.webp" alt="Lamu Sunset Cruise" class="w-full h-48 object-cover" loading="lazy" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold mb-1 text-gray-800">Lamu Sunset Cruise</h3>
+            <p class="text-gray-600 text-sm mb-2">Evening dhow rides with grilled seafood and music.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Tourism & Attractions > Boat Tours</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Lamu</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★★☆</span><span class="text-sm text-gray-600">(88 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=3" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 4. Kwale Wellness Center -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          <img src="images/listings/clinic.webp" alt="Kwale Wellness Center" class="w-full h-48 object-cover" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-1">Kwale Wellness Center</h3>
+            <p class="text-gray-600 text-sm mb-2">Outpatient clinic with labs and counseling support.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Health & Wellness > Clinics</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Kwale</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★☆☆</span><span class="text-sm text-gray-600">(64 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=4" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 5. Wundanyi Cyber Café -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          <img src="images/listings/cyber.webp" alt="Wundanyi Cyber Café" class="w-full h-48 object-cover" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-1">Wundanyi Cyber Café</h3>
+            <p class="text-gray-600 text-sm mb-2">Printing, browsing and e-citizen access available.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Tech & Digital Services > Cyber Cafes</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Taita Taveta</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★☆☆</span><span class="text-sm text-gray-600">(53 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=5" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 6. Hola ICT Academy -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          <img src="images/listings/computer.webp" alt="Hola ICT Academy" class="w-full h-48 object-cover" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-1">Hola ICT Academy</h3>
+            <p class="text-gray-600 text-sm mb-2">Courses in digital skills and coding for beginners.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Education & Learning > ICT Training</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Tana River</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★★☆</span><span class="text-sm text-gray-600">(72 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=6" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 7. Mvita Hair Lounge -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          <img src="images/listings/saloon.webp" alt="Mvita Hair Lounge" class="w-full h-48 object-cover" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-1">Mvita Hair Lounge</h3>
+            <p class="text-gray-600 text-sm mb-2">Professional grooming, nails and hair styling.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Beauty & Grooming > Salons</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Mombasa</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★★★</span><span class="text-sm text-gray-600">(145 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=7" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 8. Kilifi SACCO Services -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          <img src="images/listings/sacco.webp" alt="Kilifi SACCO Services" class="w-full h-48 object-cover" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-1">Kilifi SACCO Services</h3>
+            <p class="text-gray-600 text-sm mb-2">Loans, savings & investment support for locals.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Financial Services > SACCOs</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Kilifi</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★★☆</span><span class="text-sm text-gray-600">(88 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=8" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 9. Kwale Builders Hub -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          <img src="images/listings/builders.webp" alt="Kwale Builders Hub" class="w-full h-48 object-cover" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-1">Kwale Builders Hub</h3>
+            <p class="text-gray-600 text-sm mb-2">Tools, fundi referrals & site support available.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Construction & Real Estate > Contractors</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Kwale</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★☆☆</span><span class="text-sm text-gray-600">(34 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=9" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 10. Taita Agro Market -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          <img src="images/listings/market.webp" alt="Taita Agro Market" class="w-full h-48 object-cover" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-1">Taita Agro Market</h3>
+            <p class="text-gray-600 text-sm mb-2">Livestock, seeds & agro tools for small-scale farmers.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Farmers & Agribusiness > Livestock</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Taita Taveta</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★★☆</span><span class="text-sm text-gray-600">(49 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=10" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 11. Lamu Pet Care -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          <img src="images/listings/pet.webp" alt="Lamu Pet Care" class="w-full h-48 object-cover" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-1">Lamu Pet Care</h3>
+            <p class="text-gray-600 text-sm mb-2">Vet visits, grooming and pet adoption support.</p>
+            <p class="text-indi go-600 font-semibold text-sm mb-1">Pet & Animal Services > Vets</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Lamu</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★★★</span><span class="text-sm text-gray-600">(91 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=11" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+
+        <!-- 12. Nyali Express Delivery -->
+        <article class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          <img src="images/listings/delivery1.webp" alt="Nyali Express Delivery" class="w-full h-48 object-cover" />
+          <div class="p-5">
+            <h3 class="text-xl font-bold text-gray-800 mb-1">Nyali Express Delivery</h3>
+            <p class="text-gray-600 text-sm mb-2">Boda riders for same-day delivery across Mombasa.</p>
+            <p class="text-indigo-600 font-semibold text-sm mb-1">Delivery & Errands > Boda Delivery</p>
+            <p class="text-gray-500 text-xs mb-2">Region: Mombasa</p>
+            <div class="flex items-center space-x-1 mb-3">
+              <span class="text-yellow-400">★★★★☆</span><span class="text-sm text-gray-600">(76 reviews)</span>
+            </div>
+            <a href="listing_detail.html?index=12" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded px-4 py-2">View Listing</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 🌍 Categories & Subcategories Section with Descriptions -->
+  <section class="bg-white py-20 px-6 border-t border-gray-200">
+    <div class="container mx-auto max-w-7xl">
+      <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-16 tracking-tight" data-aos="fade-down" data-aos-duration="800">
+        🌍 Explore All Service Categories
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+
+        <!-- Accommodation -->
+        <div class="category-card" data-aos-delay="100">
+          <img src="images/categories/accommodation.webp" alt="Accommodation">
+          <div class="card-body">
+            <h3>Accommodation</h3>
+            <p class="text-sm text-gray-600 mb-2">Find a place to stay across the coast, from budget-friendly hostels to luxury beach resorts.</p>
+            <ul>
+              <li><strong>Hotels:</strong> Standard or luxury stay options</li>
+              <li><strong>Guest Houses:</strong> Homely accommodations often run by locals</li>
+              <li><strong>B&Bs:</strong> Bed & Breakfasts for overnight guests</li>
+              <li><strong>Lodges:</strong> Often nature-surrounded and tourism-focused</li>
+              <li><strong>Apartments:</strong> Short or long-stay furnished rentals</li>
+              <li><strong>Hostels:</strong> Affordable dorm-style stays, ideal for backpackers</li>
+              <li><strong>Camps & Lodges:</strong> Outdoor camps and tourist lodges</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Food & Dining -->
+        <div class="category-card" data-aos-delay="150">
+          <img src="images/categories/food_dining.webp" alt="Food & Dining">
+          <div class="card-body">
+            <h3>Food & Dining</h3>
+            <p class="text-sm text-gray-600 mb-2">Explore diverse dining spots including traditional Swahili cuisines and modern eateries.</p>
+            <ul>
+              <li><strong>Restaurants:</strong> Dine-in experiences with varied cuisines</li>
+              <li><strong>Local Kitchens:</strong> Authentic local dishes at affordable prices</li>
+              <li><strong>Fast Food:</strong> Quick service meals, local or global brands</li>
+              <li><strong>Cafés & Coffee Shops:</strong> Chill spots for coffee, snacks, and remote work</li>
+              <li><strong>Food Delivery:</strong> Services offering meals delivered to your door</li>
+              <li><strong>Juice & Smoothie Bars:</strong> Healthy refreshment stops</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Transport & Travel -->
+        <div class="category-card" data-aos-delay="200">
+          <img src="images/categories/transport_travel.webp" alt="Transport & Travel">
+          <div class="card-body">
+            <h3>Transport & Travel</h3>
+            <p class="text-sm text-gray-600 mb-2">Move around easily with local and tourist-friendly transport options.</p>
+            <ul>
+              <li><strong>Car Hire:</strong> Rent vehicles for self-drive or chauffeur</li>
+              <li><strong>Tuk Tuks:</strong> Affordable 3-wheel rides within town</li>
+              <li><strong>Boda Bodas:</strong> Motorbike transport for short quick trips</li>
+              <li><strong>Tour Operators:</strong> Guided trip planners for tourists</li>
+              <li><strong>Airport Shuttles:</strong> Transfers to and from the airport</li>
+              <li><strong>Boat Services:</strong> Local sea transport for island hops</li>
+              <li><strong>Boat Tours:</strong> Leisure cruises and excursions</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Jobs & Gigs -->
+        <div class="category-card" data-aos-delay="250">
+          <img src="images/categories/jobs.webp" alt="Jobs & Gigs">
+          <div class="card-body">
+            <h3>Jobs & Gigs</h3>
+            <p class="text-sm text-gray-600 mb-2">Discover career and side hustle opportunities across the region.</p>
+            <ul>
+              <li><strong>Full Time:</strong> Salaried roles across industries</li>
+              <li><strong>Part Time:</strong> Flexible job roles</li>
+              <li><strong>Internships:</strong> Training positions for students and graduates</li>
+              <li><strong>Remote:</strong> Online job opportunities</li>
+              <li><strong>Daily Hustles:</strong> Short-term or one-day gigs</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Shopping -->
+        <div class="category-card" data-aos-delay="300">
+          <img src="images/categories/shopping.webp" alt="Shopping">
+          <div class="card-body">
+            <h3>Shopping</h3>
+            <p class="text-sm text-gray-600 mb-2">Shop from a variety of stores, boutiques, and markets.</p>
+            <ul>
+              <li><strong>Boutiques:</strong> Fashion stores for men, women, and kids</li>
+              <li><strong>Supermarkets:</strong> Full-service retail stores for groceries and household items</li>
+              <li><strong>Local Markets:</strong> Fresh produce and open-air shopping</li>
+              <li><strong>Electronics Stores:</strong> Phones, computers, and accessories</li>
+              <li><strong>Beauty & Cosmetic Shops:</strong> Makeup, skincare, and beauty products</li>
+              <li><strong>Art & Curio Shops:</strong> Souvenirs and handmade crafts</li>
+            </ul>
+          </div>
+        </div>
+
+          <!-- Health & Wellness -->
+    <div class="category-card" data-aos-delay="350">
+      <img src="images/categories/health_wellness.webp" alt="Health & Wellness">
+      <div class="card-body">
+        <h3>Health & Wellness</h3>
+        <p class="text-sm text-gray-600 mb-2">Clinics, pharmacies, hospitals, gyms, labs and mental health support.</p>
+        <ul>
+          <li><strong>Hospitals:</strong> Major medical facilities</li>
+          <li><strong>Clinics:</strong> Localized care providers</li>
+          <li><strong>Pharmacies:</strong> Medicines and consultations</li>
+          <li><strong>Therapists:</strong> Licensed mental health professionals</li>
+          <li><strong>Counselors:</strong> Guidance and emotional support</li>
+          <li><strong>Laboratories:</strong> Medical test centers</li>
+          <li><strong>Wellness Centers:</strong> Holistic and preventive health</li>
+          <li><strong>Mental Health Services:</strong> Access to psychiatric and support programs</li>
+          <li><strong>Gyms & Fitness Studios:</strong> Physical health facilities</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Beauty & Grooming -->
+    <div class="category-card" data-aos-delay="400">
+      <img src="images/categories/beauty_grooming.webp" alt="Beauty & Grooming">
+      <div class="card-body">
+        <h3>Beauty & Grooming</h3>
+        <p class="text-sm text-gray-600 mb-2">Barbers, salons, spas, massage, nails, cosmetics and more.</p>
+        <ul>
+          <li><strong>Salons:</strong> Hair and styling services</li>
+          <li><strong>Barbers:</strong> Men's grooming</li>
+          <li><strong>Spas:</strong> Relaxation and rejuvenation</li>
+          <li><strong>Massage Therapists:</strong> Body therapy services</li>
+          <li><strong>Nail Studios:</strong> Mani-pedis and nail art</li>
+          <li><strong>Cosmetic Services:</strong> Beauty enhancement treatments</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Financial Services -->
+    <div class="category-card" data-aos-delay="450">
+      <img src="images/categories/financial.webp" alt="Financial Services">
+      <div class="card-body">
+        <h3>Financial Services</h3>
+        <p class="text-sm text-gray-600 mb-2">Banks, SACCOs, MPESA, insurance, credit, Forex.</p>
+        <ul>
+          <li><strong>Banks:</strong> Financial institutions</li>
+          <li><strong>SACCOs:</strong> Member-based savings groups</li>
+          <li><strong>Forex Bureaus:</strong> Currency exchange services</li>
+          <li><strong>Insurance Agencies:</strong> Protection and risk coverage</li>
+          <li><strong>MPESA Agents:</strong> Mobile money access</li>
+          <li><strong>Loan & Credit Services:</strong> Lending institutions</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Construction & Real Estate -->
+    <div class="category-card" data-aos-delay="500">
+      <img src="images/categories/real_estate.webp" alt="Construction & Real Estate">
+      <div class="card-body">
+        <h3>Construction & Real Estate</h3>
+        <p class="text-sm text-gray-600 mb-2">Contractors, listings, plumbers, electricians, materials, land.</p>
+        <ul>
+          <li><strong>Contractors:</strong> Building experts</li>
+          <li><strong>Real Estate Agents:</strong> Property finders</li>
+          <li><strong>Interior Design:</strong> Space aesthetics</li>
+          <li><strong>Materials:</strong> Hardware & supplies</li>
+          <li><strong>Plumbers:</strong> Water systems specialists</li>
+          <li><strong>Electricians:</strong> Wiring and power solutions</li>
+          <li><strong>Land for Sale:</strong> Plot listings</li>
+          <li><strong>Properties for Rent:</strong> Homes and spaces</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Education & Learning -->
+    <div class="category-card" data-aos-delay="550">
+      <img src="images/categories/education.webp" alt="Education & Learning">
+      <div class="card-body">
+        <h3>Education & Learning</h3>
+        <p class="text-sm text-gray-600 mb-2">Schools, colleges, ICT training, tutors, driving, languages.</p>
+        <ul>
+          <li><strong>Primary Schools:</strong> Basic education</li>
+          <li><strong>Colleges & Universities:</strong> Higher education</li>
+          <li><strong>ICT Training:</strong> Computer & digital skills</li>
+          <li><strong>Tutors:</strong> Private educators</li>
+          <li><strong>Driving Schools:</strong> Licensed trainers</li>
+          <li><strong>Computer Training Centers:</strong> IT skill centers</li>
+          <li><strong>Vocational Institutions:</strong> Practical skills</li>
+          <li><strong>Language Centers:</strong> Foreign & local language learning</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tech & Digital Services -->
+    <div class="category-card" data-aos-delay="600">
+      <img src="images/categories/tech_digital.webp" alt="Tech & Digital Services">
+      <div class="card-body">
+        <h3>Tech & Digital Services</h3>
+        <p class="text-sm text-gray-600 mb-2">Developers, cyber cafes, Wi-Fi setup, repairs, freelancers.</p>
+        <ul>
+          <li><strong>Cyber Cafes:</strong> Internet access</li>
+          <li><strong>Dev Agencies:</strong> Software teams</li>
+          <li><strong>App Developers:</strong> Mobile/web solutions</li>
+          <li><strong>Laptop Repair:</strong> PC servicing</li>
+          <li><strong>Wi-Fi Setup:</strong> Home/office connectivity</li>
+          <li><strong>TV/Satellite Installers:</strong> Entertainment setup</li>
+          <li><strong>Mobile Repair:</strong> Smartphone services</li>
+          <li><strong>Freelance Tech Support:</strong> On-demand help</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- WiFi & Local Digital Services -->
+    <div class="category-card" data-aos-delay="650">
+      <img src="images/categories/wifi_digital.webp" alt="WiFi & Local Digital Services">
+      <div class="card-body">
+        <h3>WiFi & Local Digital Services</h3>
+        <p class="text-sm text-gray-600 mb-2">Free WiFi, printing, online payment, SIM registration, tech hubs.</p>
+        <ul>
+          <li><strong>Free/Public WiFi:</strong> Open access internet zones</li>
+          <li><strong>WiFi Installation:</strong> Home and office setups</li>
+          <li><strong>MPESA Help Desks:</strong> Transaction assistance points</li>
+          <li><strong>Sim Registration Support:</strong> Phone line verification</li>
+          <li><strong>Printing & Scanning:</strong> Document services</li>
+          <li><strong>Online Payment Points:</strong> Bill and service payment stations</li>
+          <li><strong>Tech Hubs & Innovation Centers:</strong> Co-working and startup support spaces</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Entertainment & Nightlife -->
+    <div class="category-card" data-aos-delay="700">
+      <img src="images/categories/entertainment_events.webp" alt="Entertainment & Nightlife">
+      <div class="card-body">
+        <h3>Entertainment & Nightlife</h3>
+        <p class="text-sm text-gray-600 mb-2">Bars, lounges, DJs, clubs, live music, photography and events.</p>
+        <ul>
+          <li><strong>Clubs & Lounges:</strong> Nightlife destinations</li>
+          <li><strong>Bars:</strong> Casual drinking spots</li>
+          <li><strong>DJs & Sound Providers:</strong> Entertainment setups</li>
+          <li><strong>Adult Venues:</strong> Age-restricted leisure</li>
+          <li><strong>Live Music:</strong> Performances and sessions</li>
+          <li><strong>Event Planners:</strong> Event logistics and design</li>
+          <li><strong>Wedding Services:</strong> Bridal and event planning</li>
+          <li><strong>Photography & Videography:</strong> Event captures</li>
+          <li><strong>Event Venues:</strong> Spaces for gatherings</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tourism & Attractions -->
+    <div class="category-card" data-aos-delay="750">
+      <img src="images/categories/tourism.webp" alt="Tourism & Attractions">
+      <div class="card-body">
+        <h3>Tourism & Attractions</h3>
+        <p class="text-sm text-gray-600 mb-2">Resorts, excursions, museums, nature parks, safaris, diving.</p>
+        <ul>
+          <li><strong>Tour Guides:</strong> Professional local experts</li>
+          <li><strong>Heritage Sites:</strong> Cultural and historical places</li>
+          <li><strong>Beach Resorts:</strong> Coastal luxury stays</li>
+          <li><strong>Nature Parks:</strong> Wildlife and conservation spots</li>
+          <li><strong>Museums & Heritage Sites:</strong> Artifacts and culture</li>
+          <li><strong>Cultural Events:</strong> Festivals and traditions</li>
+          <li><strong>Diving & Snorkeling:</strong> Water adventure activities</li>
+          <li><strong>Cultural Experiences:</strong> Authentic local living tours</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Local Services -->
+    <div class="category-card" data-aos-delay="800">
+      <img src="images/categories/local-services.webp" alt="Local Services">
+      <div class="card-body">
+        <h3>Local Services</h3>
+        <p class="text-sm text-gray-600 mb-2">Laundry, tailoring, security, water delivery, cleaning, furniture.</p>
+        <ul>
+          <li><strong>Tailors:</strong> Custom clothing</li>
+          <li><strong>Plumbers:</strong> Fixing water systems</li>
+          <li><strong>Laundry:</strong> Wash and fold services</li>
+          <li><strong>Water Delivery:</strong> Tank and bottle deliveries</li>
+          <li><strong>Furniture Makers:</strong> Custom woodwork</li>
+          <li><strong>Cleaning Services:</strong> Professional cleaners</li>
+          <li><strong>Security Services:</strong> Guards and safety personnel</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Faith & Religion -->
+    <div class="category-card" data-aos-delay="850">
+      <img src="images/categories/faith_religion.webp" alt="Faith & Religion">
+      <div class="card-body">
+        <h3>Faith & Religion</h3>
+        <p class="text-sm text-gray-600 mb-2">Churches, mosques, temples, faith events, bookstores, charities.</p>
+        <ul>
+          <li><strong>Churches:</strong> Christian congregations</li>
+          <li><strong>Mosques:</strong> Islamic places of worship</li>
+          <li><strong>Temples:</strong> Hindu and other religious temples</li>
+          <li><strong>Faith Events:</strong> Gatherings and worship functions</li>
+          <li><strong>Religious Bookshops:</strong> Faith-based literature</li>
+          <li><strong>Faith-based Charities:</strong> Religious NGO services</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Emergency & Support -->
+    <div class="category-card" data-aos-delay="900">
+      <img src="images/categories/emergency_services.webp" alt="Emergency & Support">
+      <div class="card-body">
+        <h3>Emergency & Support</h3>
+        <p class="text-sm text-gray-600 mb-2">Police, ambulance, fire, Red Cross, disaster help, support lines.</p>
+        <ul>
+          <li><strong>Police Stations:</strong> Law enforcement presence</li>
+          <li><strong>Ambulance Services:</strong> Emergency medical help</li>
+          <li><strong>Fire Departments:</strong> Firefighters and rescue</li>
+          <li><strong>Rescue Services:</strong> First responders</li>
+          <li><strong>Red Cross & NGO Help:</strong> Disaster and aid support</li>
+          <li><strong>Community Support Lines:</strong> Help hotlines</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Community Boards -->
+    <div class="category-card" data-aos-delay="950">
+      <img src="images/categories/community.webp" alt="Community Boards">
+      <div class="card-body">
+        <h3>Community Boards</h3>
+        <p class="text-sm text-gray-600 mb-2">Lost & found, alerts, cleanups, rallies, announcements.</p>
+        <ul>
+          <li><strong>Lost & Found:</strong> Report and recover items</li>
+          <li><strong>Public Alerts:</strong> Community-wide notices</li>
+          <li><strong>Charity Events:</strong> Fundraisers and drives</li>
+          <li><strong>Community Cleanup:</strong> Volunteer efforts</li>
+          <li><strong>Rallies:</strong> Activism and awareness events</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Farmers & Agribusiness -->
+    <div class="category-card" data-aos-delay="1000">
+      <img src="images/categories/farmers.webp" alt="Farmers & Agribusiness">
+      <div class="card-body">
+        <h3>Farmers & Agribusiness</h3>
+        <p class="text-sm text-gray-600 mb-2">Seeds, agro tools, livestock, markets, fertilizer dealers.</p>
+        <ul>
+          <li><strong>Seed Sellers:</strong> Crop and plant seeds</li>
+          <li><strong>Machinery:</strong> Farm tools and equipment</li>
+          <li><strong>Livestock:</strong> Cattle, goats, poultry</li>
+          <li><strong>Buyers:</strong> Market access and resellers</li>
+          <li><strong>Fertilizer Dealers:</strong> Crop nutrient supplies</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Pet & Animal Services -->
+    <div class="category-card" data-aos-delay="1050">
+      <img src="images/categories/pets.webp" alt="Pet & Animal Services">
+      <div class="card-body">
+        <h3>Pet & Animal Services</h3>
+        <p class="text-sm text-gray-600 mb-2">Vets, grooming, pet adoption, food supply, shelters.</p>
+        <ul>
+          <li><strong>Vets:</strong> Animal healthcare</li>
+          <li><strong>Grooming:</strong> Pet beauty and hygiene</li>
+          <li><strong>Animal Shelters:</strong> Rescue and adoption</li>
+          <li><strong>Pet Supplies:</strong> Food and accessories</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Repair & Maintenance -->
+    <div class="category-card" data-aos-delay="1100">
+      <img src="images/categories/repair.webp" alt="Repair & Maintenance">
+      <div class="card-body">
+        <h3>Repair & Maintenance</h3>
+        <p class="text-sm text-gray-600 mb-2">Electricians, tech repair, house fixes, fundis, carpenters.</p>
+        <ul>
+          <li><strong>Electricians:</strong> Wiring and lighting</li>
+          <li><strong>Fundis:</strong> General handyworkers</li>
+          <li><strong>Carpenters:</strong> Furniture and repairs</li>
+          <li><strong>Phone Repair:</strong> Smartphone technicians</li>
+          <li><strong>Wiring:</strong> Power and network lines</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Delivery & Errands -->
+    <div class="category-card" data-aos-delay="1150">
+      <img src="images/categories/delivery.webp" alt="Delivery & Errands">
+      <div class="card-body">
+        <h3>Delivery & Errands</h3>
+        <p class="text-sm text-gray-600 mb-2">Boda deliveries, food runners, courier, messengers.</p>
+        <ul>
+          <li><strong>Boda Delivery:</strong> Motorcycle transport</li>
+          <li><strong>Courier:</strong> Professional parcel delivery</li>
+          <li><strong>Food Runners:</strong> Meal pick-ups and drops</li>
+          <li><strong>Messenger Services:</strong> Business or legal errands</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Professional Services -->
+    <div class="category-card" data-aos-delay="1200">
+      <img src="images/categories/professional_services.webp" alt="Professional Services">
+      <div class="card-body">
+        <h3>Professional Services</h3>
+        <p class="text-sm text-gray-600 mb-2">Law firms, auditors, freelancers, consultants, notaries.</p>
+        <ul>
+          <li><strong>Law Firms:</strong> Legal representation</li>
+          <li><strong>Accountants & Auditors:</strong> Finance and audit help</li>
+          <li><strong>Freelancers:</strong> Contract-based professionals</li>
+          <li><strong>Consultancy Agencies:</strong> Business guidance</li>
+          <li><strong>Notary/Public Services:</strong> Document verification</li>
+        </ul>
+      </div>
+
+        </div>
+      </div>
+    </section>
+
+  <!-- AOS Animate On Scroll Library -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+  </script>
+
+  <style>
+    .category-card {
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.4s ease;
+      overflow: hidden;
+    }
+    .category-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    .category-card img {
+      width: 100%;
+      height: 12rem;
+      object-fit: cover;
+    }
+    .card-body {
+      padding: 1.5rem;
+    }
+    .card-body h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #4338ca;
+      margin-bottom: 0.5rem;
+    }
+    .card-body p {
+      font-size: 0.875rem;
+      color: #4b5563;
+      margin-bottom: 0.5rem;
+    }
+    .card-body ul li {
+      font-size: 0.875rem;
+      color: #374151;
+      margin-left: 1rem;
+      list-style-type: disc;
+    }
+  </style>
+
+  <!-- Footer -->
+<footer class="bg-gray-900 text-white py-10 mt-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+      
+      <div>
+        <img src="images/coast_logo.png" alt="Coast Connect" class="w-24 mx-auto md:mx-0 mb-2">
+        <p class="text-gray-400 text-sm">Your local marketplace to connect, grow, and thrive along the Coast.</p>
+      </div>
+
+      <div>
+        <h3 class="text-white font-semibold mb-2">Quick Links</h3>
+        <ul class="text-sm space-y-1 text-gray-400">
+          <li><a href="#" class="hover:text-yellow-400">Home</a></li>
+          <li><a href="#" class="hover:text-yellow-400">Listings</a></li>
+          <li><a href="#" class="hover:text-yellow-400">Contact</a></li>
+          <li><a href="#" class="hover:text-yellow-400">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-white font-semibold mb-2">Follow Us</h3>
+        <p class="text-gray-400 text-sm mb-2">Stay connected with us</p>
+        <div class="flex justify-center md:justify-start space-x-4">
+          <a href="#" class="hover:text-yellow-400">Twitter</a>
+          <a href="#" class="hover:text-yellow-400">Facebook</a>
+          <a href="#" class="hover:text-yellow-400">Instagram</a>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="border-t border-gray-700 mt-10 pt-4 text-center text-xs text-gray-500">
+      © 2025 Coast Connect. All rights reserved. | Built with ❤️ by the Coast Connect Team.
+    </div>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    AOS.init();
+
+    const phrases = [
+      "Connect. Serve. Uplift the Coast.",
+      "Empower Locals. Inspire Change.",
+      "From Lamu to Diani — We Unite.",
+      "Welcome to Coast Connect.",
+      "Bridge. Build. Believe."
+    ];
+
+    let index = 0;
+    const typeText = document.getElementById("typewriter-text");
+
+    function animateText() {
+      // Fade out first
+      typeText.classList.remove("animate-slide-in");
+
+      // Wait a moment before changing the text
+      setTimeout(() => {
+        typeText.textContent = phrases[index];
+        typeText.classList.add("animate-slide-in");
+
+        index = (index + 1) % phrases.length;
+      }, 100); // Small delay for animation reset
+    }
+
+    // Initial trigger
+    animateText();
+
+    // Then loop
+    setInterval(animateText, 4500);
+  });
+</script>
+
+<style>
+  @keyframes slide-in {
+    0% { opacity: 0; transform: translateX(-100%); }
+    50% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  .animate-slide-in {
+    animation: slide-in 4.5s ease-in-out;
+  }
+
+  #typewriter-text {
+    display: inline-block;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+  
+</style>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    once: true,
+    duration: 800,
+    easing: 'ease-in-out',
+  });
+</script>
+
+
+  <!-- AOS Script Init -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init();</script>
+
+</body>
+</html>

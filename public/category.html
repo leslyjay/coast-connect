@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Category · Coast Connect</title>
+  <link rel="icon" href="images/coast_logo.png" />
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --accent: #f6da4c;
+      --brand: #4f46e5;
+      --muted: #64748b;
+      --glass: rgba(255,255,255,0.75);
+    }
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#f6f7fb; color:#0f172a; margin:0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    header{ backdrop-filter: blur(6px); background: rgba(255,255,255,0.72); }
+    .hero { height: clamp(42vh, 52vh, 64vh); position:relative; background-size:cover; background-position:center; display:flex; align-items:center; justify-content:center; }
+    .hero::after { content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.52)); }
+    .hero-inner{ position:relative; z-index:2; text-align:center; padding: 0 1rem; max-width:1200px; }
+    .hero-title{ color:var(--accent); font-weight:800; text-shadow:0 10px 30px rgba(0,0,0,0.35); transform:translateY(12px); opacity:0; }
+    .hero-sub{ color: #f3f4f6; opacity:.95; margin-top:.6rem; }
+
+    /* Sticky filter */
+    .sticky-filter { position: sticky; top: 84px; z-index:40; padding: .6rem; background: rgba(255,255,255,0.92); border-radius:12px; box-shadow:0 8px 24px rgba(2,6,23,0.06); }
+
+    /* Subcategory */
+    .subcat-section { margin-bottom:3rem; }
+    .subcat-head { display:flex; gap: .75rem; align-items:center; justify-content:space-between; padding:.8rem; background:white; border-radius:.8rem; box-shadow:0 6px 20px rgba(2,6,23,0.04); cursor:pointer; }
+    .subcat-meta { color:var(--muted); font-size:.95rem; margin-top:.35rem; }
+
+    /* Listings grid/card */
+    .listings-grid { display:grid; gap:1rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); margin-top:1rem; }
+    .listing-card { background:white; border-radius:12px; overflow:hidden; display:flex; flex-direction:column; min-height:200px; box-shadow:0 8px 30px rgba(2,6,23,0.06); transition: transform .22s ease, box-shadow .22s ease; position:relative; }
+    .listing-card:hover { transform: translateY(-6px); box-shadow:0 18px 50px rgba(2,6,23,0.12); }
+    .listing-thumb { height:160px; background-size:cover; background-position:center; transition: transform .45s cubic-bezier(.2,.9,.2,1); }
+    .listing-card:hover .listing-thumb { transform: scale(1.04); }
+    .listing-body { padding: .85rem; display:flex; flex-direction:column; gap:.5rem; flex:1; }
+    .listing-title { font-weight:700; color:#b45309; }
+    .listing-meta { font-size:.9rem; color:var(--muted); display:flex; gap:.5rem; align-items:center; }
+
+    /* package badge */
+    .package-badge { position:absolute; top:0.7rem; left:0.7rem; padding:.25rem .45rem; font-size:.72rem; font-weight:700; border-radius:.35rem; color:white; box-shadow:0 6px 18px rgba(0,0,0,0.12); }
+    .Gold{ background: linear-gradient(45deg,#f59e0b,#fbbf24); }
+    .Bronze{ background: linear-gradient(45deg,#92400e,#b45309); }
+    .Basic{ background: linear-gradient(45deg,#475569,#64748b); }
+
+    .rating { display:flex; gap:.25rem; align-items:center; font-size:.88rem; color:#374151; }
+
+    .collapse-icon { transition: transform .28s ease; }
+
+    .no-results { padding:1.5rem; background:white; border-radius:.6rem; text-align:center; color:var(--muted); box-shadow:0 6px 18px rgba(2,6,23,0.04); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-title { transition:none !important; transform:none !important; opacity:1 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="fixed w-full z-50 top-0 left-0">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between p-4">
+      <div class="flex items-center gap-3">
+        <a href="categories.html" class="text-sm text-gray-600 hover:text-indigo-700">← Categories</a>
+        <div class="ml-2 font-bold text-indigo-700">Coast Connect</div>
+      </div>
+      <div class="hidden md:flex gap-6 text-sm">
+        <a href="index.html" class="hover:text-indigo-700">Home</a>
+        <a href="listings.html" class="hover:text-indigo-700">All Listings</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="mt-20">
+    <!-- Hero -->
+    <section id="hero" class="hero rounded-b-3xl" role="banner" aria-label="Category hero">
+      <div class="hero-inner">
+        <div id="heroBreadcrumb" class="text-sm text-white/90 mb-3"></div>
+        <h1 id="heroTitle" class="hero-title text-3xl md:text-5xl"></h1>
+        <p id="heroSubtitle" class="hero-sub text-sm md:text-lg"></p>
+      </div>
+    </section>
+
+    <!-- Filter bar -->
+    <div class="max-w-7xl mx-auto px-4 md:px-6 -mt-10">
+      <div class="sticky-filter flex flex-col md:flex-row md:items-center gap-3">
+        <div class="flex-1 flex gap-3 items-center">
+          <input id="searchBox" class="px-4 py-2 rounded-lg border border-gray-200 w-full md:w-96" placeholder="Search listings title or description…" aria-label="Search listings">
+          <select id="regionFilter" class="px-4 py-2 rounded-lg border border-gray-200 w-full md:w-60" aria-label="Filter by region">
+            <option value="">🌍 All regions</option>
+
+          </select>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="resetBtn" class="px-3 py-2 rounded-lg bg-white border">Reset</button>
+          <div id="counts" class="text-sm text-gray-600"></div>
+          <button id="shareBtn" class="px-3 py-2 rounded-lg bg-white border ml-2">Share</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <section id="content" class="max-w-7xl mx-auto px-4 md:px-6 py-10 space-y-12" aria-live="polite">
+      <!-- Subcategory sections injected here -->
+    </section>
+  </main>
+
+  <!-- Modal (small preview) -->
+  <div id="previewModal" style="display:none;" class="fixed inset-0 z-60 flex items-center justify-center">
+    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.55)" onclick="closePreview()"></div>
+    <div style="background:white; border-radius:12px; padding:1rem; max-width:720px; width:94%; box-shadow:0 20px 60px rgba(2,6,23,0.2);">
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 id="pmTitle" class="text-xl font-bold"></h3>
+          <div id="pmMeta" class="text-sm text-gray-500 mt-1"></div>
+        </div>
+        <button onclick="closePreview()">✖</button>
+      </div>
+      <div id="pmBody" class="mt-4 text-sm text-gray-700"></div>
+      <div class="mt-4 flex justify-end">
+        <a id="pmGo" class="px-4 py-2 rounded-lg bg-indigo-600 text-white" href="#">Open listing</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+  AOS.init({ duration:700, once:true });
+
+  // ----- util -----
+  const params = new URLSearchParams(window.location.search);
+  const CATEGORY = (params.get('category') || '').trim();
+  const PARAM_SUB = (params.get('subcategory') || params.get('sub') || '').trim();
+  const PARAM_LISTING = (params.get('listing') || params.get('id') || '').trim();
+
+  function slug(s){ return String(s||'').toLowerCase().replace(/ & /g,'-').replace(/\s+/g,'-').replace(/[^\w-]/g,''); }
+  function escapeHtml(s){ if(!s) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'", '&#39;'); }
+
+  // fallback subcategory descriptions generator
+  function genSubcatDesc(sub, cat){
+    return `Discover top ${sub} in ${cat}. Handpicked local options, honest reviews and booking-ready listings to help you find the perfect ${sub.toLowerCase()}.`;
+  }
+
+  // ----- state -----
+  let RAW = null;                // full array from JSON
+  let listings = [];             // filtered for the category
+  let filtered = [];             // after search/region
+  let subsOrder = [];            // list of unique subcategories in order
+  let subToListings = {};        // map sub => [listings]
+  const contentEl = document.getElementById('content');
+
+  // UI refs
+  const regionSelect = document.getElementById('regionFilter');
+  const searchBox = document.getElementById('searchBox');
+  const countsEl = document.getElementById('counts');
+  const heroEl = document.getElementById('hero');
+  const heroTitle = document.getElementById('heroTitle');
+  const heroSubtitle = document.getElementById('heroSubtitle');
+  const heroBreadcrumb = document.getElementById('heroBreadcrumb');
+  const previewModal = document.getElementById('previewModal');
+  const pmTitle = document.getElementById('pmTitle');
+  const pmMeta = document.getElementById('pmMeta');
+  const pmBody = document.getElementById('pmBody');
+  const pmGo = document.getElementById('pmGo');
+
+  // load JSON (flat list expected)
+  fetch('legendary_listings.json').then(r => r.json()).then(data => {
+    RAW = data || [];
+    // filter by category (case-insensitive)
+    listings = RAW.filter(item => (item.category||'').toString().toLowerCase() === (CATEGORY||'').toLowerCase());
+    if (!CATEGORY) { 
+      contentEl.innerHTML = `<div class="no-results">No category selected.</div>`;
+      heroTitle.textContent = 'Unknown Category';
+      heroSubtitle.textContent = '';
+      return;
+    }
+
+    // *** HERO IMAGE FROM FIRST LISTING IMAGE ***
+    let heroImgPath = null;
+    for (const item of listings) {
+      if (item.image && item.image.trim() !== '') {
+        heroImgPath = item.image.trim();
+        break;
+      }
+    }
+    if (!heroImgPath) {
+      heroImgPath = `images/categories/${slug(CATEGORY)}.webp`;
+    }
+
+    heroEl.style.opacity = '0';
+    heroEl.style.transition = 'opacity 0.6s ease-in-out';
+
+    const heroImageObj = new Image();
+    heroImageObj.src = heroImgPath;
+    heroImageObj.onload = () => {
+      heroEl.style.backgroundImage = `url('${heroImgPath}')`;
+      heroEl.style.opacity = '1';
+    };
+
+    // Set hero text and breadcrumb
+    heroTitle.textContent = CATEGORY;
+    heroSubtitle.textContent = listings.length > 0 
+      ? `${listings.length} listing${listings.length === 1 ? '' : 's'} available`
+      : 'No listings available yet — explore upcoming additions!';
+    heroBreadcrumb.innerHTML = `<span class="text-sm">${escapeHtml(CATEGORY)}</span>`;
+
+    // If no listings, still show subcategories
+    if (listings.length === 0) {
+      const subcats = getKnownSubcategoriesFor(CATEGORY);
+      contentEl.innerHTML = '';
+      
+      subcats.forEach(sub => {
+        const sec = document.createElement('section');
+        sec.className = 'subcat-section';
+        sec.innerHTML = `
+          <div class="subcat-head">
+            <div>
+              <h2 class="text-lg md:text-2xl font-bold">${escapeHtml(sub)}</h2>
+              <div class="subcat-meta">${escapeHtml(genSubcatDesc(sub, CATEGORY))}</div>
+            </div>
+            <div class="text-sm text-gray-500">0 listings</div>
+          </div>
+        `;
+        contentEl.appendChild(sec);
+      });
+      
+      return;
+    }
+
+    // build regions
+    const regions = Array.from(new Set(listings.map(l => (l.region||'').toString()).filter(Boolean))).sort();
+    regionSelect.innerHTML = `<option value="">🌍 All regions</option>`;
+    regions.forEach(r => {
+      const opt = document.createElement('option'); opt.value = r; opt.textContent = r; regionSelect.appendChild(opt);
+    });
+
+    // group by subcategory (preserving order as first seen)
+    subToListings = {};
+    subsOrder = [];
+    listings.forEach(item => {
+      const sub = (item.subcategory || 'Other').toString();
+      if (!subToListings[sub]) { subToListings[sub] = []; subsOrder.push(sub); }
+      // normalize listing object for convenience
+      subToListings[sub].push(Object.assign({}, {
+        id: item.id,
+        title: item.title || item.name || ('Listing ' + (item.id||'')),
+        description: item.description || item.shortDesc || '',
+        region: item.region || item.location || '',
+        rating: item.rating || 0,
+        reviews: item.reviews || 0,
+        image: item.image || item.img || '',
+        package: item.package || 'Basic',
+        raw: item
+      }));
+    });
+
+    // initial filtered = all in category
+    filtered = JSON.parse(JSON.stringify(subToListings)); // deep-ish copy by sub
+
+    // render UI
+    renderAllSections();
+
+    // wire filters
+    regionSelect.addEventListener('change', applyFilters);
+    searchBox.addEventListener('input', debounce(applyFilters, 220));
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      regionSelect.value = ''; searchBox.value = ''; applyFilters();
+    });
+
+    // share
+    document.getElementById('shareBtn').addEventListener('click', shareView);
+
+    // handle deep link params
+    if (PARAM_SUB) setTimeout(()=> openAndScrollToSub(PARAM_SUB), 420);
+    if (PARAM_LISTING) setTimeout(()=> openListingById(PARAM_LISTING), 700);
+
+  }).catch(err=>{
+    console.error(err);
+    contentEl.innerHTML = `<div class="no-results">Failed to load listings data.</div>`;
+  });
+
+  // ---------- render ----------
+
+  function renderAllSections() {
+    contentEl.innerHTML = '';
+    let total = 0;
+
+    subsOrder.forEach((sub, idx) => {
+      const items = (filtered[sub] || []);
+      total += items.length;
+
+      // create section
+      const sec = document.createElement('section');
+      sec.className = 'subcat-section';
+      sec.setAttribute('data-sub', sub);
+
+      // header (collapsible)
+      const head = document.createElement('div');
+      head.className = 'subcat-head';
+      head.innerHTML = `
+        <div>
+          <div class="flex items-center gap-3">
+            <h2 class="text-lg md:text-2xl font-bold">${escapeHtml(sub)}</h2>
+            <span class="text-sm text-gray-500">· ${items.length} listing${items.length===1?'':'s'}</span>
+          </div>
+          <div class="subcat-meta">${escapeHtml(generateSubDescription(sub))}</div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button class="text-sm p-2 rounded-md collapse-btn" aria-expanded="${items.length>0}">Toggle</button>
+        </div>
+      `;
+      sec.appendChild(head);
+
+      // wrapper -> listings grid
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mt-4';
+      const grid = document.createElement('div');
+      grid.className = 'listings-grid';
+      grid.setAttribute('aria-live','polite');
+
+      if (items.length === 0) {
+        grid.innerHTML = `<div class="no-results">No listings in this subcategory match your filters.</div>`;
+      } else {
+        items.forEach(li => {
+          const card = document.createElement('article');
+          card.className = 'listing-card';
+          card.setAttribute('data-id', li.id);
+          card.setAttribute('tabindex', '0');
+          // rating stars render
+          const stars = renderStars(li.rating);
+
+          card.innerHTML = `
+            <div class="package-badge ${escapeHtml(li.package || 'Basic')}">${escapeHtml(li.package || 'Basic')}</div>
+            <div class="listing-thumb" role="img" aria-label="${escapeHtml(li.title)}" style="background: linear-gradient(90deg,#eef2ff,#ffffff);"></div>
+            <div class="listing-body">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="listing-title">${escapeHtml(li.title)}</div>
+                  <div class="listing-meta">${escapeHtml(li.region || '')}</div>
+                </div>
+                <div class="rating">${stars}<span class="text-xs text-gray-500 ml-1">${escapeHtml(String(li.rating))}</span></div>
+              </div>
+              <p class="text-sm text-gray-600 mt-2">${escapeHtml(truncate(li.description || '', 140))}</p>
+              <div class="mt-3 flex gap-2">
+                <button class="px-3 py-1 rounded-md border text-sm preview-btn" data-id="${escapeHtml(li.id)}">Preview</button>
+                <button class="px-3 py-1 rounded-md bg-indigo-600 text-white text-sm open-btn" data-id="${escapeHtml(li.id)}">Open</button>
+              </div>
+            </div>
+          `;
+
+          // lazy load thumb
+          if (li.image) {
+            const thumbEl = card.querySelector('.listing-thumb');
+            lazyLoadBackground(thumbEl, li.image);
+          }
+
+          // handlers
+          card.querySelector('.preview-btn').addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            openPreview(li);
+          });
+          card.querySelector('.open-btn').addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            // go to listings page hash
+            window.location.href = `listings.html#${encodeURIComponent(li.id)}`;
+          });
+
+          // keyboard support: Enter -> open preview
+          card.addEventListener('keydown', (e) => { if (e.key === 'Enter') openPreview(li); });
+
+          grid.appendChild(card);
+        });
+      }
+
+      wrapper.appendChild(grid);
+      sec.appendChild(wrapper);
+      contentEl.appendChild(sec);
+
+      // collapse behavior
+      const collapseBtn = head.querySelector('.collapse-btn');
+      const gridWrap = wrapper;
+      if (collapseBtn) {
+        const isOpen = items.length > 0;
+        collapseBtn.setAttribute('aria-expanded', String(isOpen));
+        collapseBtn.addEventListener('click', () => {
+          const expanded = collapseBtn.getAttribute('aria-expanded') === 'true';
+          if (expanded) {
+            gsap.to(gridWrap, { height: 0, duration: 0.26, ease: 'power2.inOut', onComplete: ()=> gridWrap.style.display = 'none' });
+            collapseBtn.setAttribute('aria-expanded','false');
+          } else {
+            gridWrap.style.display = ''; gsap.fromTo(gridWrap, { height: 0 }, { height: 'auto', duration: 0.32, ease: 'power2.inOut' });
+            collapseBtn.setAttribute('aria-expanded','true');
+          }
+        });
+      }
+
+      // AOS for the header
+      head.setAttribute('data-aos','fade-up');
+      grid.querySelectorAll('.listing-card').forEach(el => el.setAttribute('data-aos','fade-up'));
+    }); // subsOrder done
+
+    countsEl.textContent = `${total} listing${total===1?'':'s'} shown`;
+    AOS.refresh();
+    gsap.fromTo('.listing-card', { opacity:0, y:10 }, { opacity:1, y:0, duration:0.46, stagger:0.04, ease:'power2.out' });
+  }
+
+  // ---------- helpers ----------
+
+  function generateSubDescription(sub) {
+    return genSubcatDesc(sub, CATEGORY);
+  }
+
+  function renderStars(r) {
+    const n = Math.round(Number(r) || 0);
+    let s = '';
+    for (let i=0;i<5;i++) {
+      s += i < n ? '★' : '☆';
+    }
+    return `<span style="color:#f59e0b">${s}</span>`;
+  }
+
+  function truncate(s, n=140) { if (!s) return ''; return s.length>n ? s.slice(0,n-1) + '…' : s; }
+
+  // simple lazy background loader
+  function lazyLoadBackground(el, url) {
+    if (!el || !url) return;
+    const img = new Image();
+    img.onload = ()=> { el.style.backgroundImage = `url('${url}')`; };
+    img.src = url;
+  }
+
+  // debounce util
+  function debounce(fn, wait=200){
+    let t;
+    return (...args)=> { clearTimeout(t); t = setTimeout(()=> fn.apply(this, args), wait); };
+  }
+
+  // ---------- filtering ----------
+
+  function applyFilters(){
+    const q = (searchBox.value||'').trim().toLowerCase();
+    const region = regionSelect.value || '';
+
+    // rebuild filtered map per sub
+    const map = {};
+    subsOrder.forEach(sub => {
+      map[sub] = (subToListings[sub] || []).filter(li => {
+        return (!region || (li.region || '').toString() === region) &&
+               (!q || (li.title||'').toString().toLowerCase().includes(q) || (li.description||'').toString().toLowerCase().includes(q));
+      });
+    });
+    filtered = map;
+    // render using the filtered map
+    const prev = subToListings;
+    const prevOrder = subsOrder.slice();
+    subToListings = map;
+    subsOrder = prevOrder;
+    renderAllSections();
+    subToListings = prev;
+  }
+
+  // ---------- preview modal ----------
+
+  function openPreview(item){
+    pmTitle.textContent = item.title;
+    pmMeta.textContent = `${item.region || ''} · ${item.rating || 0} ★ (${item.reviews || 0})`;
+    pmBody.innerHTML = `
+      ${ item.image ? `<div style="height:220px;background-image:url('${escapeHtml(item.image)}');background-size:cover;border-radius:.5rem;"></div>` : '' }
+      <p class="mt-3">${escapeHtml(item.description || item.raw?.description || '')}</p>
+    `;
+    pmGo.href = `listings.html#${encodeURIComponent(item.id)}`;
+    previewModal.style.display = 'flex';
+  }
+  function closePreview(){ previewModal.style.display = 'none'; }
+
+  // ---------- deep linking ----------
+
+  function openAndScrollToSub(name){
+    if (!name) return;
+    const candidate = Array.from(document.querySelectorAll('.subcat-section')).find(s => s.getAttribute('data-sub').toLowerCase().includes(name.toLowerCase()));
+    if (candidate) {
+      const btn = candidate.querySelector('.collapse-btn');
+      const wrapper = candidate.querySelector('.mt-4');
+      if (btn && btn.getAttribute('aria-expanded') !== 'true') btn.click();
+      setTimeout(()=> {
+        candidate.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        gsap.fromTo(candidate, { backgroundColor: '#fff7e6' }, { backgroundColor: 'transparent', duration:1.1, delay:0.15 });
+      }, 360);
+    }
+  }
+
+  function openListingById(id){
+    if (!id) return;
+    const card = document.querySelector(`.listing-card[data-id="${CSS.escape(String(id))}"]`);
+    if (card) {
+      const section = card.closest('.subcat-section');
+      if (section) {
+        const btn = section.querySelector('.collapse-btn');
+        if (btn && btn.getAttribute('aria-expanded') !== 'true') btn.click();
+      }
+      setTimeout(()=> {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        gsap.fromTo(card, { boxShadow: '0 0 0 rgba(246,229,141,0.0)' }, { boxShadow: '0 16px 60px rgba(246,229,141,0.18)', duration: 0.45, yoyo:true, repeat:1 });
+        const idVal = card.getAttribute('data-id');
+        const item = listings.find(x => String(x.id) === String(idVal));
+        if (item) openPreview(item);
+      }, 300);
+    } else {
+      window.location.href = `listings.html#${encodeURIComponent(id)}`;
+    }
+  }
+
+  // ---------- share ----------
+
+  function shareView(){
+    const sp = new URLSearchParams();
+    if (CATEGORY) sp.set('category', CATEGORY);
+    const r = regionSelect.value; if (r) sp.set('region', r);
+    const q = searchBox.value.trim(); if (q) sp.set('q', q);
+    const url = `${location.origin}${location.pathname}?${sp.toString()}`;
+    if (navigator.share) {
+      navigator.share({ title: `Explore ${CATEGORY} on Coast Connect`, text: `Find ${CATEGORY} listings.`, url }).catch(()=> copyToClipboard(url));
+    } else copyToClipboard(url);
+  }
+
+  function copyToClipboard(t){
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(()=> showToast('Link copied ✅'));
+    else { prompt('Copy this link', t); }
+  }
+
+  function showToast(msg='Done', ms=1500){
+    const el = document.createElement('div');
+    el.textContent = msg; 
+    el.style.position='fixed'; 
+    el.style.right='18px'; 
+    el.style.top='86px';
+    el.style.background='rgba(0,0,0,0.7)';
+    el.style.color='white'; 
+    el.style.padding='8px 12px';
+    el.style.borderRadius='8px';
+    el.style.zIndex = 99999;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), ms);
+  }
+
+  // ---------- helpers ----------
+
+  // Returns array of known subcategories for given category 
+  function getKnownSubcategoriesFor(cat) {
+    const map = {
+      'Accommodation': [
+        'Hotels',
+        'Guest Houses',
+        'B&Bs',
+        'Lodges',
+        'Apartments',
+        'Hostels',
+        'Camps & Lodges',
+        'Beach Villas'        
+      ],
+      'Food & Dining': [
+        'Restaurants',
+        'Local Kitchens',
+        'Fast Food',
+        'Cafés & Coffee Shops',
+        'Food Delivery',
+        'Juice & Smoothie Bars',
+        'Cafés',             
+        'Delivery'            
+      ],
+      'Transport & Travel': [
+        'Car Hire',
+        'Tuk Tuks',
+        'Boda Bodas',
+        'Tour Operators',
+        'Airport Shuttles',
+        'Boat Services',
+        'Boat Tours',
+        'Taxis',              // Added from second script
+        'Tours',
+        'Boat Charters'
+      ],
+      'Jobs & Gigs': [
+        'Full Time',
+        'Part Time',
+        'Internships',
+        'Remote',
+        'Daily Hustles'
+      ],
+      'Shopping': [
+        'Boutiques',
+        'Supermarkets',
+        'Local Markets',
+        'Electronics Stores',
+        'Beauty & Cosmetic Shops',
+        'Art & Curio Shops'
+      ],
+      'Health & Wellness': [
+        'Hospitals',
+        'Clinics',
+        'Pharmacies',
+        'Therapists',
+        'Counselors',
+        'Laboratories',
+        'Wellness Centers',
+        'Mental Health Services',
+        'Gyms & Fitness Studios'
+      ],
+      'Beauty & Grooming': [
+        'Salons',
+        'Barbers',
+        'Spas',
+        'Massage Therapists',
+        'Nail Studios',
+        'Cosmetic Services'
+      ],
+      'Financial Services': [
+        'Banks',
+        'SACCOs',
+        'Forex Bureaus',
+        'Insurance Agencies',
+        'MPESA Agents',
+        'Loan & Credit Services'
+      ],
+      'Construction & Real Estate': [
+        'Contractors',
+        'Real Estate Agents',
+        'Interior Design',
+        'Materials',
+        'Plumbers',
+        'Electricians',
+        'Land for Sale',
+        'Properties for Rent'
+      ],
+      'Education & Learning': [
+        'Primary Schools',
+        'Colleges & Universities',
+        'ICT Training',
+        'Tutors',
+        'Driving Schools',
+        'Computer Training Centers',
+        'Vocational Institutions',
+        'Language Centers'
+      ],
+      'Tech & Digital Services': [
+        'Cyber Cafes',
+        'Dev Agencies',
+        'App Developers',
+        'Laptop Repair',
+        'Wi-Fi Setup',
+        'TV/Satellite Installers',
+        'Mobile Repair',
+        'Freelance Tech Support'
+      ],
+      'WiFi & Local Digital Services': [
+        'Free/Public WiFi',
+        'WiFi Installation',
+        'MPESA Help Desks',
+        'Sim Registration Support',
+        'Printing & Scanning',
+        'Online Payment Points',
+        'Tech Hubs & Innovation Centers'
+      ],
+      'Entertainment & Nightlife': [
+        'Clubs & Lounges',
+        'Bars',
+        'DJs & Sound Providers',
+        'Adult Venues',
+        'Live Music',
+        'Event Planners',
+        'Wedding Services',
+        'Photography & Videography',
+        'Event Venues',
+        'Party Rentals',         // Added from second script
+        'Live Music Venues',
+        'Event Photography'
+      ],
+      'Tourism & Attractions': [
+        'Tour Guides',
+        'Heritage Sites',
+        'Beach Resorts',
+        'Nature Parks',
+        'Museums & Heritage Sites',
+        'Cultural Events',
+        'Diving & Snorkeling',
+        'Cultural Experiences'
+      ],
+      'Local Services': [
+        'Tailors',
+        'Plumbers',
+        'Laundry',
+        'Water Delivery',
+        'Furniture Makers',
+        'Cleaning Services',
+        'Security Services'
+      ],
+      'Faith & Religion': [
+        'Churches',
+        'Mosques',
+        'Temples',
+        'Faith Events',
+        'Religious Bookshops',
+        'Faith-based Charities'
+      ],
+      'Emergency & Support': [
+        'Police Stations',
+        'Ambulance Services',
+        'Fire Departments',
+        'Rescue Services',
+        'Red Cross & NGO Help',
+        'Community Support Lines'
+      ],
+      'Community Boards': [
+        'Lost & Found',
+        'Public Alerts',
+        'Charity Events',
+        'Community Cleanup',
+        'Rallies'
+      ],
+      'Farmers & Agribusiness': [
+        'Seed Sellers',
+        'Machinery',
+        'Livestock',
+        'Buyers',
+        'Fertilizer Dealers'
+      ],
+      'Pet & Animal Services': [
+        'Vets',
+        'Grooming',
+        'Animal Shelters',
+        'Pet Supplies',
+        'Animal Adoption',           // Added from second script
+        'Pet Training',             // Added from second script
+        'Pet Grooming'              // Align wording
+      ],
+      'Repair & Maintenance': [
+        'Electricians',
+        'Fundis',
+        'Carpenters',
+        'Phone Repair',
+        'Wiring'
+      ],
+      'Delivery & Errands': [
+        'Boda Delivery',
+        'Courier',
+        'Food Runners',
+        'Messenger Services'
+      ],
+      'Professional Services': [
+        'Law Firms',
+        'Accountants & Auditors',
+        'Freelancers',
+        'Consultancy Agencies',
+        'Notary/Public Services'
+      ],
+
+      // Now add categories missing in the first script but present in the second:
+      'Events & Celebrations': [
+        'Wedding Planning',
+        'Party Rentals',
+        'Conference Venues',
+        'Catering Services',
+        'Event DJs & MCs',
+        'Photographers & Videographers',
+        'Florists & Decorators'
+      ],
+      'Personal Services': [
+        'Cleaning Services',
+        'Laundry & Dry Cleaning',
+        'Tailoring & Alterations',
+        'Car Wash & Detailing',
+        'Gardening & Landscaping',
+        'Handyman & Repairs',
+        'Home Help & Care'
+      ],
+      'Sports & Fitness': [
+        'Gyms & Fitness Centers',
+        'Personal Trainers',
+        'Yoga & Pilates Studios',
+        'Martial Arts & Boxing',
+        'Sports Clubs & Teams',
+        'Swimming Pools & Lessons',
+        'Athletics & Track Events'
+      ],
+      'Automotive': [
+        'Garages & Workshops',
+        'Spare Parts',
+        'Towing & Recovery',
+        'Car Rental & Leasing',
+        'Auto Accessories',
+        'Tyre Shops'
+      ],
+      'Arts & Crafts': [
+        'Art Galleries',
+        'Handmade Crafts',
+        'Souvenir Shops',
+        'Art Supplies',
+        'Workshops & Classes'
+      ],
+      'Religious & Spiritual': [
+        'Churches',
+        'Mosques',
+        'Temples',
+        'Spiritual Leaders',
+        'Religious Events'
+      ],
+      'Legal & Consultancy': [
+        'Law Firms',
+        'Consulting Agencies',
+        'Financial Advisors',
+        'Notaries',
+        'Tax Consultants'
+      ],
+      'Home & Appliances': [
+        'Furniture Stores',
+        'Appliance Repair',
+        'Home Cleaning',
+        'Handyman Services',
+        'Electrical Repairs'
+      ],
+      'Travel & Tours': [
+        'Safari Tours',
+        'City Tours',
+        'Boat Cruises',
+        'Travel Agencies',
+        'Guided Tours',
+        'Adventure Activities'
+      ],
+      'Pets & Animals': [
+        'Veterinary Clinics',
+        'Pet Grooming',
+        'Pet Training',
+        'Pet Supplies',
+        'Animal Adoption'
+      ],
+      'Miscellaneous': [
+        'Event Staffing',
+        'Courier Services',
+        'Photography',
+        'Translation Services',
+        'Security Services',
+        'Custom Orders'
+      ]
+    };
+    return map[cat] || ['General'];
+  }
+
+
+  // Preview modal close on background click
+  previewModal.addEventListener('click', (e) => { if(e.target === previewModal) closePreview(); });
+  document.getElementById('pmClose').addEventListener('click', closePreview);
+
+</script>
+
+<style>
+  /* Add your styles for highlight, subcat-section, listing-card, etc. */
+  .no-results {
+    font-style: italic;
+    color: #777;
+    padding: 3rem;
+    text-align: center;
+  }
+  .subcat-section {
+    margin-bottom: 2rem;
+  }
+  .subcat-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .listing-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.08);
+    padding: 1rem;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.3s ease;
+  }
+  .listing-card:hover, .listing-card:focus {
+    box-shadow: 0 0 15px rgba(246,229,141,0.7);
+    outline: none;
+  }
+  .listing-thumb {
+    width: 100%;
+    height: 160px;
+    border-radius: 8px;
+    background-color: #eee;
+    background-size: cover;
+    background-position: center center;
+  }
+  .listing-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .listing-meta {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  .rating {
+    font-size: 1rem;
+    color: #f59e0b;
+  }
+  .package-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    color: white;
+    background-color: #3b82f6;
+    user-select: none;
+  }
+  .highlight-listing {
+    box-shadow: 0 0 0 4px rgba(246,229,141,0.8);
+    transition: box-shadow 0.5s ease;
+  }
+</style>
+
+</body>
+</html>

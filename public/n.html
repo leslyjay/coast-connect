@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Categories | Coast Connect</title>
+  <link rel="icon" href="images/coast_logo.png" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    .category-card {
+      transition: all 0.4s ease;
+    }
+    .category-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+      border-color: #facc15;
+    }
+    .category-img {
+      transition: transform 0.4s ease;
+    }
+    .category-card:hover .category-img {
+      transform: scale(1.08);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      padding-top: 5%;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background-color: white;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Hero -->
+  <section class="text-center py-14 bg-white shadow-sm border-b border-gray-200" data-aos="fade-down">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-yellow-500 mb-3">Explore Categories</h1>
+    <p class="text-gray-600 text-lg">Browse through top-level categories and discover what’s inside.</p>
+  </section>
+
+  <!-- Filter Chips -->
+  <div class="max-w-7xl mx-auto px-6 py-6 flex flex-wrap gap-3 justify-center" data-aos="fade-up">
+    <button class="px-4 py-2 bg-yellow-400 text-white rounded-full hover:bg-yellow-500 filter-btn" data-filter="all">All</button>
+    <button class="px-4 py-2 bg-gray-200 rounded-full hover:bg-yellow-300 filter-btn" data-filter="business">Business</button>
+    <button class="px-4 py-2 bg-gray-200 rounded-full hover:bg-yellow-300 filter-btn" data-filter="services">Services</button>
+    <button class="px-4 py-2 bg-gray-200 rounded-full hover:bg-yellow-300 filter-btn" data-filter="entertainment">Entertainment</button>
+    <button class="px-4 py-2 bg-gray-200 rounded-full hover:bg-yellow-300 filter-btn" data-filter="lifestyle">Lifestyle</button>
+  </div>
+
+  <!-- Categories Grid -->
+  <section class="max-w-7xl mx-auto px-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-3" id="categories-container">
+
+    <!-- Example Category -->
+    <div class="category-card bg-white border border-gray-200 rounded-xl overflow-hidden" data-category="business" data-aos="fade-up">
+      <img src="images/categories/business.jpg" alt="Business" class="w-full h-48 object-cover category-img">
+      <div class="p-5">
+        <h3 class="text-xl font-bold mb-2">Business</h3>
+        <p class="text-gray-600 mb-4">Explore companies, startups, and professional services.</p>
+        <ul class="text-gray-500 text-sm mb-4 space-y-1">
+          <li>Consulting</li>
+          <li>Marketing</li>
+          <li>Finance</li>
+        </ul>
+        <div class="flex justify-between items-center">
+          <a href="category.html?category=Business" class="px-4 py-2 bg-yellow-400 text-white rounded hover:bg-yellow-500">Open</a>
+          <button onclick="openModal('Business',['Consulting','Marketing','Finance','Real Estate','Accounting'])" class="text-sm text-yellow-500 hover:underline">View All</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- More categories will be dynamically loaded -->
+
+  </section>
+
+  <!-- Show More -->
+  <div class="flex justify-center my-10">
+    <button id="show-more-btn" class="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">Show More</button>
+  </div>
+
+  <!-- Modal -->
+  <div id="subcategory-modal" class="modal">
+    <div class="modal-content">
+      <h2 id="modal-title" class="text-2xl font-bold mb-4"></h2>
+      <ul id="modal-subcategories" class="list-disc pl-6 mb-6"></ul>
+      <div class="text-right">
+        <button onclick="closeModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    const categories = [
+      {
+        name: "Business",
+        image: "images/categories/business.jpg",
+        description: "Explore companies, startups, and professional services.",
+        subcategories: ["Consulting", "Marketing", "Finance", "Real Estate", "Accounting"],
+        categoryType: "business"
+      },
+      {
+        name: "Entertainment",
+        image: "images/categories/entertainment.jpg",
+        description: "Discover fun activities, movies, music, and nightlife.",
+        subcategories: ["Movies", "Music", "Nightclubs", "Events", "Theatres"],
+        categoryType: "entertainment"
+      },
+      {
+        name: "Lifestyle",
+        image: "images/categories/lifestyle.jpg",
+        description: "Find wellness, fashion, and lifestyle inspiration.",
+        subcategories: ["Fashion", "Beauty", "Wellness", "Fitness", "Travel"],
+        categoryType: "lifestyle"
+      },
+      {
+        name: "Services",
+        image: "images/categories/services.jpg",
+        description: "Browse a variety of professional and home services.",
+        subcategories: ["Plumbing", "Electrical", "Cleaning", "IT Support", "Delivery"],
+        categoryType: "services"
+      }
+    ];
+
+    let loadedCount = 1;
+    const container = document.getElementById('categories-container');
+
+    function renderCategory(cat) {
+      const preview = cat.subcategories.slice(0,3).map(sub => `<li>${sub}</li>`).join('');
+      const card = document.createElement('div');
+      card.className = "category-card bg-white border border-gray-200 rounded-xl overflow-hidden";
+      card.dataset.category = cat.categoryType;
+      card.setAttribute("data-aos","fade-up");
+      card.innerHTML = `
+        <img src="${cat.image}" alt="${cat.name}" class="w-full h-48 object-cover category-img">
+        <div class="p-5">
+          <h3 class="text-xl font-bold mb-2">${cat.name}</h3>
+          <p class="text-gray-600 mb-4">${cat.description}</p>
+          <ul class="text-gray-500 text-sm mb-4 space-y-1">${preview}</ul>
+          <div class="flex justify-between items-center">
+            <a href="category.html?category=${encodeURIComponent(cat.name)}" class="px-4 py-2 bg-yellow-400 text-white rounded hover:bg-yellow-500">Open</a>
+            <button onclick="openModal('${cat.name}',${JSON.stringify(cat.subcategories)})" class="text-sm text-yellow-500 hover:underline">View All</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    }
+
+    document.getElementById('show-more-btn').addEventListener('click', () => {
+      if (loadedCount < categories.length) {
+        renderCategory(categories[loadedCount]);
+        loadedCount++;
+      } else {
+        document.getElementById('show-more-btn').style.display = 'none';
+      }
+    });
+
+    function openModal(category, subs) {
+      document.getElementById('modal-title').textContent = category + " - All Subcategories";
+      document.getElementById('modal-subcategories').innerHTML = subs.map(s => `<li>${s}</li>`).join('');
+      document.getElementById('subcategory-modal').style.display = 'block';
+    }
+    function closeModal() {
+      document.getElementById('subcategory-modal').style.display = 'none';
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter');
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-yellow-400','text-white'));
+        btn.classList.add('bg-yellow-400','text-white');
+        document.querySelectorAll('#categories-container .category-card').forEach(card => {
+          card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
+        });
+      });
+    });
+
+    // Initial render first category
+    renderCategory(categories[0]);
+  </script>
+</body>
+</html>

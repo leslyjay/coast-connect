@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Search Results | Coast Connect</title>
+  <link rel="icon" href="images/coast_logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+<!-- 🚀 Search Results -->
+<section class="max-w-7xl mx-auto px-6 py-20">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-yellow-500 mb-10 text-center drop-shadow" data-aos="fade-down">
+        🔍 Results for "<span id="searchTerm" class="italic text-gray-800"></span>"
+    </h1>
+      
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get("query") || "all";
+        document.getElementById("searchTerm").textContent = query;
+    </script>
+      
+
+  <!-- 🧭 Filters & Sorting -->
+  <div class="flex flex-wrap items-center justify-center gap-4 mb-12" data-aos="fade-up">
+    <select class="px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400">
+      <option>🕒 Sort by Latest</option>
+      <option>🔥 Most Popular</option>
+      <option>⭐ Top Rated</option>
+      <option>📁 Category</option>
+    </select>
+
+    <select class="px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400">
+      <option>🎖️ Filter by Rank</option>
+      <option>🥇 Gold</option>
+      <option>🥈 Silver</option>
+      <option>🥉 Bronze</option>
+    </select>
+
+    <input type="text" placeholder="🔍 Search within results..." class="px-4 py-3 rounded-lg border border-gray-300 shadow-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+  </div>
+
+  <!-- 🎯 Listings Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+    <!-- 🧩 Listing Card (Example) -->
+    <div class="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-transform duration-300 transform hover:-translate-y-1" data-aos="fade-up" data-aos-delay="100">
+      <h3 class="text-xl font-bold text-yellow-600 mb-1">Mombasa Youth Forum</h3>
+      <p class="text-sm text-gray-500 mb-3">Community → Youth Empowerment</p>
+      <span class="inline-block px-3 py-1 text-xs rounded-full bg-yellow-400 text-white font-bold uppercase tracking-wide">🥇 Gold</span>
+
+      <div class="mt-4 flex gap-4 text-sm font-medium">
+        <a href="listing-detail.html" class="text-blue-600 hover:underline">🌐 View</a>
+        
+        <!-- ✅ Only show Edit/Delete if user owns listing -->
+        <a href="edit-listing.html?id=1" class="text-green-600 hover:underline">✏️ Edit</a>
+        <button onclick="confirmDelete('Mombasa Youth Forum')" class="text-red-500 hover:underline">🗑️ Delete</button>
+      </div>
+    </div>
+
+    <!-- 🧩 Another Card -->
+    <div class="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-transform duration-300 transform hover:-translate-y-1" data-aos="fade-up" data-aos-delay="200">
+      <h3 class="text-xl font-bold text-yellow-600 mb-1">Coastal Artisans Collective</h3>
+      <p class="text-sm text-gray-500 mb-3">Community → Handcrafts</p>
+      <span class="inline-block px-3 py-1 text-xs rounded-full bg-gray-500 text-white font-bold uppercase tracking-wide">🥈 Silver</span>
+
+      <div class="mt-4 flex gap-4 text-sm font-medium">
+        <a href="listing-detail.html" class="text-blue-600 hover:underline">🌐 View</a>
+        <!-- Not owned: no edit/delete shown -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 🛑 Delete Confirmation Modal (Hidden by default) -->
+<div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg shadow-xl max-w-sm p-6">
+    <h2 class="text-xl font-bold mb-4">⚠️ Confirm Delete</h2>
+    <p class="text-gray-700 mb-6">Are you sure you want to delete <span id="deleteTarget" class="font-semibold text-yellow-600"></span>?</p>
+    <div class="flex justify-end gap-4">
+      <button onclick="closeModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">Cancel</button>
+      <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🌟 AOS & Modal Script -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ once: true, duration: 800 });
+
+  function confirmDelete(title) {
+    document.getElementById('deleteModal').classList.remove('hidden');
+    document.getElementById('deleteTarget').textContent = title;
+  }
+
+  function closeModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+  }
+</script>
+</body>
+</html>

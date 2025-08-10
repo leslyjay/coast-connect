@@ -1,0 +1,83 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coast Connect | Home</title>
+  <link rel="icon" href="images/coast_logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    @keyframes slide-in {
+      0% { opacity: 0; transform: translateX(-100%); }
+      50% { opacity: 1; transform: translateX(0); }
+      100% { opacity: 0; transform: translateX(100%); }
+    }
+    .animate-slide-in {
+      animation: slide-in 4.5s ease-in-out forwards;
+    }
+    #typewriter-text {
+      display: inline-block;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800">
+  <!-- Hero Section -->
+  <section class="relative h-screen text-white flex items-center justify-center px-6 overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center z-0 brightness-75" style="background-image: url('images/hero_sunset.jpg');"></div>
+    <div class="absolute inset-0 bg-black bg-opacity-60 z-0"></div>
+    <div class="relative z-10 text-center max-w-3xl">
+      <img src="images/coast_logo.png" alt="Coast Connect" class="w-28 mx-auto mb-6 animate-bounce drop-shadow-xl" />
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-4 overflow-hidden">
+        <span id="typewriter-text" class="inline-block animate-slide-in">Connect. Serve. Uplift the Coast.</span>
+      </h1>
+      <p class="text-lg md:text-2xl text-gray-200">From Watamu to Lamu, we unite the people with opportunity and connection.</p>
+      <a href="#" class="mt-8 inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-full shadow-xl hover:scale-105 transition">
+        🚀 List Your Service
+      </a>
+    </div>
+  </section>
+
+  <!-- Remaining content will be dynamically appended below -->
+  <!-- To avoid message truncation, we'll save this as a file -->
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    AOS.init();
+    new Swiper('.swiper-container', {
+      loop: true,
+      autoplay: { delay: 5000 },
+      pagination: { el: '.swiper-pagination' }
+    });
+
+    const map = L.map('map').setView([-3.2167, 40.1167], 8);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    L.marker([-3.2167, 40.1167]).addTo(map).bindPopup('Coast Connect HQ').openPopup();
+
+    const phrases = [
+      "Connect. Serve. Uplift the Coast.",
+      "Empower Locals. Inspire Change.",
+      "From Lamu to Diani — We Unite.",
+      "Bridge. Build. Believe."
+    ];
+    let index = 0;
+    const typeText = document.getElementById("typewriter-text");
+    function animateText() {
+      typeText.classList.remove("animate-slide-in");
+      void typeText.offsetWidth;
+      typeText.textContent = phrases[index];
+      typeText.classList.add("animate-slide-in");
+      index = (index + 1) % phrases.length;
+    }
+    setInterval(animateText, 4500);
+  </script>
+</body>
+</html>

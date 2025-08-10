@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Coast Connect | Listings</title>
+  <link rel="icon" href="images/coast_logo.png" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS + GSAP -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <!-- Leaflet (map) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <!-- QR & PDF libs -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
+  <style>
+    :root{--accent:#f6c84c}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,#fff,#f7fafc)}
+    .glass{background:rgba(255,255,255,0.75);backdrop-filter:blur(8px)}
+    .navbar-blur{backdrop-filter:blur(10px);background:rgba(255,255,255,0.85)}
+    .line-clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .listing-img{height:180px;object-fit:cover;width:100%}
+    @media (max-width:900px){
+      #detailsPanel{position:fixed;right:0;left:0;bottom:0;top:64px;background:white;z-index:60;transform:translateY(100%);transition:transform .34s cubic-bezier(.22,.9,.3,1);border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:0 -20px 50px rgba(2,6,23,0.08)}
+      #detailsPanel.open{transform:translateY(0%)}
+      #listingsPanel{padding-bottom:120px}
+    }
+    .star{cursor:pointer;font-size:1.1rem}
+    #toast{position:fixed;top:18px;right:18px;z-index:80;padding:12px 16px;border-radius:8px;background:#10b981;color:#fff;box-shadow:0 8px 30px rgba(2,6,23,.12);opacity:0;transition:opacity .25s}
+    #toast.show{opacity:1}
+    .lazy-placeholder{background:linear-gradient(90deg,#eee,#f6f6f6,#eee);min-height:120px}
+    .watermark{opacity:.12;position:absolute;right:12px;top:12px;width:110px;pointer-events:none}
+  </style>
+</head>
+<body class="text-gray-800">
+
+<!-- =========================
+     CONFIG - edit these if you have a backend
+     ========================= -->
+<script>
+  // Set API_BASE to your real backend (without trailing slash), e.g. "https://api.yoursite.com"
+  // If left null/empty, client will fallback to localStorage + Base64 image storage.
+  window.CONFIG = {
+    API_BASE: "", // <-- put your API base url here to enable server-backed save/upload
+    UPLOAD_PATH: "/upload",      // POST to API_BASE + UPLOAD_PATH expecting form-data {file}
+    LISTINGS_PATH: "/listings",  // POST GET PUT endpoints at API_BASE + LISTINGS_PATH
+    TIMEOUT: 10000
+  };
+</script>
+
+<!-- NAVBAR -->
+<header id="topNav" class="fixed w-full z-50 top-0 left-0 transition-all">
+  <nav class="max-w-7xl mx-auto flex items-center justify-between p-3 md:p-4 px-4 md:px-6 glass">
+    <div class="flex items-center gap-3">
+      <img src="images/coast_logo.png" alt="Coast Connect" class="w-10 h-10 rounded-md shadow-sm" />
+      <div>
+        <a href="index.html" class="text-lg font-extrabold text-indigo-700">Coast Connect</a>
+        <div class="text-xs text-gray-500 -mt-1">List · Discover · Book</div>
+      </div>
+    </div>
+
+    <div class="hidden md:flex items-center gap-6">
+      <a href="index.html" class="text-sm hover:text-indigo-700">Home</a>
+      <a href="#listings" class="text-sm hover:text-indigo-700">Listings</a>
+      <a href="contact.html" class="text-sm hover:text-indigo-700">Contact</a>
+      <button id="exportAllPdf" class="text-sm px-3 py-1 rounded-full border border-gray-200 hover:bg-gray-50">Export All to PDF</button>
+    </div>
+
+    <div class="flex md:hidden items-center gap-2">
+      <button id="favoritesToggle" title="Show Favorites" class="p-2 rounded-md hover:bg-gray-100" aria-pressed="false">❤️</button>
+      <button id="hamburger" aria-expanded="false" class="p-2 rounded-md hover:bg-gray-100">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"></path></svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-t shadow-sm">
+    <a href="index.html" class="block px-6 py-3">Home</a>
+    <a href="#listings" class="block px-6 py-3">Listings</a>
+    <a href="contact.html" class="block px-6 py-3">Contact</a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="max-w-7xl mx-auto mt-20 px-4 md:px-6 pb-16">
+
+  <!-- HERO -->
+  <section class="relative text-center py-12 md:py-20 overflow-hidden">
+    <div class="pointer-events-none absolute -left-24 -top-24 w-72 h-72 rounded-full bg-yellow-300 opacity-30 filter blur-3xl animate-pulse"></div>
+    <div class="pointer-events-none absolute -right-24 -bottom-24 w-96 h-96 rounded-full bg-indigo-200 opacity-25 filter blur-3xl animate-pulse"></div>
+
+    <h1 class="text-3xl md:text-5xl font-extrabold mb-3" data-aos="fade-down">🚀 List Your Hustle — Get Discovered on the Coast</h1>
+    <p class="text-gray-600 max-w-2xl mx-auto mb-6" data-aos="fade-up" data-aos-delay="120">
+      Post your service, product, or spot. Bookings, QR sharing, maps and easy contact — all in one legendary place.
+    </p>
+    <div class="flex flex-wrap justify-center gap-3" data-aos="fade-up" data-aos-delay="220">
+      <a href="#create" class="bg-yellow-400 hover:bg-yellow-500 text-black px-5 py-3 rounded-full font-semibold shadow">Add Listing</a>
+      <a href="#listings" class="border border-gray-200 px-5 py-3 rounded-full hover:bg-gray-50">Browse Listings</a>
+    </div>
+  </section>
+
+  <!-- GRID: Listings panel + Details -->
+  <div class="grid md:grid-cols-12 gap-8">
+
+    <!-- LEFT: Listings -->
+    <section id="listingsPanel" class="md:col-span-7 bg-transparent" aria-label="Listings panel">
+      <!-- Controls -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4">
+        <div class="flex gap-2 w-full sm:w-auto">
+          <input id="searchInput" type="search" placeholder="Search title or description..." aria-label="Search listings"
+            class="w-full sm:w-64 p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-yellow-300" />
+          <button id="clearSearch" title="Clear" class="p-3 rounded-lg border border-gray-200 hidden">✖</button>
+        </div>
+
+        <div class="flex gap-2">
+          <select id="filterCategory" class="p-3 rounded-lg border border-gray-200">
+            <option value="">All categories</option>
+          </select>
+          <select id="filterRegion" class="p-3 rounded-lg border border-gray-200">
+            <option value="">All regions</option>
+          </select>
+          <select id="filterPackage" class="p-3 rounded-lg border border-gray-200">
+            <option value="">All packages</option>
+            <option value="Gold">Gold</option>
+            <option value="Silver">Silver</option>
+            <option value="Bronze">Bronze</option>
+            <option value="Basic">Basic</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div id="listingsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4" aria-live="polite"></div>
+
+      <!-- infinite sentinel for lazy loading -->
+      <div id="scrollSentinel" class="h-8"></div>
+    </section>
+
+    <!-- RIGHT: Details -->
+    <aside id="detailsPanel" class="md:col-span-5 hidden md:block bg-white rounded-2xl shadow-xl p-6 glass" aria-label="Listing details panel">
+      <div id="detailsEmpty" class="text-center py-20" data-aos="fade-in">
+        <img src="images/coast_logo.png" alt="" class="mx-auto w-20 h-20 opacity-80 mb-4" />
+        <h3 class="text-xl font-bold">Select a listing to view details</h3>
+        <p class="text-sm text-gray-500 mt-2">Tap any card on the left. On mobile it will slide up.</p>
+      </div>
+
+      <div id="detailsContent" class="hidden space-y-4">
+        <div class="relative rounded-xl overflow-hidden shadow-sm">
+          <img id="detailImage" src="" alt="listing image" class="w-full h-64 object-cover listing-img" />
+          <img class="watermark" src="images/coast_logo.png" alt="watermark">
+        </div>
+
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="detailTitle" class="text-2xl font-extrabold text-indigo-700"></h2>
+            <div id="detailMeta" class="text-sm text-gray-500 mt-1"></div>
+            <div id="detailRating" class="mt-2 text-sm text-yellow-500"></div>
+          </div>
+          <div class="text-right">
+            <div id="detailPackage" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800"></div>
+            <div class="mt-3">
+              <button id="favBtn" class="p-2 rounded-md hover:bg-gray-100" title="Favorite">🤍</button>
+            </div>
+          </div>
+        </div>
+
+        <p id="detailDescription" class="text-gray-700 leading-relaxed"></p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="rounded-xl p-4 border border-gray-100">
+            <p class="text-xs text-gray-500">📞 Phone</p>
+            <p id="detailPhone" class="font-medium"></p>
+          </div>
+          <div class="rounded-xl p-4 border border-gray-100">
+            <p class="text-xs text-gray-500">📧 Email</p>
+            <p id="detailEmail" class="font-medium"></p>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <a id="callNow" class="flex-1 text-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg" href="#" aria-label="Call">📞 Call</a>
+          <a id="waNow" class="flex-1 text-center bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg" href="#" target="_blank" aria-label="WhatsApp">💬 WhatsApp</a>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <h3 class="text-sm font-semibold mb-2">📍 Location</h3>
+            <div id="detailMap" class="h-48 rounded-lg border"></div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div>
+              <h3 class="text-sm font-semibold mb-2">📠 Save Contact</h3>
+              <div id="detailQR" aria-hidden="true"></div>
+            </div>
+            <div class="ml-auto flex flex-col gap-2">
+              <button id="openBooking" class="bg-indigo-600 text-white px-4 py-2 rounded-lg">Book / Inquire</button>
+              <button id="openReview" class="bg-white border border-gray-200 px-4 py-2 rounded-lg">Add Review</button>
+              <button id="exportPdf" class="bg-gray-800 text-white px-4 py-2 rounded-lg">Export PDF</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-2">Reviews</h4>
+          <div id="reviewsList" class="space-y-2 text-sm text-gray-700"></div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- CREATE FORM -->
+  <section id="create" class="mt-14 bg-white rounded-2xl p-6 shadow">
+    <h3 class="text-xl font-bold mb-4">Add / Edit Listing</h3>
+    <form id="createForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <input type="hidden" id="editIndex" value="-1" />
+      <div class="col-span-1 md:col-span-2">
+        <label class="text-sm text-gray-600">Title</label>
+        <input id="inputTitle" required class="w-full p-3 border rounded-lg" />
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-600">Region</label>
+        <select id="inputRegion" class="w-full p-3 border rounded-lg">
+          <option>Mombasa</option><option>Kilifi</option><option>Kwale</option><option>Lamu</option><option>Tana River</option><option>Taita Taveta</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-sm text-gray-600">Category</label>
+        <select id="inputCategory" class="w-full p-3 border rounded-lg">
+          <option>Food & Dining</option><option>Beauty & Grooming</option><option>Education</option><option>Tech & Digital</option><option>Tourism</option><option>Accommodation</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-600">Subcategory</label>
+        <input id="inputSubcategory" class="w-full p-3 border rounded-lg" placeholder="e.g. Restaurant, Salon..." />
+      </div>
+      <div>
+        <label class="text-sm text-gray-600">Package</label>
+        <select id="inputPackage" class="w-full p-3 border rounded-lg">
+          <option>Basic</option><option>Bronze</option><option>Silver</option><option>Gold</option>
+        </select>
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="text-sm text-gray-600">Description</label>
+        <textarea id="inputDescription" rows="4" class="w-full p-3 border rounded-lg"></textarea>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-600">Contact (phone)</label>
+        <input id="inputContact" class="w-full p-3 border rounded-lg" placeholder="+2547..." />
+      </div>
+      <div>
+        <label class="text-sm text-gray-600">Email (optional)</label>
+        <input id="inputEmail" class="w-full p-3 border rounded-lg" placeholder="you@domain.com" />
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="text-sm text-gray-600">Image (URL or upload)</label>
+        <div class="flex gap-2">
+          <input id="inputImage" class="w-full p-3 border rounded-lg" placeholder="https://..." />
+          <input id="fileInput" type="file" accept="image/*" class="p-2" />
+        </div>
+      </div>
+
+      <div class="md:col-span-2 flex gap-2">
+        <button id="saveBtn" type="submit" class="bg-yellow-400 px-6 py-3 rounded-full font-semibold">Save Listing</button>
+        <button id="resetBtn" type="button" class="px-6 py-3 rounded-full border">Reset</button>
+        <button id="uploadImageBtn" type="button" class="px-6 py-3 rounded-full border">Upload Image</button>
+      </div>
+    </form>
+  </section>
+
+</main>
+
+<!-- BOOKING MODAL -->
+<div id="bookingModal" class="fixed inset-0 z-60 hidden items-center justify-center bg-black/50">
+  <div class="bg-white rounded-lg max-w-md w-full p-5">
+    <div class="flex justify-between items-center">
+      <h4 class="text-lg font-bold">Booking / Payment</h4>
+      <button id="closeBooking" class="text-gray-500">✖</button>
+    </div>
+    <form id="bookingForm" class="mt-4 grid gap-3">
+      <input id="bkName" required class="p-3 border rounded" placeholder="Your name" />
+      <input id="bkEmail" required class="p-3 border rounded" placeholder="Your email" />
+      <textarea id="bkMsg" rows="4" class="p-3 border rounded" placeholder="Message..."></textarea>
+
+      <div class="flex gap-2 items-center">
+        <label class="text-sm text-gray-600">Pay now?</label>
+        <select id="paymentOption" class="p-2 border rounded">
+          <option value="no">No — just send booking</option>
+          <option value="mock">Mock Card (demo)</option>
+        </select>
+      </div>
+
+      <div class="flex gap-2">
+        <button class="bg-indigo-600 text-white px-4 py-2 rounded">Send Booking</button>
+        <button type="button" id="bkCancel" class="px-4 py-2 rounded border">Cancel</button>
+      </div>
+    </form>
+    <p class="text-xs text-gray-500 mt-3">Note: Payment integration is a demo placeholder. Replace with Stripe/PayPal server-side for production.</p>
+  </div>
+</div>
+
+<!-- REVIEW MODAL -->
+<div id="reviewModal" class="fixed inset-0 z-70 hidden items-center justify-center bg-black/50">
+  <div class="bg-white rounded-lg max-w-md w-full p-5">
+    <div class="flex justify-between items-center mb-2">
+      <h4 class="text-lg font-bold">Add Review</h4>
+      <button id="closeReview" class="text-gray-500">✖</button>
+    </div>
+    <form id="reviewForm" class="grid gap-3">
+      <div class="flex gap-2 items-center">
+        <label class="text-sm">Rating:</label>
+        <div id="starInput" class="flex gap-1"></div>
+      </div>
+      <textarea id="reviewText" rows="4" class="p-3 border rounded" placeholder="Share your thoughts..."></textarea>
+      <div class="flex gap-2">
+        <button class="bg-yellow-400 px-4 py-2 rounded">Submit Review</button>
+        <button type="button" id="cancelReview" class="px-4 py-2 rounded border">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- toast container -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- Footer -->
+<footer class="text-center py-8 text-sm text-gray-500">
+  © <span id="year"></span> Coast Connect · Built with ❤
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script>
+/* ============================
+   Legendary Listings — Full Script
+   ============================ */
+
+/* --- Library inits --- */
+AOS.init({ duration: 700, once: true });
+gsap.from("header", { y: -30, opacity: 0, duration: 0.7, ease: "power2.out" });
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* --- Region coords (coastal counties) --- */
+const regionCoords = {
+  "Mombasa":[-4.0435,39.6682],
+  "Kilifi":[-3.6300,39.8403],
+  "Kwale":[-4.1816,39.4619],
+  "Lamu":[-2.2684,40.9029],
+  "Tana River":[-1.8406,40.0489],
+  "Taita Taveta":[-3.3961,38.3603]
+};
+
+/* --- Config & state --- */
+const API_BASE = window.CONFIG.API_BASE || "";
+const UPLOAD_URL = API_BASE ? (API_BASE + window.CONFIG.UPLOAD_PATH) : "";
+const LISTINGS_URL = API_BASE ? (API_BASE + window.CONFIG.LISTINGS_PATH) : "";
+const TIMEOUT = window.CONFIG.TIMEOUT || 10000;
+
+let allListings = [], filteredListings = [], favorites = JSON.parse(localStorage.getItem('cc_favorites')||'[]');
+let showingIndex = null;
+let map = null, mapMarker = null;
+
+/* --- UI refs --- */
+const listingsContainer = document.getElementById('listingsContainer');
+const filterCategory = document.getElementById('filterCategory');
+const filterRegion = document.getElementById('filterRegion');
+const filterPackage = document.getElementById('filterPackage');
+const searchInput = document.getElementById('searchInput');
+const scrollSentinel = document.getElementById('scrollSentinel');
+
+const detailsPanel = document.getElementById('detailsPanel');
+const detailsContent = document.getElementById('detailsContent');
+const detailsEmpty = document.getElementById('detailsEmpty');
+
+const detailImage = document.getElementById('detailImage');
+const detailTitle = document.getElementById('detailTitle');
+const detailMeta = document.getElementById('detailMeta');
+const detailPackage = document.getElementById('detailPackage');
+const detailDescription = document.getElementById('detailDescription');
+const detailPhone = document.getElementById('detailPhone');
+const detailEmail = document.getElementById('detailEmail');
+const callNow = document.getElementById('callNow');
+const waNow = document.getElementById('waNow');
+const detailQR = document.getElementById('detailQR');
+const favBtn = document.getElementById('favBtn');
+const detailRating = document.getElementById('detailRating');
+const reviewsList = document.getElementById('reviewsList');
+
+const createForm = document.getElementById('createForm');
+const inputTitle = document.getElementById('inputTitle');
+const inputRegion = document.getElementById('inputRegion');
+const inputCategory = document.getElementById('inputCategory');
+const inputSubcategory = document.getElementById('inputSubcategory');
+const inputPackage = document.getElementById('inputPackage');
+const inputDescription = document.getElementById('inputDescription');
+const inputContact = document.getElementById('inputContact');
+const inputEmail = document.getElementById('inputEmail');
+const inputImage = document.getElementById('inputImage');
+const fileInput = document.getElementById('fileInput');
+const editIndex = document.getElementById('editIndex');
+
+const uploadImageBtn = document.getElementById('uploadImageBtn');
+
+const bookingModal = document.getElementById('bookingModal');
+const openBooking = document.getElementById('openBooking');
+const closeBooking = document.getElementById('closeBooking');
+const bkCancel = document.getElementById('bkCancel');
+const bookingForm = document.getElementById('bookingForm');
+
+const exportPdfBtn = document.getElementById('exportPdf');
+const exportAllPdfBtn = document.getElementById('exportAllPdf');
+
+/* --- lazy + infinite scroll --- */
+let pageSize = 6;
+let renderedCount = 0;
+
+/* -------------------------
+   Utilities
+   ------------------------- */
+function escapeHtml(s=''){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function showToast(msg, ms=2600){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), ms);
+}
+function sleep(ms){ return new Promise(res=>setTimeout(res,ms)); }
+
+/* --- HTTP helpers with timeout --- */
+async function fetchWithTimeout(url, opts={}, timeout=TIMEOUT){
+  const ctrl = new AbortController();
+  const id = setTimeout(()=>ctrl.abort(), timeout);
+  opts.signal = ctrl.signal;
+  try {
+    const res = await fetch(url, opts);
+    clearTimeout(id);
+    return res;
+  } catch(e){
+    clearTimeout(id);
+    throw e;
+  }
+}
+
+/* -------------------------
+   Load listings: try JSON -> fallback localStorage -> sample
+   ------------------------- */
+async function loadListings(){
+  try {
+    if (LISTINGS_URL){
+      const res = await fetchWithTimeout(LISTINGS_URL);
+      if (!res.ok) throw new Error('server error');
+      const data = await res.json();
+      allListings = Array.isArray(data) ? data : (data.listings || []);
+      // store locally too
+      localStorage.setItem('cc_listings', JSON.stringify(allListings));
+    } else {
+      // try legendary_listings.json file in same folder
+      const res = await fetch('legendary_listings.json', {cache:'no-cache'});
+      if (res.ok){
+        allListings = await res.json();
+        localStorage.setItem('cc_listings', JSON.stringify(allListings));
+      } else {
+        throw new Error('no file');
+      }
+    }
+  } catch (e) {
+    const raw = localStorage.getItem('cc_listings');
+    if (raw){
+      allListings = JSON.parse(raw);
+    } else {
+      allListings = sampleSeed();
+    }
+  }
+  filteredListings = [...allListings];
+  populateFilters();
+  resetRender();
+  renderMore(); // initial batch
+}
+
+/* sample seed */
+function sampleSeed(){
+  const sample = [
+    { id:1, title:"Seaside Restaurant", region:"Mombasa", category:"Food & Dining", subcategory:"Restaurant", package:"Gold", description:"Fresh seafood & dramatic ocean views. Open daily.", contact:"+254700000001", email:"hello@seaside.example", image:"https://source.unsplash.com/800x600/?restaurant,sea", reviews:[{rating:5, text:"Amazing!"}]},
+    { id:2, title:"Beachfront Villa", region:"Kilifi", category:"Accommodation", subcategory:"Villa", package:"Silver", description:"Private villa with pool and direct beach access.", contact:"+254700000002", email:"stay@villa.example", image:"https://source.unsplash.com/800x600/?villa,beach", reviews:[{rating:4, text:"Wonderful stay."}]},
+    { id:3, title:"Island Tour Operator", region:"Lamu", category:"Tourism", subcategory:"Tours", package:"Bronze", description:"Day trips, diving and cultural tours across the islands.", contact:"+254700000003", email:"book@islands.example", image:"https://source.unsplash.com/800x600/?boat,sea", reviews:[]}
+  ];
+  localStorage.setItem('cc_listings', JSON.stringify(sample));
+  return sample;
+}
+
+/* -------------------------
+   Filters & rendering (with lazy images + infinite scroll)
+   ------------------------- */
+function populateFilters(){
+  const cats = new Set(), regs = new Set();
+  allListings.forEach(l => { if(l.category) cats.add(l.category); if(l.region) regs.add(l.region); });
+  filterCategory.innerHTML = '<option value="">All categories</option>'; cats.forEach(c=> filterCategory.innerHTML += `<option>${escapeHtml(c)}</option>`);
+  filterRegion.innerHTML = '<option value="">All regions</option>'; regs.forEach(r=> filterRegion.innerHTML += `<option>${escapeHtml(r)}</option>`);
+}
+
+function resetRender(){
+  listingsContainer.innerHTML = '';
+  renderedCount = 0;
+}
+
+function renderMore(){
+  const list = filteredListings;
+  const next = list.slice(renderedCount, renderedCount + pageSize);
+  next.forEach(renderCard);
+  renderedCount += next.length;
+  if (renderedCount >= list.length) {
+    // remove sentinel observer if any
+    observer && observer.disconnect();
+  }
+}
+
+function renderCard(l){
+  const isFav = favorites.includes(l.id);
+  const card = document.createElement('article');
+  card.className = 'bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition transform hover:-translate-y-1 cursor-pointer';
+  card.setAttribute('data-id', l.id);
+  const img = l.image || 'https://source.unsplash.com/800x600/?business';
+  card.innerHTML = `
+    <div class="h-44 overflow-hidden lazy-placeholder">
+      <img data-src="${escapeHtml(img)}" alt="${escapeHtml(l.title)}" class="w-full h-full object-cover listing-img lazy" />
+    </div>
+    <div class="p-3">
+      <div class="flex justify-between items-start gap-2">
+        <div>
+          <h3 class="text-sm md:text-base font-semibold">${escapeHtml(l.title)}</h3>
+          <div class="text-xs text-gray-500 mt-1">${escapeHtml(l.region)} · ${escapeHtml(l.category)}</div>
+          <div class="text-xs text-yellow-500 mt-1">${averageRatingText(l)}</div>
+        </div>
+        <div class="text-right">
+          <div class="text-xs font-semibold ${tierColorClass(l.package)} uppercase">${escapeHtml(l.package||'Basic')}</div>
+          <button class="fav-toggle mt-2" data-id="${l.id}" title="Toggle favorite">${isFav? '❤️':'🤍'}</button>
+        </div>
+      </div>
+      <p class="mt-2 text-sm text-gray-600 line-clamp-3">${escapeHtml(l.description||'')}</p>
+    </div>
+  `;
+  card.addEventListener('click', ()=> showDetailsById(l.id));
+  card.querySelectorAll('.fav-toggle').forEach(btn=>{
+    btn.addEventListener('click', (ev)=>{
+      ev.stopPropagation();
+      toggleFavorite(parseInt(btn.dataset.id,10));
+      renderFullRefresh();
+    });
+  });
+  listingsContainer.appendChild(card);
+  lazyLoadImage(card.querySelector('img[data-src]'));
+}
+
+/* color class for package */
+function tierColorClass(pkg){
+  return (pkg==='Gold')? 'text-yellow-500' : (pkg==='Silver')? 'text-gray-500' : (pkg==='Bronze')? 'text-orange-500' : 'text-blue-500';
+}
+
+/* average rating text */
+function averageRatingText(l){
+  const revs = l.reviews || [];
+  if (!revs.length) return 'No reviews yet';
+  const avg = (revs.reduce((s,r)=>s+r.rating,0))/revs.length;
+  return `★ ${avg.toFixed(1)} · ${revs.length} reviews`;
+}
+
+/* lazy loader for single image using IntersectionObserver */
+function lazyLoadImage(imgEl){
+  if (!imgEl) return;
+  const io = new IntersectionObserver((entries, observer)=>{
+    entries.forEach(entry=>{
+      if (entry.isIntersecting){
+        imgEl.src = imgEl.dataset.src;
+        imgEl.classList.remove('lazy');
+        observer.disconnect();
+      }
+    });
+  }, {rootMargin:'120px'});
+  io.observe(imgEl);
+}
+
+/* infinite scroll observer */
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if (entry.isIntersecting){
+      renderMore();
+    }
+  });
+}, {rootMargin:'300px'});
+
+observer.observe(scrollSentinel);
+
+/* -------------------------
+   Filtering & searching wiring
+   ------------------------- */
+function applyFilters(){
+  const q = (searchInput.value||'').trim().toLowerCase();
+  const cat = filterCategory.value;
+  const reg = filterRegion.value;
+  const pkg = filterPackage.value;
+
+  filteredListings = allListings.filter(l=>{
+    if (cat && l.category !== cat) return false;
+    if (reg && l.region !== reg) return false;
+    if (pkg && l.package !== pkg) return false;
+    if (q){
+      const hay = (l.title+' '+(l.description||'')+' '+(l.subcategory||'')).toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  resetRender();
+  renderMore();
+}
+
+filterCategory.addEventListener('change', applyFilters);
+filterRegion.addEventListener('change', applyFilters);
+filterPackage.addEventListener('change', applyFilters);
+searchInput.addEventListener('input', applyFilters);
+
+/* -------------------------
+   Show details inline (map, qr, reviews)
+   ------------------------- */
+function showDetailsById(id){
+  const idx = allListings.findIndex(x=>x.id===id);
+  if (idx===-1) return;
+  showingIndex = idx;
+  const l = allListings[idx];
+
+  detailsEmpty.classList.add('hidden');
+  detailsContent.classList.remove('hidden');
+
+  detailTitle.textContent = l.title;
+  detailMeta.textContent = `${l.region} · ${l.category} → ${l.subcategory||''}`;
+  detailPackage.textContent = l.package || 'Basic';
+  detailImage.src = l.image || 'https://source.unsplash.com/1000x600/?business';
+  detailImage.alt = l.title;
+  detailDescription.textContent = l.description || '';
+  detailPhone.textContent = l.contact || 'Not provided';
+  detailEmail.textContent = l.email || 'Not provided';
+  callNow.href = `tel:${(l.contact||'').replace(/\s+/g,'')}`;
+  waNow.href = `https://wa.me/${(l.contact||'').replace(/\D/g,'')}`;
+
+  favBtn.innerHTML = favorites.includes(l.id) ? '❤️ Favorited' : '🤍 Favorite';
+  favBtn.classList.toggle('fav-active', favorites.includes(l.id));
+  favBtn.onclick = () => { toggleFavorite(l.id); renderFullRefresh(); };
+
+  // render rating stars area
+  detailRating.innerHTML = averageRatingText(l);
+
+  // load QR
+  detailQR.innerHTML = '';
+  new QRCode(detailQR, { text: `BEGIN:VCARD\nFN:${l.title}\nTEL:${l.contact||''}\nEMAIL:${l.email||''}\nEND:VCARD`, width:120, height:120 });
+
+  // reviews list
+  renderReviewsList(l);
+
+  // Map
+  const coords = regionCoords[l.region] || [-4.0435,39.6682];
+  if (map){ map.off(); map.remove(); map=null; mapMarker=null; }
+  map = L.map('detailMap', { scrollWheelZoom:false }).setView(coords, 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{ attribution:'© OpenStreetMap contributors' }).addTo(map);
+  mapMarker = L.marker(coords).addTo(map).bindPopup(l.title).openPopup();
+
+  // mobile: open sliding panel
+  const detailsPanelMobile = document.getElementById('detailsPanel');
+  if (window.innerWidth < 900 && detailsPanelMobile){
+    detailsPanelMobile.classList.add('open');
+    gsap.fromTo('#detailsPanel', {y:80, opacity:0}, {y:0, opacity:1, duration:.45, ease:'back.out(1.2)'});
+  } else {
+    gsap.fromTo('#detailsContent',{ opacity:0, x: 10 }, { opacity:1, x:0, duration:0.35 });
+  }
+}
+
+/* render review list */
+function renderReviewsList(l){
+  const revs = l.reviews || [];
+  if (!revs.length){ reviewsList.innerHTML = `<div class="text-gray-500">No reviews yet — be the first to review.</div>`; return; }
+  reviewsList.innerHTML = revs.map(r=>`<div class="p-3 border rounded"><div class="text-yellow-500">★ ${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div><div class="text-sm mt-1">${escapeHtml(r.text||'')}</div><div class="text-xs text-gray-400 mt-1">${new Date(r.date||Date.now()).toLocaleString()}</div></div>`).join('');
+}
+
+/* -------------------------
+   Favorites
+   ------------------------- */
+function toggleFavorite(id){
+  id = parseInt(id,10);
+  if (favorites.includes(id)) favorites = favorites.filter(x=>x!==id); else favorites.push(id);
+  localStorage.setItem('cc_favorites', JSON.stringify(favorites));
+  showToast('Favorites updated');
+}
+
+/* -------------------------
+   Create / Edit listings with server fallback
+   ------------------------- */
+createForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const payload = {
+    id: editIndex.value && parseInt(editIndex.value,10) > 0 ? parseInt(editIndex.value,10) : Date.now(),
+    title: inputTitle.value.trim(),
+    region: inputRegion.value,
+    category: inputCategory.value,
+    subcategory: inputSubcategory.value.trim(),
+    package: inputPackage.value,
+    description: inputDescription.value.trim(),
+    contact: inputContact.value.trim(),
+    email: inputEmail.value.trim(),
+    image: inputImage.value.trim(),
+    reviews: []
+  };
+  // keep existing reviews if editing
+  const existingIdx = allListings.findIndex(x=>x.id===payload.id);
+  if (existingIdx>=0) payload.reviews = allListings[existingIdx].reviews || [];
+
+  // if server configured, try save
+  if (LISTINGS_URL){
+    try {
+      const method = existingIdx>=0 ? 'PUT' : 'POST';
+      const url = existingIdx>=0 ? `${LISTINGS_URL}/${payload.id}` : LISTINGS_URL;
+      const res = await fetchWithTimeout(url, { method, headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      if (!res.ok) throw new Error('save failed');
+      const saved = await res.json();
+      // optimistic: replace local copy
+      if (existingIdx>=0) allListings[existingIdx] = saved; else allListings.unshift(saved);
+      localStorage.setItem('cc_listings', JSON.stringify(allListings));
+      showToast('Saved to server ✅');
+    } catch(err){
+      // fallback to local
+      if (existingIdx>=0) allListings[existingIdx] = payload; else allListings.unshift(payload);
+      localStorage.setItem('cc_listings', JSON.stringify(allListings));
+      showToast('Saved locally (server unavailable)');
+    }
+  } else {
+    // local-only
+    if (existingIdx>=0) allListings[existingIdx] = payload; else allListings.unshift(payload);
+    localStorage.setItem('cc_listings', JSON.stringify(allListings));
+    showToast('Saved locally ✅');
+  }
+
+  resetForm();
+  filteredListings = [...allListings];
+  populateFilters();
+  renderFullRefresh();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+function resetForm(){
+  editIndex.value = -1;
+  createForm.reset();
+}
+
+/* Upload file -> server or base64 fallback */
+uploadImageBtn.addEventListener('click', async ()=>{
+  const f = fileInput.files[0];
+  if (!f){ showToast('Choose a file first'); return; }
+  showToast('Uploading image...');
+  // if server upload configured
+  if (UPLOAD_URL){
+    try {
+      const fd = new FormData();
+      fd.append('file', f);
+      const res = await fetchWithTimeout(UPLOAD_URL, { method:'POST', body:fd });
+      if (!res.ok) throw new Error('upload failed');
+      const data = await res.json();
+      if (data && data.url){ inputImage.value = data.url; showToast('Uploaded to server ✅'); return; }
+      throw new Error('no url');
+    } catch(err){
+      console.warn('upload failed', err);
+      // fallback to base64
+    }
+  }
+  // fallback -> base64 data URL
+  const reader = new FileReader();
+  reader.onload = e=>{
+    inputImage.value = e.target.result;
+    showToast('Image converted to data URL (saved locally)');
+  };
+  reader.readAsDataURL(f);
+});
+
+/* -------------------------
+   Booking & payment (mock)
+   ------------------------- */
+openBooking.addEventListener('click', ()=> bookingModal.classList.remove('hidden'));
+closeBooking.addEventListener('click', ()=> bookingModal.classList.add('hidden'));
+bkCancel.addEventListener('click', ()=> bookingModal.classList.add('hidden'));
+
+bookingForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const name = document.getElementById('bkName').value.trim();
+  const email = document.getElementById('bkEmail').value.trim();
+  const msg = document.getElementById('bkMsg').value.trim();
+  const paymentOption = document.getElementById('paymentOption').value;
+  const listing = allListings[showingIndex];
+  const payload = { listingId: listing.id, name, email, msg, paid: paymentOption !== 'no', date: Date.now() };
+
+  // try send to server
+  if (API_BASE){
+    try {
+      const res = await fetchWithTimeout(API_BASE + '/bookings', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      if (!res.ok) throw new Error('booking failed');
+      showToast('Booking sent to server ✅');
+    } catch(e){
+      // fallback: store locally
+      const bs = JSON.parse(localStorage.getItem('cc_bookings')||'[]'); bs.push(payload); localStorage.setItem('cc_bookings', JSON.stringify(bs));
+      showToast('Booking saved locally (server down)');
+    }
+  } else {
+    const bs = JSON.parse(localStorage.getItem('cc_bookings')||'[]'); bs.push(payload); localStorage.setItem('cc_bookings', JSON.stringify(bs));
+    showToast('Booking saved locally ✅');
+  }
+
+  bookingForm.reset();
+  bookingModal.classList.add('hidden');
+});
+
+/* -------------------------
+   Reviews modal & logic
+   ------------------------- */
+let starValue = 5;
+const starInput = document.getElementById('starInput');
+function buildStarInput(){
+  starInput.innerHTML = '';
+  for (let i=1;i<=5;i++){
+    const s = document.createElement('span'); s.className='star text-2xl'; s.textContent = '☆'; s.dataset.val = i;
+    s.addEventListener('click', ()=> { starValue = i; updateStars(); });
+    starInput.appendChild(s);
+  }
+  updateStars();
+}
+function updateStars(){ Array.from(starInput.children).forEach(ch=> ch.textContent = (parseInt(ch.dataset.val)<=starValue)?'★':'☆'); }
+buildStarInput();
+
+document.getElementById('openReview').addEventListener('click', ()=> document.getElementById('reviewModal').classList.remove('hidden'));
+document.getElementById('closeReview').addEventListener('click', ()=> document.getElementById('reviewModal').classList.add('hidden'));
+document.getElementById('cancelReview').addEventListener('click', ()=> document.getElementById('reviewModal').classList.add('hidden'));
+
+document.getElementById('reviewForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const text = document.getElementById('reviewText').value.trim();
+  if (!text){ showToast('Please add a review message'); return; }
+  const listing = allListings[showingIndex];
+  const review = { rating: starValue, text, date: Date.now() };
+
+  // try server
+  if (API_BASE){
+    try {
+      const res = await fetchWithTimeout(`${LISTINGS_URL}/${listing.id}/reviews`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(review) });
+      if (!res.ok) throw new Error('server review failed');
+      const saved = await res.json();
+      // refresh listing data from server if returned
+      if (saved.id){
+        const idx = allListings.findIndex(x=>x.id===saved.id);
+        if (idx>=0) allListings[idx] = saved;
+      }
+      showToast('Review sent to server ✅');
+    } catch(err){
+      listing.reviews = listing.reviews || []; listing.reviews.push(review); localStorage.setItem('cc_listings', JSON.stringify(allListings));
+      showToast('Review saved locally (server down)');
+    }
+  } else {
+    listing.reviews = listing.reviews || []; listing.reviews.push(review); localStorage.setItem('cc_listings', JSON.stringify(allListings));
+    showToast('Review saved locally ✅');
+  }
+
+  document.getElementById('reviewText').value = '';
+  document.getElementById('reviewModal').classList.add('hidden');
+  renderReviewsList(listing);
+  renderFullRefresh();
+});
+
+/* -------------------------
+   Export PDF (single listing) using html2canvas + jsPDF
+   ------------------------- */
+async function exportListingToPDF(listing){
+  showToast('Generating PDF...');
+  // create an offscreen element clone to capture
+  const node = document.createElement('div');
+  node.style.width = '900px';
+  node.style.padding = '18px';
+  node.style.background = '#fff';
+  node.innerHTML = `
+    <div style="position:relative;">
+      <img src="images/coast_logo.png" style="position:absolute;right:18px;top:18px;width:120px;opacity:.12"/>
+      <h1 style="font-size:24px">${escapeHtml(listing.title)}</h1>
+      <p style="color:#666">${escapeHtml(listing.region)} · ${escapeHtml(listing.category)} → ${escapeHtml(listing.subcategory||'')}</p>
+      <img src="${escapeHtml(listing.image||'')}" style="width:100%;height:300px;object-fit:cover;margin-top:12px;border-radius:8px"/>
+      <p style="margin-top:12px;color:#333">${escapeHtml(listing.description||'')}</p>
+      <p style="margin-top:8px">Contact: ${escapeHtml(listing.contact||'')}</p>
+      <p style="margin-top:8px">Email: ${escapeHtml(listing.email||'')}</p>
+    </div>
+  `;
+  document.body.appendChild(node);
+  await sleep(120); // let images load
+  const canvas = await html2canvas(node, { scale: 2, useCORS:true, allowTaint:true });
+  document.body.removeChild(node);
+
+  const imgData = canvas.toDataURL('image/jpeg', 0.9);
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({orientation:'portrait', unit:'pt', format:'a4'});
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const imgProps = pdf.getImageProperties(imgData);
+  const imgWidth = pageWidth - 40;
+  const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+  pdf.addImage(imgData, 'JPEG', 20, 40, imgWidth, imgHeight);
+  // watermark (logo)
+  try {
+    const logo = await loadImageAsDataURL('images/coast_logo.png');
+    pdf.setGState ? pdf.setGState(new pdf.GState({opacity:0.12})) : null;
+    pdf.addImage(logo, 'PNG', pageWidth - 140, 20, 110, 110, undefined, 'FAST');
+  } catch(e){ /* ignore if watermark load fails */ }
+  pdf.save(`${listing.title.replace(/\s+/g,'_')}.pdf`);
+  showToast('PDF ready ✅');
+}
+
+/* helper: load image as dataURL */
+function loadImageAsDataURL(src){
+  return new Promise((res, rej)=>{
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = ()=>{
+      const c = document.createElement('canvas'); c.width = img.naturalWidth; c.height = img.naturalHeight;
+      c.getContext('2d').drawImage(img,0,0);
+      res(c.toDataURL('image/png'));
+    };
+    img.onerror = rej;
+    img.src = src;
+  });
+}
+
+/* Export all visible listings to one PDF (basic) */
+exportAllPdfBtn && exportAllPdfBtn.addEventListener('click', async ()=>{
+  showToast('Preparing full PDF (this may take a few seconds)...');
+  // for simplicity, export currently filtered list by rendering a long HTML and capturing
+  const list = filteredListings.length ? filteredListings : allListings;
+  const node = document.createElement('div');
+  node.style.width = '900px'; node.style.padding = '18px'; node.style.background = '#fff';
+  node.innerHTML = `<h1>Coast Connect — Listings</h1>${list.map(l=>`<section style="margin-top:18px"><h2>${escapeHtml(l.title)}</h2><p>${escapeHtml(l.region)} · ${escapeHtml(l.category)}</p><img src="${escapeHtml(l.image)}" style="width:100%;height:180px;object-fit:cover"/></section>`).join('')}`;
+  document.body.appendChild(node);
+  await sleep(120);
+  const canvas = await html2canvas(node, { scale: 2, useCORS:true, allowTaint:true });
+  document.body.removeChild(node);
+  const imgData = canvas.toDataURL('image/jpeg', 0.9);
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({orientation:'portrait', unit:'pt', format:'a4'});
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, (canvas.height * pageWidth)/canvas.width);
+  pdf.save(`coast_connect_listings.pdf`);
+  showToast('PDF exported ✅');
+});
+
+/* -------------------------
+   Helpers to re-render entire list safely
+   ------------------------- */
+function renderFullRefresh(){
+  filteredListings = [...allListings];
+  populateFilters();
+  resetRender();
+  renderMore();
+}
+
+/* -------------------------
+   Review & Rating UI helpers are handled above
+   ------------------------- */
+
+/* -------------------------
+   Misc UI wiring
+   ------------------------- */
+document.getElementById('hamburger').addEventListener('click', ()=>{
+  const m=document.getElementById('mobileMenu'); m.classList.toggle('hidden');
+});
+document.getElementById('favoritesToggle').addEventListener('click', ()=>{
+  if (!favorites.length) { showToast('No favorites yet — tap ❤️ on any listing'); return; }
+  filteredListings = allListings.filter(x=>favorites.includes(x.id));
+  resetRender(); renderMore();
+  showToast('Showing favorites ⭐');
+});
+
+/* close details panel on click outside (mobile) */
+document.addEventListener('click', (e)=>{
+  const detailsPanelMobile = document.getElementById('detailsPanel');
+  if (!detailsPanelMobile) return;
+  if (window.innerWidth < 900){
+    const inside = e.target.closest('#detailsPanel') || e.target.closest('[data-id]');
+    if (!inside && detailsPanelMobile.classList.contains('open')) detailsPanelMobile.classList.remove('open');
+  }
+});
+
+/* sticky nav blur */
+window.addEventListener('scroll', ()=>{
+  const topNav = document.getElementById('topNav');
+  if (window.scrollY > 8) topNav.classList.add('navbar-blur','shadow-md'); else topNav.classList.remove('navbar-blur','shadow-md');
+});
+
+/* Export PDF button wiring (single listing) */
+exportPdfBtn && exportPdfBtn.addEventListener('click', ()=>{
+  const l = allListings[showingIndex]; if (!l) return showToast('Select a listing first'); exportListingToPDF(l);
+});
+
+/* allow export from detailsContent to call exportListingToPDF too */
+document.addEventListener('click', (e)=>{
+  if (e.target && e.target.matches('[id^="exportPdf"]')) {
+    const l = allListings[showingIndex]; if (!l) return showToast('Select a listing first'); exportListingToPDF(l);
+  }
+});
+
+/* -------------------------
+   Initial boot
+   ------------------------- */
+loadListings();
+</script>
+</body>
+</html>

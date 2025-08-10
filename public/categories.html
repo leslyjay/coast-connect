@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Explore Categories | Coast Connect</title>
+  <link rel="icon" href="images/coast_logo.png" />
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <!-- GSAP for micro-animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    :root { --accent: #f6da4c; --muted: #919bae; --glass: rgba(255,255,255,0.78) }
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+           background: linear-gradient(180deg,#ffffff,#f7fafc); color: #111827; -webkit-font-smoothing:antialiased; }
+    .glass { background: var(--glass); backdrop-filter: blur(8px); }
+    .navbar-blur { backdrop-filter: blur(10px); background: rgba(255,255,255,0.92); }
+    .category-card { transition: transform .25s, box-shadow .25s; will-change: transform; }
+    .category-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 24px 50px rgba(2,6,23,0.10); }
+    .small-muted { color: var(--muted); }
+    .lazy-placeholder { background: linear-gradient(90deg,#eee,#f6f6f6,#eee); min-height: 140px }
+    #toast { position: fixed; top: 16px; right: 16px; z-index: 60; padding: 10px 14px; background: #10b981; color: #fff; border-radius: 8px; opacity: 0; transition: opacity .25s; }
+    #toast.show { opacity: 1; }
+    .chip { background: #fff; border: 1px solid #e6e9ef; color: #374151; padding: .35rem .6rem; border-radius: 9999px; font-size: .85rem; }
+    .floating-hero { transform-origin: center; }
+    /* modal */
+    .modal-backdrop { background: rgba(2,6,23,0.45); backdrop-filter: blur(2px); }
+    /* accessibility focus */
+    button:focus, a:focus { outline: 3px solid rgba(88, 91, 249, 0.18); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      .category-card, .floating-hero { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body class="text-gray-800">
+
+  <script> window.CONFIG = { API_BASE: "" }; </script>
+
+  <!-- NAV -->
+  <header id="topNav" class="fixed w-full z-50 top-0 left-0 navbar-blur">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between p-3 md:p-4 px-4 md:px-6 glass">
+      <div class="flex items-center gap-3">
+        <img src="images/coast_logo.png" alt="Coast Connect" class="w-10 h-10 rounded-md shadow-sm" />
+        <div>
+          <a href="index.html" class="text-lg font-extrabold text-indigo-700">Coast Connect</a>
+          <div class="text-xs text-gray-500 -mt-1">List · Discover · Book</div>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-6">
+        <a href="index.html" class="text-sm hover:text-indigo-700">Home</a>
+        <a id="browseBtn" href="listings.html" class="text-sm hover:text-indigo-700">Browse</a>
+        <a id="addBtn" href="listings.html#create" class="text-sm hover:text-indigo-700">Add Listing</a>
+      </div>
+
+      <div class="flex md:hidden items-center gap-2">
+        <button id="hamburger" aria-expanded="false" class="p-2 rounded-md hover:bg-gray-100">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"></path></svg>
+        </button>
+      </div>
+    </nav>
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t shadow-sm">
+      <a href="index.html" class="block px-6 py-3">Home</a>
+      <a id="mobileBrowse" href="listings.html" class="block px-6 py-3">Browse Listings</a>
+      <a id="mobileAdd" href="listings.html#create" class="block px-6 py-3">Add Listing</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main class="max-w-7xl mx-auto mt-20 px-4 md:px-6 pb-20">
+    <section class="py-12 text-center relative overflow-visible">
+      <div class="max-w-4xl mx-auto">
+        <h1 
+          class="text-4xl md:text-5xl font-extrabold text-yellow-600 mb-3 floating-hero translate-y-3 opacity-0 transition-all duration-700 ease-out" 
+          id="heroTitle"
+        >
+          Explore Top Coastal Categories
+        </h1>
+
+        <p class="text-gray-600 max-w-2xl mx-auto mb-6" data-aos="fade-up" data-aos-delay="100">Discover curated services and listings across the coast — tap a category to explore subcategories and find verified local providers. Built to convert visitors into customers.</p>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-3 items-center mb-8" data-aos="fade-up" data-aos-delay="140">
+          <input id="searchInput" type="search" placeholder="Search categories..." class="px-4 py-2 w-full sm:w-80 rounded-lg border border-gray-200 focus:ring-2 focus:ring-yellow-300" />
+          <div class="flex gap-2">
+            <select id="typeFilter" class="px-4 py-2 rounded-lg border border-gray-200">
+              <option value="">📂 All types</option>
+              <option value="popular"> Popular</option>
+              <option value="services"> Services</option>
+              <option value="products"> Products</option>
+              <option value="support"> Community</option>
+            </select>
+            <button id="btnAddTop" class="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-full font-semibold shadow">Add Listing</button>
+          </div>
+        </div>
+
+        <!-- filter chips -->
+        <div class="flex justify-center gap-3 flex-wrap mb-6" data-aos="fade-up" data-aos-delay="180" id="chipsWrap">
+          <button class="chip" data-type="">All</button>
+          <button class="chip" data-type="popular">Popular</button>
+          <button class="chip" data-type="services">Services</button>
+          <button class="chip" data-type="products">Products</button>
+          <button class="chip" data-type="support">Community</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid -->
+    <section id="categoriesGrid" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <!-- JS injected -->
+    </section>
+
+    <div class="flex justify-center mt-8">
+      <button id="loadMore" class="px-6 py-2 rounded-full border border-gray-200">Show more categories</button>
+    </div>
+  </main>
+
+  <!-- Quick Preview Modal (subcats + top listings) -->
+  <div id="previewModal" class="fixed inset-0 z-60 hidden items-center justify-center">
+    <div class="absolute inset-0 modal-backdrop" tabindex="-1"></div>
+    <div class="relative max-w-4xl w-full bg-white rounded-2xl shadow-2xl p-6 z-70" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+      <div class="flex justify-between items-start gap-3">
+        <div>
+          <h3 id="previewTitle" class="text-xl font-bold">Preview</h3>
+          <p id="previewSub" class="text-sm text-gray-500 mt-1">Quick view of subcategories and sample listings.</p>
+        </div>
+        <button id="closePreview" class="text-gray-500">Close</button>
+      </div>
+
+      <div id="previewBody" class="mt-4 grid md:grid-cols-2 gap-4 max-h-[60vh] overflow-auto">
+        <!-- injected -->
+      </div>
+
+      <div class="mt-4 flex justify-end gap-2">
+        <button id="goCategoryPage" class="px-4 py-2 rounded-full border">Open Category Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- toast -->
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <!-- analytics quick panel visible if ?admin=1 -->
+  <div id="analyticsPanel" aria-hidden="true" class="fixed left-6 bottom-6 z-70 bg-white rounded-xl shadow p-4 hidden max-w-xs">
+    <div class="flex justify-between items-center mb-2">
+      <strong>Analytics</strong>
+      <button id="closeAnalytics" class="text-gray-500">✖</button>
+    </div>
+    <div id="analyticsBody" class="text-sm text-gray-700"></div>
+    <div class="mt-3 text-xs text-gray-400">Local analytics stored in <code>localStorage → cc_analytics</code>.</div>
+  </div>
+
+  <footer class="text-center py-8 text-sm text-gray-500">
+    © <span id="year"></span> Coast Connect · Built with ❤
+  </footer>
+
+  <!-- libs -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+  /***********************
+   Upgraded Legendary Categories Page
+   - Subcategory previews
+   - Quick-preview modal with sample listings
+   - GSAP hero micro-anim + AOS for card reveals
+   - Search + chips + load-more + analytics + referrals
+  ***********************/
+
+  AOS.init({ duration: 700, once: true });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Config optionally for analytics forwarding
+  const API_BASE = window.CONFIG && window.CONFIG.API_BASE ? window.CONFIG.API_BASE : "";
+
+    // Data: categories + subcategories + sample listings
+  const CATEGORIES = [
+    {
+      key: 'Financial Services',
+      title: 'Financial Services',
+      img: 'images/categories/financial.webp',
+      tag: 'Banks, SACCOs, insurance & loans',
+      type: 'services',
+      desc: 'Banks, SACCOs, MPESA, insurance, credit, Forex.',
+      subcats: [
+        { key: 'banks', title: 'Banks', desc: 'Financial institutions.' },
+        { key: 'saccos', title: 'SACCOs', desc: 'Member-based savings groups.' },
+        { key: 'forex', title: 'Forex Bureaus', desc: 'Currency exchange services.' },
+        { key: 'insurance', title: 'Insurance Agencies', desc: 'Protection & risk coverage.' },
+        { key: 'mpesa', title: 'MPESA Agents', desc: 'Mobile money access.' },
+        { key: 'loans', title: 'Loan & Credit Services', desc: 'Lending institutions.' }
+      ],
+      listings: [
+        { id: 'F-801', title: 'Coast Bank', excerpt: 'Full financial services', img: 'images/listings/bank.jpg' },
+        { id: 'F-802', title: 'Safe SACCO', excerpt: 'Savings and loans', img: 'images/listings/sacco.jpg' }
+      ]
+    },
+    {
+      key: 'Construction & Real Estate',
+      title: 'Construction & Real Estate',
+      img: 'images/categories/real_estate.webp',
+      tag: 'Contractors, agents & materials',
+      type: 'services',
+      desc: 'Contractors, listings, plumbers, electricians, materials, land.',
+      subcats: [
+        { key: 'contractors', title: 'Contractors', desc: 'Building experts.' },
+        { key: 'real-estate-agents', title: 'Real Estate Agents', desc: 'Property finders.' },
+        { key: 'interior-design', title: 'Interior Design', desc: 'Space aesthetics.' },
+        { key: 'materials', title: 'Materials', desc: 'Hardware & supplies.' },
+        { key: 'plumbers', title: 'Plumbers', desc: 'Water systems specialists.' },
+        { key: 'electricians', title: 'Electricians', desc: 'Wiring and power solutions.' },
+        { key: 'land-for-sale', title: 'Land for Sale', desc: 'Plot listings.' },
+        { key: 'properties-for-rent', title: 'Properties for Rent', desc: 'Homes and spaces.' }
+      ],
+      listings: [
+        { id: 'C-901', title: 'Sunset Builders Ltd', excerpt: 'Reliable construction services', img: 'images/listings/contractor.jpg' },
+        { id: 'C-902', title: 'Coast Realty', excerpt: 'Find your dream home', img: 'images/listings/real_estate.jpg' }
+      ]
+    },
+    {
+      key: 'Education & Learning',
+      title: 'Education & Learning',
+      img: 'images/categories/education.webp',
+      tag: 'Schools, training & tutors',
+      type: 'services',
+      desc: 'Schools, colleges, ICT training, tutors, driving, languages.',
+      subcats: [
+        { key: 'primary-schools', title: 'Primary Schools', desc: 'Basic education.' },
+        { key: 'colleges', title: 'Colleges & Universities', desc: 'Higher education.' },
+        { key: 'ict-training', title: 'ICT Training', desc: 'Computer & digital skills.' },
+        { key: 'tutors', title: 'Tutors', desc: 'Private educators.' },
+        { key: 'driving-schools', title: 'Driving Schools', desc: 'Licensed trainers.' },
+        { key: 'computer-centers', title: 'Computer Training Centers', desc: 'IT skill centers.' },
+        { key: 'vocational', title: 'Vocational Institutions', desc: 'Practical skills.' },
+        { key: 'language-centers', title: 'Language Centers', desc: 'Language learning.' }
+      ],
+      listings: [
+        { id: 'E-1001', title: 'Coast Technical College', excerpt: 'Professional ICT courses', img: 'images/listings/college.jpg' },
+        { id: 'E-1002', title: 'Bright Tutors', excerpt: 'Home tutoring services', img: 'images/listings/tutors.jpg' }
+      ]
+    },
+    {
+      key: 'Tech & Digital Services',
+      title: 'Tech & Digital Services',
+      img: 'images/categories/tech_digital.webp',
+      tag: 'Developers, repair & Wi-Fi',
+      type: 'services',
+      desc: 'Developers, cyber cafes, Wi-Fi setup, repairs, freelancers.',
+      subcats: [
+        { key: 'cyber-cafes', title: 'Cyber Cafes', desc: 'Internet access.' },
+        { key: 'dev-agencies', title: 'Dev Agencies', desc: 'Software teams.' },
+        { key: 'app-developers', title: 'App Developers', desc: 'Mobile/web solutions.' },
+        { key: 'laptop-repair', title: 'Laptop Repair', desc: 'PC servicing.' },
+        { key: 'wifi-setup', title: 'Wi-Fi Setup', desc: 'Home/office connectivity.' },
+        { key: 'tv-satellite', title: 'TV/Satellite Installers', desc: 'Entertainment setup.' },
+        { key: 'mobile-repair', title: 'Mobile Repair', desc: 'Smartphone services.' },
+        { key: 'freelance-tech-support', title: 'Freelance Tech Support', desc: 'On-demand help.' }
+      ],
+      listings: [
+        { id: 'TD-1101', title: 'FastFix Laptop Repair', excerpt: 'Quick & reliable service', img: 'images/listings/laptop_repair.jpg' },
+        { id: 'TD-1102', title: 'Coast App Devs', excerpt: 'Custom software solutions', img: 'images/listings/app_dev.jpg' }
+      ]
+    },
+    {
+      key: 'WiFi & Local Digital Services',
+      title: 'WiFi & Local Digital Services',
+      img: 'images/categories/wifi_digital.webp',
+      tag: 'Free WiFi, payments & tech hubs',
+      type: 'popular',
+      desc: 'Free WiFi, printing, online payment, SIM registration, tech hubs.',
+      subcats: [
+        { key: 'free-wifi', title: 'Free/Public WiFi', desc: 'Open access internet zones.' },
+        { key: 'wifi-installation', title: 'WiFi Installation', desc: 'Home and office setups.' },
+        { key: 'mpesa-help', title: 'MPESA Help Desks', desc: 'Transaction assistance.' },
+        { key: 'sim-registration', title: 'SIM Registration Support', desc: 'Phone line verification.' },
+        { key: 'printing-scanning', title: 'Printing & Scanning', desc: 'Document services.' },
+        { key: 'online-payment', title: 'Online Payment Points', desc: 'Bill & service payments.' },
+        { key: 'tech-hubs', title: 'Tech Hubs & Innovation Centers', desc: 'Co-working & startup support.' }
+      ],
+      listings: [
+        { id: 'WL-1201', title: 'Coast Tech Hub', excerpt: 'Innovation and co-working space', img: 'images/listings/tech_hub.jpg' },
+        { id: 'WL-1202', title: 'City Free WiFi Spot', excerpt: 'Open internet access zone', img: 'images/listings/free_wifi.jpg' }
+      ]
+    },
+    {
+      key: 'Entertainment & Nightlife',
+      title: 'Entertainment & Nightlife',
+      img: 'images/categories/entertainment_events.webp',
+      tag: 'Bars, clubs, live music & events',
+      type: 'popular',
+      desc: 'Bars, lounges, DJs, clubs, live music, photography and events.',
+      subcats: [
+        { key: 'clubs-lounges', title: 'Clubs & Lounges', desc: 'Nightlife destinations.' },
+        { key: 'bars', title: 'Bars', desc: 'Casual drinking spots.' },
+        { key: 'djs', title: 'DJs & Sound Providers', desc: 'Event music and entertainment.' },
+        { key: 'live-music', title: 'Live Music Venues', desc: 'Concerts and performances.' },
+        { key: 'event-photography', title: 'Event Photography', desc: 'Capturing moments.' },
+        { key: 'party-rentals', title: 'Party Rentals', desc: 'Chairs, tents, and decor.' }
+      ],
+      listings: [
+        { id: 'E-1301', title: 'Coast Night Club', excerpt: 'Live DJ and dance floor', img: 'images/listings/nightclub.jpg' },
+        { id: 'E-1302', title: 'Seaside Bar', excerpt: 'Great cocktails & vibe', img: 'images/listings/seaside_bar.jpg' }
+      ]
+    },
+    {
+      key: 'Events & Celebrations',
+      title: 'Events & Celebrations',
+      img: 'images/categories/events_celebrations.webp',
+      tag: 'Weddings, parties, catering & venues',
+      type: 'services',
+      desc: 'Weddings, parties, conferences, catering, venues, DJs and more.',
+      subcats: [
+        { key: 'wedding-planning', title: 'Wedding Planning', desc: 'Complete bridal coordination.' },
+        { key: 'party-rentals', title: 'Party Rentals', desc: 'Chairs, tents, decor.' },
+        { key: 'conference-venues', title: 'Conference Venues', desc: 'Professional event spaces.' },
+        { key: 'catering-services', title: 'Catering Services', desc: 'Food & beverage provision.' },
+        { key: 'event-djs', title: 'Event DJs & MCs', desc: 'Entertainment hosts.' },
+        { key: 'photographers-videographers', title: 'Photographers & Videographers', desc: 'Event documentation.' },
+        { key: 'florists-decorators', title: 'Florists & Decorators', desc: 'Event styling.' }
+      ],
+      listings: [
+        { id: 'EV-1401', title: 'Elegant Weddings', excerpt: 'Full bridal planning services', img: 'images/listings/wedding_planner.jpg' },
+        { id: 'EV-1402', title: 'Party Central Rentals', excerpt: 'Event chairs & tents', img: 'images/listings/party_rentals.jpg' }
+      ]
+    },
+    {
+      key: 'Personal Services',
+      title: 'Personal Services',
+      img: 'images/categories/personal_services.webp',
+      tag: 'Cleaning, laundry, repairs & home help',
+      type: 'services',
+      desc: 'Cleaning, laundry, repair, tailoring, home help and more.',
+      subcats: [
+        { key: 'cleaning-services', title: 'Cleaning Services', desc: 'Home and office cleaning.' },
+        { key: 'laundry-dry-cleaning', title: 'Laundry & Dry Cleaning', desc: 'Clothing care services.' },
+        { key: 'tailoring-alterations', title: 'Tailoring & Alterations', desc: 'Custom clothing services.' },
+        { key: 'car-wash-detailing', title: 'Car Wash & Detailing', desc: 'Vehicle cleaning services.' },
+        { key: 'gardening-landscaping', title: 'Gardening & Landscaping', desc: 'Outdoor care.' },
+        { key: 'handyman-repairs', title: 'Handyman & Repairs', desc: 'General fix-it jobs.' },
+        { key: 'home-help-care', title: 'Home Help & Care', desc: 'Elderly and child care.' }
+      ],
+      listings: [
+        { id: 'PS-1501', title: 'Sparkle Cleaners', excerpt: 'Top-notch home cleaning', img: 'images/listings/cleaning.jpg' },
+        { id: 'PS-1502', title: 'Tailor Made', excerpt: 'Expert tailoring services', img: 'images/listings/tailoring.jpg' }
+      ]
+    },
+    {
+      key: 'Sports & Fitness',
+      title: 'Sports & Fitness',
+      img: 'images/categories/sports_fitness.webp',
+      tag: 'Gyms, trainers, clubs & athletics',
+      type: 'popular',
+      desc: 'Gyms, trainers, clubs, yoga, martial arts, swimming, athletics.',
+      subcats: [
+        { key: 'gyms-fitness-centers', title: 'Gyms & Fitness Centers', desc: 'Workout facilities.' },
+        { key: 'personal-trainers', title: 'Personal Trainers', desc: 'Coaching and guidance.' },
+        { key: 'yoga-pilates-studios', title: 'Yoga & Pilates Studios', desc: 'Wellness classes.' },
+        { key: 'martial-arts-boxing', title: 'Martial Arts & Boxing', desc: 'Combat training.' },
+        { key: 'sports-clubs-teams', title: 'Sports Clubs & Teams', desc: 'Organized sports.' },
+        { key: 'swimming-pools-lessons', title: 'Swimming Pools & Lessons', desc: 'Aquatic activities.' },
+        { key: 'athletics-track-events', title: 'Athletics & Track Events', desc: 'Running and competitions.' }
+      ],
+      listings: [
+        { id: 'SF-1601', title: 'FitLife Gym', excerpt: 'State-of-the-art fitness center', img: 'images/listings/gym.jpg' },
+        { id: 'SF-1602', title: 'Coast Yoga Studio', excerpt: 'Yoga classes & wellness', img: 'images/listings/yoga.jpg' }
+      ]
+    },
+    {
+      key: 'Automotive',
+      title: 'Automotive',
+      img: 'images/categories/automotive.webp',
+      tag: 'Garages, parts, towing & rentals',
+      type: 'services',
+      desc: 'Garages, parts, towing, rentals, repairs and accessories.',
+      subcats: [
+        { key: 'garages-workshops', title: 'Garages & Workshops', desc: 'Vehicle servicing.' },
+        { key: 'spare-parts', title: 'Spare Parts', desc: 'Replacement components.' },
+        { key: 'towing-recovery', title: 'Towing & Recovery', desc: 'Emergency vehicle transport.' },
+        { key: 'car-rental-leasing', title: 'Car Rental & Leasing', desc: 'Short or long-term hire.' },
+        { key: 'auto-accessories', title: 'Auto Accessories', desc: 'Enhancements and add-ons.' },
+        { key: 'tyre-shops', title: 'Tyre Shops', desc: 'Sales and repair.' }
+      ],
+      listings: [
+        { id: 'AU-1701', title: 'AutoFix Garage', excerpt: 'Reliable vehicle repairs', img: 'images/listings/garage.jpg' },
+        { id: 'AU-1702', title: 'Premium Tyres', excerpt: 'Quality tyre sales & fitting', img: 'images/listings/tyres.jpg' }
+      ]
+    },
+    {
+      key: 'Arts & Crafts',
+      title: 'Arts & Crafts',
+      img: 'images/categories/arts_crafts.webp',
+      tag: 'Handmade art, souvenirs & galleries',
+      type: 'services',
+      desc: 'Handmade art, souvenirs, local crafts, galleries and supplies.',
+      subcats: [
+        { key: 'art-galleries', title: 'Art Galleries', desc: 'Exhibitions and sales.' },
+        { key: 'handmade-crafts', title: 'Handmade Crafts', desc: 'Local artisan products.' },
+        { key: 'souvenir-shops', title: 'Souvenir Shops', desc: 'Gifts and memorabilia.' },
+        { key: 'art-supplies', title: 'Art Supplies', desc: 'Materials and tools.' },
+        { key: 'workshops-classes', title: 'Workshops & Classes', desc: 'Learn art skills.' }
+      ],
+      listings: [
+        { id: 'AC-1801', title: 'Seaside Art Gallery', excerpt: 'Local artist exhibitions', img: 'images/listings/art_gallery.jpg' },
+        { id: 'AC-1802', title: 'Crafts & Curios', excerpt: 'Handmade souvenirs', img: 'images/listings/crafts.jpg' }
+      ]
+    },
+    {
+      key: 'Religious & Spiritual',
+      title: 'Religious & Spiritual',
+      img: 'images/categories/religious_spiritual.webp',
+      tag: 'Places of worship & spiritual guidance',
+      type: 'services',
+      desc: 'Places of worship, spiritual guidance, religious groups and events.',
+      subcats: [
+        { key: 'churches', title: 'Churches', desc: 'Christian worship centers.' },
+        { key: 'mosques', title: 'Mosques', desc: 'Muslim places of prayer.' },
+        { key: 'temples', title: 'Temples', desc: 'Hindu and other faiths.' },
+        { key: 'spiritual-leaders', title: 'Spiritual Leaders', desc: 'Guidance and counseling.' },
+        { key: 'religious-events', title: 'Religious Events', desc: 'Gatherings and celebrations.' }
+      ],
+      listings: [
+        { id: 'RS-1901', title: 'St. Mary’s Church', excerpt: 'Community worship center', img: 'images/listings/church.jpg' },
+        { id: 'RS-1902', title: 'Coast Mosque', excerpt: 'Prayer and gatherings', img: 'images/listings/mosque.jpg' }
+      ]
+    },
+    {
+      key: 'Legal & Consultancy',
+      title: 'Legal & Consultancy',
+      img: 'images/categories/legal_consultancy.webp',
+      tag: 'Lawyers, consultants & advisors',
+      type: 'services',
+      desc: 'Lawyers, notaries, consultants, financial advisors and more.',
+      subcats: [
+        { key: 'law-firms', title: 'Law Firms', desc: 'Legal representation.' },
+        { key: 'consulting-agencies', title: 'Consulting Agencies', desc: 'Business advice.' },
+        { key: 'financial-advisors', title: 'Financial Advisors', desc: 'Money management.' },
+        { key: 'notaries', title: 'Notaries', desc: 'Document authentication.' },
+        { key: 'tax-consultants', title: 'Tax Consultants', desc: 'Tax planning and advice.' }
+      ],
+      listings: [
+        { id: 'LC-2001', title: 'Coast Law Chambers', excerpt: 'Expert legal services', img: 'images/listings/lawyers.jpg' },
+        { id: 'LC-2002', title: 'Finance Advisory Ltd', excerpt: 'Financial consultancy', img: 'images/listings/consultants.jpg' }
+      ]
+    },
+    {
+      key: 'Home & Appliances',
+      title: 'Home & Appliances',
+      img: 'images/categories/home_appliances.webp',
+      tag: 'Furniture, repairs & cleaning',
+      type: 'services',
+      desc: 'Furniture, appliance repair, cleaning, handyman and electrical.',
+      subcats: [
+        { key: 'furniture-stores', title: 'Furniture Stores', desc: 'Home and office furniture.' },
+        { key: 'appliance-repair', title: 'Appliance Repair', desc: 'Fixing home electronics.' },
+        { key: 'home-cleaning', title: 'Home Cleaning', desc: 'Residential cleaning services.' },
+        { key: 'handyman-services', title: 'Handyman Services', desc: 'Small repairs and jobs.' },
+        { key: 'electrical-repairs', title: 'Electrical Repairs', desc: 'Wiring and appliances.' }
+      ],
+      listings: [
+        { id: 'HA-2101', title: 'Home Comfort Furniture', excerpt: 'Quality furniture sales', img: 'images/listings/furniture.jpg' },
+        { id: 'HA-2102', title: 'Appliance Fixers', excerpt: 'Fast appliance repairs', img: 'images/listings/appliance_repair.jpg' }
+      ]
+    },
+    {
+      key: 'Travel & Tours',
+      title: 'Travel & Tours',
+      img: 'images/categories/travel_tours.webp',
+      tag: 'Safari, city & boat tours',
+      type: 'popular',
+      desc: 'Safaris, city tours, cruises, travel agencies and adventures.',
+      subcats: [
+        { key: 'safari-tours', title: 'Safari Tours', desc: 'Wildlife and nature trips.' },
+        { key: 'city-tours', title: 'City Tours', desc: 'Urban sightseeing.' },
+        { key: 'boat-cruises', title: 'Boat Cruises', desc: 'Water sightseeing.' },
+        { key: 'travel-agencies', title: 'Travel Agencies', desc: 'Trip planning services.' },
+        { key: 'guided-tours', title: 'Guided Tours', desc: 'Expert-led travel.' },
+        { key: 'adventure-activities', title: 'Adventure Activities', desc: 'Exciting experiences.' }
+      ],
+      listings: [
+        { id: 'TT-2201', title: 'Wild Coast Safaris', excerpt: 'Exciting wildlife tours', img: 'images/listings/safari.jpg' },
+        { id: 'TT-2202', title: 'City Explorer Tours', excerpt: 'Discover the city', img: 'images/listings/city_tour.jpg' }
+      ]
+    },
+    {
+      key: 'Pets & Animals',
+      title: 'Pets & Animals',
+      img: 'images/categories/pets_animals.webp',
+      tag: 'Veterinary, grooming & supplies',
+      type: 'services',
+      desc: 'Veterinary clinics, grooming, pet training, supplies and adoption.',
+      subcats: [
+        { key: 'veterinary-clinics', title: 'Veterinary Clinics', desc: 'Animal health services.' },
+        { key: 'pet-grooming', title: 'Pet Grooming', desc: 'Care and cleaning.' },
+        { key: 'pet-training', title: 'Pet Training', desc: 'Behavior and obedience.' },
+        { key: 'pet-supplies', title: 'Pet Supplies', desc: 'Food and accessories.' },
+        { key: 'animal-adoption', title: 'Animal Adoption', desc: 'Find a new friend.' }
+      ],
+      listings: [
+        { id: 'PA-2301', title: 'Coast Vet Clinic', excerpt: 'Comprehensive pet care', img: 'images/listings/vet.jpg' },
+        { id: 'PA-2302', title: 'Pet Groomers', excerpt: 'Professional grooming services', img: 'images/listings/pet_grooming.jpg' }
+      ]
+    },
+    {
+      key: 'Miscellaneous',
+      title: 'Miscellaneous',
+      img: 'images/categories/miscellaneous.webp',
+      tag: 'Various services & special requests',
+      type: 'services',
+      desc: 'Event staffing, courier, translation, security, custom orders.',
+      subcats: [
+        { key: 'event-staffing', title: 'Event Staffing', desc: 'Temporary event workers.' },
+        { key: 'courier-services', title: 'Courier Services', desc: 'Fast parcel delivery.' },
+        { key: 'photography', title: 'Photography', desc: 'Professional photoshoots.' },
+        { key: 'translation-services', title: 'Translation Services', desc: 'Language support.' },
+        { key: 'security-services', title: 'Security Services', desc: 'Safety and protection.' },
+        { key: 'custom-orders', title: 'Custom Orders', desc: 'Tailored services.' }
+      ],
+      listings: [
+        { id: 'MI-2401', title: 'Swift Couriers', excerpt: 'Reliable delivery services', img: 'images/listings/courier.jpg' },
+        { id: 'MI-2402', title: 'Secure Guards', excerpt: 'Professional security staff', img: 'images/listings/security.jpg' }
+      ]
+    },
+
+    // Now append categories present in the first script but missing above:
+
+    {
+      key: 'Accommodation',
+      title: 'Accommodation',
+      img: 'images/categories/accommodation.webp',
+      tag: 'Hotels, lodges & stays',
+      type: 'services',
+      desc: 'Comfortable stays — book hotels, guesthouses, and beachfront cottages handpicked for quality.',
+      subcats: [
+        { key: 'hotels', title: 'Hotels' },
+        { key: 'guest-houses', title: 'Guest Houses' },
+        { key: 'b&bs', title: 'B&Bs' },
+        { key: 'lodges', title: 'Lodges' },
+        { key: 'apartments', title: 'Apartments' },
+        { key: 'hostels', title: 'Hostels' },
+        { key: 'camps-lodges', title: 'Camps & Lodges' },
+        { key: 'beach-villas', title: 'Beach Villas' }
+      ]
+    },
+    {
+      key: 'Food & Dining',
+      title: 'Food & Dining',
+      img: 'images/categories/food_dining.webp',
+      tag: 'Restaurants, cafes & local kitchens',
+      type: 'services',
+      desc: 'Local eateries, fast food, cafes, delivery and more.',
+      subcats: [
+        { key: 'restaurants', title: 'Restaurants' },
+        { key: 'local-kitchens', title: 'Local Kitchens' },
+        { key: 'fast-food', title: 'Fast Food' },
+        { key: 'cafes-coffee-shops', title: 'Cafés & Coffee Shops' },
+        { key: 'food-delivery', title: 'Food Delivery' },
+        { key: 'juice-smoothie-bars', title: 'Juice & Smoothie Bars' }
+      ]
+    },
+    {
+      key: 'Transport & Travel',
+      title: 'Transport & Travel',
+      img: 'images/categories/transport_travel.webp',
+      tag: 'Car hire, tuk tuks & tours',
+      type: 'services',
+      desc: 'Car hire, tuk tuks, boda bodas, tours, boats and airport shuttles.',
+      subcats: [
+        { key: 'car-hire', title: 'Car Hire' },
+        { key: 'tuk-tuks', title: 'Tuk Tuks' },
+        { key: 'boda-bodas', title: 'Boda Bodas' },
+        { key: 'tour-operators', title: 'Tour Operators' },
+        { key: 'airport-shuttles', title: 'Airport Shuttles' },
+        { key: 'boat-services', title: 'Boat Services' },
+        { key: 'boat-tours', title: 'Boat Tours' },
+        { key: 'taxis', title: 'Taxis' },
+        { key: 'tours', title: 'Tours' },
+        { key: 'boat-charters', title: 'Boat Charters' }
+      ]
+    },
+    {
+      key: 'Jobs & Gigs',
+      title: 'Jobs & Gigs',
+      img: 'images/categories/jobs_gigs.webp',
+      tag: 'Full time, part time & gigs',
+      type: 'services',
+      desc: 'Full time, part time, internships, remote jobs, daily hustles.',
+      subcats: [
+        { key: 'full-time', title: 'Full Time' },
+        { key: 'part-time', title: 'Part Time' },
+        { key: 'internships', title: 'Internships' },
+        { key: 'remote', title: 'Remote' },
+        { key: 'daily-hustles', title: 'Daily Hustles' }
+      ]
+    },
+    {
+      key: 'Shopping',
+      title: 'Shopping',
+      img: 'images/categories/shopping.webp',
+      tag: 'Markets, boutiques & electronics',
+      type: 'services',
+      desc: 'Boutiques, supermarkets, markets, electronics, cosmetics and art.',
+      subcats: [
+        { key: 'boutiques', title: 'Boutiques' },
+        { key: 'supermarkets', title: 'Supermarkets' },
+        { key: 'local-markets', title: 'Local Markets' },
+        { key: 'electronics-stores', title: 'Electronics Stores' },
+        { key: 'beauty-cosmetics', title: 'Beauty & Cosmetic Shops' },
+        { key: 'art-curio-shops', title: 'Art & Curio Shops' }
+      ]
+    },
+    {
+      key: 'Health & Wellness',
+      title: 'Health & Wellness',
+      img: 'images/categories/health_wellness.webp',
+      tag: 'Hospitals, clinics & labs',
+      type: 'services',
+      desc: 'Hospitals, clinics, pharmacies, labs, therapists and wellness.',
+      subcats: [
+        { key: 'hospitals', title: 'Hospitals' },
+        { key: 'clinics', title: 'Clinics' },
+        { key: 'pharmacies', title: 'Pharmacies' },
+        { key: 'therapists', title: 'Therapists' },
+        { key: 'counselors', title: 'Counselors' },
+        { key: 'laboratories', title: 'Laboratories' },
+        { key: 'wellness-centers', title: 'Wellness Centers' },
+        { key: 'mental-health-services', title: 'Mental Health Services' },
+        { key: 'gyms-fitness-studios', title: 'Gyms & Fitness Studios' }
+      ]
+    },
+    {
+      key: 'Beauty & Grooming',
+      title: 'Beauty & Grooming',
+      img: 'images/categories/beauty_grooming.webp',
+      tag: 'Salons, barbers & spas',
+      type: 'services',
+      desc: 'Salons, barbers, spas, massage, nails and cosmetic services.',
+      subcats: [
+        { key: 'salons', title: 'Salons' },
+        { key: 'barbers', title: 'Barbers' },
+        { key: 'spas', title: 'Spas' },
+        { key: 'massage-therapists', title: 'Massage Therapists' },
+        { key: 'nail-studios', title: 'Nail Studios' },
+        { key: 'cosmetic-services', title: 'Cosmetic Services' }
+      ]
+    },
+    {
+      key: 'Local Services',
+      title: 'Local Services',
+      img: 'images/categories/local_services.webp',
+      tag: 'Tailors, plumbers, laundry & security',
+      type: 'services',
+      desc: 'Tailors, plumbers, laundry, water delivery, furniture, cleaning and security.',
+      subcats: [
+        { key: 'tailors', title: 'Tailors' },
+        { key: 'plumbers', title: 'Plumbers' },
+        { key: 'laundry', title: 'Laundry' },
+        { key: 'water-delivery', title: 'Water Delivery' },
+        { key: 'furniture-makers', title: 'Furniture Makers' },
+        { key: 'cleaning-services', title: 'Cleaning Services' },
+        { key: 'security-services', title: 'Security Services' }
+      ]
+    },
+    {
+      key: 'Faith & Religion',
+      title: 'Faith & Religion',
+      img: 'images/categories/faith_religion.webp',
+      tag: 'Churches, mosques & temples',
+      type: 'services',
+      desc: 'Churches, mosques, temples, faith events and religious shops.',
+      subcats: [
+        { key: 'churches', title: 'Churches' },
+        { key: 'mosques', title: 'Mosques' },
+        { key: 'temples', title: 'Temples' },
+        { key: 'faith-events', title: 'Faith Events' },
+        { key: 'religious-bookshops', title: 'Religious Bookshops' },
+        { key: 'faith-based-charities', title: 'Faith-based Charities' }
+      ]
+    },
+    {
+      key: 'Emergency & Support',
+      title: 'Emergency & Support',
+      img: 'images/categories/emergency_support.webp',
+      tag: 'Police, ambulance & rescue',
+      type: 'services',
+      desc: 'Police, ambulance, fire, rescue, Red Cross and community support.',
+      subcats: [
+        { key: 'police-stations', title: 'Police Stations' },
+        { key: 'ambulance-services', title: 'Ambulance Services' },
+        { key: 'fire-departments', title: 'Fire Departments' },
+        { key: 'rescue-services', title: 'Rescue Services' },
+        { key: 'red-cross-ngo-help', title: 'Red Cross & NGO Help' },
+        { key: 'community-support-lines', title: 'Community Support Lines' }
+      ]
+    },
+    {
+      key: 'Community Boards',
+      title: 'Community Boards',
+      img: 'images/categories/community_boards.webp',
+      tag: 'Lost & found, alerts & cleanups',
+      type: 'services',
+      desc: 'Lost & found, public alerts, charity events, community cleanups and rallies.',
+      subcats: [
+        { key: 'lost-found', title: 'Lost & Found' },
+        { key: 'public-alerts', title: 'Public Alerts' },
+        { key: 'charity-events', title: 'Charity Events' },
+        { key: 'community-cleanup', title: 'Community Cleanup' },
+        { key: 'rallies', title: 'Rallies' }
+      ]
+    },
+    {
+      key: 'Farmers & Agribusiness',
+      title: 'Farmers & Agribusiness',
+      img: 'images/categories/farmers_agribusiness.webp',
+      tag: 'Seeds, machinery & livestock',
+      type: 'services',
+      desc: 'Seed sellers, machinery, livestock, buyers and fertilizers.',
+      subcats: [
+        { key: 'seed-sellers', title: 'Seed Sellers' },
+        { key: 'machinery', title: 'Machinery' },
+        { key: 'livestock', title: 'Livestock' },
+        { key: 'buyers', title: 'Buyers' },
+        { key: 'fertilizer-dealers', title: 'Fertilizer Dealers' }
+      ]
+    },
+    {
+      key: 'Pet & Animal Services',
+      title: 'Pet & Animal Services',
+      img: 'images/categories/pet_animal_services.webp',
+      tag: 'Vets, grooming & shelters',
+      type: 'services',
+      desc: 'Veterinarians, grooming, shelters, supplies, adoption and training.',
+      subcats: [
+        { key: 'vets', title: 'Vets' },
+        { key: 'grooming', title: 'Grooming' },
+        { key: 'animal-shelters', title: 'Animal Shelters' },
+        { key: 'pet-supplies', title: 'Pet Supplies' },
+        { key: 'animal-adoption', title: 'Animal Adoption' },
+        { key: 'pet-training', title: 'Pet Training' },
+        { key: 'pet-grooming', title: 'Pet Grooming' }
+      ]
+    },
+    {
+      key: 'Repair & Maintenance',
+      title: 'Repair & Maintenance',
+      img: 'images/categories/repair_maintenance.webp',
+      tag: 'Electricians, carpenters & phone repair',
+      type: 'services',
+      desc: 'Electricians, fundis, carpenters, phone repair and wiring.',
+      subcats: [
+        { key: 'electricians', title: 'Electricians' },
+        { key: 'fundis', title: 'Fundis' },
+        { key: 'carpenters', title: 'Carpenters' },
+        { key: 'phone-repair', title: 'Phone Repair' },
+        { key: 'wiring', title: 'Wiring' }
+      ]
+    },
+    {
+      key: 'Delivery & Errands',
+      title: 'Delivery & Errands',
+      img: 'images/categories/delivery_errands.webp',
+      tag: 'Boda delivery, courier & messengers',
+      type: 'services',
+      desc: 'Boda delivery, courier, food runners and messenger services.',
+      subcats: [
+        { key: 'boda-delivery', title: 'Boda Delivery' },
+        { key: 'courier', title: 'Courier' },
+        { key: 'food-runners', title: 'Food Runners' },
+        { key: 'messenger-services', title: 'Messenger Services' }
+      ]
+    },
+    {
+      key: 'Professional Services',
+      title: 'Professional Services',
+      img: 'images/categories/professional_services.webp',
+      tag: 'Lawyers, accountants & freelancers',
+      type: 'services',
+      desc: 'Law firms, accountants, freelancers, consultants and notaries.',
+      subcats: [
+        { key: 'law-firms', title: 'Law Firms' },
+        { key: 'accountants-auditors', title: 'Accountants & Auditors' },
+        { key: 'freelancers', title: 'Freelancers' },
+        { key: 'consultancy-agencies', title: 'Consultancy Agencies' },
+        { key: 'notary-public', title: 'Notary/Public Services' }
+      ]
+    }
+  ];
+
+  // UI refs
+  const grid = document.getElementById('categoriesGrid');
+  const loadMoreBtn = document.getElementById('loadMore');
+  const searchInput = document.getElementById('searchInput');
+  const typeFilter = document.getElementById('typeFilter');
+  const chipsWrap = document.getElementById('chipsWrap');
+  const toastEl = document.getElementById('toast');
+
+  // analytics keys
+  const ANALYTICS_KEY = 'cc_analytics';
+  const SELECTED_KEY = 'cc_selectedCategory';
+  const REF_KEY = 'cc_ref';
+  const USER_KEY = 'cc_user_id';
+
+  let visibleCount = 8;
+
+  // Ensure user id
+  function ensureUserId(){
+    let id = localStorage.getItem(USER_KEY);
+    if (!id){
+      id = 'u_' + Math.random().toString(36).slice(2,9);
+      localStorage.setItem(USER_KEY, id);
+      writeAnalytics('user_generated', { userId: id });
+    }
+    return id;
+  }
+
+  function writeAnalytics(eventType, payload = {}){
+    const timestamp = Date.now();
+    const record = { eventType, timestamp, payload };
+    try {
+      const raw = localStorage.getItem(ANALYTICS_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      arr.push(record);
+      localStorage.setItem(ANALYTICS_KEY, JSON.stringify(arr));
+      if (API_BASE){
+        fetch(API_BASE + '/analytics', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(record) }).catch(()=>{});
+      }
+    } catch(e){ console.warn('analytics error', e); }
+  }
+
+  // Create DOM card
+  function createCard(cat) {
+    const wrap = document.createElement('article');
+    wrap.className = `
+      bg-white rounded-2xl overflow-hidden shadow-sm 
+      category-card transition-all duration-300 hover:shadow-2xl hover:-translate-y-1
+    `;
+    wrap.setAttribute('data-aos', 'fade-up');
+
+    // Build subcategory chips
+    const subChips = (cat.subcats || []).slice(0, 3)
+      .map(s => `<span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">${s.title}</span>`)
+      .join(' ');
+
+    // Card layout
+    wrap.innerHTML = `
+      <!-- Image Header -->
+      <div class="h-44 w-full bg-gray-100 overflow-hidden relative">
+        <img data-src="${cat.img}" alt="${cat.title}" 
+          class="w-full h-full object-cover lazy transform transition duration-700 hover:scale-110 hover:brightness-105" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        <div class="absolute left-4 bottom-4 backdrop-blur-sm bg-black/30 p-2 rounded-lg">
+          <div class="text-sm text-white font-semibold">${cat.tag}</div>
+          <div class="text-xs text-white/90">${cat.desc || ''}</div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-4">
+        <h3 class="text-lg font-bold text-yellow-600">${cat.title}</h3>
+        <div class="flex flex-wrap gap-1 mt-2">${subChips}</div>
+      </div>
+
+      <!-- Action Bar -->
+      <div class="flex flex-col sm:flex-row border-t border-gray-200">
+        ${createAnimatedBtn('shareBtn', 'Share', 
+          `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M4 12v.01M12 4v.01M20 12v.01M4 12c3.59 0 6.5-2.91 6.5-6.5S7.59-1 4-1 1.09 1.91 1.09 5.5 4 12 4 12z" />`, 
+          'text-gray-600 hover:bg-gray-50')}
+        
+        ${createAnimatedBtn('previewBtn', 'Preview', 
+          `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M15 12c0-1.105-.895-2-2-2s-2 .895-2 2 .895 2 2 2 2-.895 2-2zm7-1s-4-5-9-5-9 5-9 5 
+          4 5 9 5 9-5 9-5z" />`, 
+          'text-indigo-600 hover:bg-indigo-50')}
+        
+        ${createAnimatedBtn('selectBtn', 'Open', 
+          `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M9 5l7 7-7 7" />`, 
+          'bg-indigo-600 text-white hover:bg-indigo-700')}
+      </div>
+    `;
+
+    // Attach event handlers
+    wrap.querySelector('.selectBtn').addEventListener('click', e => {
+      e.stopPropagation();
+      onSelectCategory(cat);
+    });
+
+    wrap.querySelector('.shareBtn').addEventListener('click', e => {
+      e.stopPropagation();
+      onShareCategory(cat);
+    });
+
+    wrap.querySelector('.previewBtn').addEventListener('click', e => {
+      e.stopPropagation();
+      onPreviewCategory(cat);
+    });
+
+    // Clicking the whole card opens the category
+    wrap.addEventListener('click', () => onSelectCategory(cat));
+
+    return wrap;
+  }
+
+  // Helper to build animated button
+  function createAnimatedBtn(className, text, svgPath, extraClasses) {
+    return `
+      <button class="group relative w-full sm:w-1/3 py-2 overflow-hidden flex items-center justify-center gap-2 text-sm font-medium ${extraClasses} transition ${className}">
+        <span class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            ${svgPath}
+          </svg>
+          <span class="transform translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300 ease-out delay-75">${text}</span>
+        </span>
+        <!-- Ripple Effect -->
+        <span class="absolute inset-0 bg-black/10 scale-0 group-active:scale-100 transition-transform duration-300 rounded"></span>
+      </button>
+    `;
+  }
+
+  // lazy image loader
+  function lazyObserve(img){
+    if (!img) return;
+    const io = new IntersectionObserver((entries, obs)=>{
+      entries.forEach(en=>{
+        if (en.isIntersecting){
+          img.src = img.dataset.src;
+          img.classList.remove('lazy');
+          obs.disconnect();
+        }
+      });
+    }, {rootMargin:'120px'});
+    io.observe(img);
+  }
+
+  // render grid (with search + filter)
+  function renderGrid(){
+    grid.innerHTML = '';
+    const filtered = applySearchFilter(CATEGORIES);
+    filtered.slice(0, visibleCount).forEach(cat=>{
+      const card = createCard(cat);
+      grid.appendChild(card);
+    });
+    // lazy images
+    Array.from(grid.querySelectorAll('img[data-src]')).forEach(img=> lazyObserve(img));
+    loadMoreBtn.style.display = (filtered.length > visibleCount) ? 'inline-block' : 'none';
+    AOS.refresh();
+    // small GSAP micro-anim for visible hero
+    gsap.fromTo('.category-card', {opacity:0, y:12}, {opacity:1, y:0, duration:0.6, stagger:0.06, ease:'power2.out'});
+  }
+
+  // search + filter logic
+  function applySearchFilter(list){
+    const q = (searchInput.value||'').trim().toLowerCase();
+    const t = (typeFilter.value||'').trim();
+    return list.filter(c=>{
+      if (t && c.type !== t) return false;
+      if (!q) return true;
+      return (c.title + ' ' + c.tag + ' ' + (c.desc||'')).toLowerCase().includes(q);
+    });
+  }
+  searchInput.addEventListener('input', ()=>{ visibleCount = 8; renderGrid(); });
+  typeFilter.addEventListener('change', ()=>{ visibleCount = 8; renderGrid(); });
+
+  // chip clicks
+  chipsWrap.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const t = btn.getAttribute('data-type');
+    typeFilter.value = t || '';
+    visibleCount = 8;
+    renderGrid();
+  });
+
+  // load more
+  loadMoreBtn.addEventListener('click', ()=>{ visibleCount += 8; renderGrid(); writeAnalytics('categories_load_more', { visibleCount }); });
+
+  // selection / redirect
+  function onSelectCategory(cat){
+    const userId = ensureUserId();
+    writeAnalytics('category_click', { category: cat.key, userId, source: location.href });
+    // persist minimal data for category page
+    const payload = { categoryKey: cat.key, title: cat.title, subcats: cat.subcats || [] };
+    localStorage.setItem(SELECTED_KEY, JSON.stringify(payload));
+    localStorage.setItem(REF_KEY, userId);
+    // redirect with params (category key)
+    const params = new URLSearchParams({ category: cat.key, ref: userId });
+    window.location.href = 'category.html?' + params.toString();
+  }
+
+  // preview (modal)
+  const previewModal = document.getElementById('previewModal');
+  const previewBody = document.getElementById('previewBody');
+  const previewSub = document.getElementById('previewSub');
+  const previewTitle = document.getElementById('previewTitle');
+  const closePreview = document.getElementById('closePreview');
+  const goCategoryPage = document.getElementById('goCategoryPage');
+  let lastPreviewCategory = null;
+
+  function onPreviewCategory(cat){
+    lastPreviewCategory = cat;
+    previewTitle.textContent = cat.title + ' · Quick Preview';
+    previewSub.textContent = cat.tag;
+    previewBody.innerHTML = `
+      <div>
+        <h4 class="font-semibold mb-2">Subcategories</h4>
+        <div class="space-y-2">
+          ${(cat.subcats || []).map(s => `<div class="p-3 border rounded-md">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="font-semibold">${s.title}</div>
+                <div class="text-sm small-muted">${s.desc || ''}</div>
+              </div>
+              <div>
+                <button class="openSubBtn text-xs px-3 py-1 rounded-full border">Open</button>
+              </div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Top Listings</h4>
+        <div class="space-y-3">
+          ${(cat.listings || []).map(l => `<div class="flex gap-3 items-center">
+            <img src="${l.img}" alt="${l.title}" class="w-16 h-12 object-cover rounded" />
+            <div>
+              <div class="font-semibold text-sm">${l.title}</div>
+              <div class="text-xs small-muted">${l.excerpt}</div>
+            </div>
+            <div class="ml-auto">
+              <button class="openListingBtn text-xs px-3 py-1 rounded-full border">View</button>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    `;
+    // wire open buttons inside preview
+    previewBody.querySelectorAll('.openSubBtn').forEach((btn, idx)=> {
+      btn.addEventListener('click', ()=> {
+        const sub = (cat.subcats || [])[idx];
+        onOpenSubcategory(cat, sub);
+      });
+    });
+    previewBody.querySelectorAll('.openListingBtn').forEach((btn, idx)=> {
+      btn.addEventListener('click', ()=> {
+        const listing = (cat.listings || [])[idx];
+        onOpenListing(cat, listing);
+      });
+    });
+
+    previewModal.classList.remove('hidden');
+    previewModal.classList.add('flex');
+    writeAnalytics('category_preview_open', { category: cat.key });
+  }
+
+  closePreview.addEventListener('click', ()=> { previewModal.classList.add('hidden'); previewModal.classList.remove('flex'); });
+  previewModal.addEventListener('click', (e)=> { if (e.target === previewModal) { previewModal.classList.add('hidden'); previewModal.classList.remove('flex'); } });
+  goCategoryPage.addEventListener('click', ()=> { if (lastPreviewCategory) onSelectCategory(lastPreviewCategory); });
+
+  // share
+  function onShareCategory(cat){
+    const userId = ensureUserId();
+    const url = new URL(window.location.href);
+    url.pathname = url.pathname.replace(/[^/]*$/, 'category.html');
+    url.search = new URLSearchParams({ category: cat.key, ref: userId }).toString();
+    const shareUrl = url.toString();
+    writeAnalytics('category_share', { category: cat.key, userId, shareUrl });
+    if (navigator.share){
+      navigator.share({ title: `Check out ${cat.title} on Coast Connect`, text: cat.tag, url: shareUrl })
+        .then(()=> showToast('Shared — thanks!'))
+        .catch(()=> copyToClipboard(shareUrl));
+    } else {
+      copyToClipboard(shareUrl);
+    }
+  }
+
+  // open subcategory straight to subcategory page
+  function onOpenSubcategory(cat, sub){
+    if (!sub) return;
+    const userId = ensureUserId();
+    writeAnalytics('subcategory_open', { category: cat.key, sub: sub.key, userId });
+    // persist selection
+    const payload = { categoryKey: cat.key, title: cat.title, subcatKey: sub.key, subcatTitle: sub.title };
+    localStorage.setItem(SELECTED_KEY, JSON.stringify(payload));
+    localStorage.setItem(REF_KEY, userId);
+    const params = new URLSearchParams({ category: cat.key, sub: sub.key, ref: userId });
+    window.location.href = 'category.html?' + params.toString();
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    const hero = document.getElementById("heroTitle");
+    setTimeout(() => {
+      hero.classList.remove("translate-y-3", "opacity-0");
+    }, 100);
+  });
+
+  // open listing detail
+  function onOpenListing(cat, listing){
+    if (!listing) return;
+    const userId = ensureUserId();
+    writeAnalytics('listing_open', { listingId: listing.id, category: cat.key, userId });
+    localStorage.setItem('cc_lastListing', JSON.stringify({ listingId: listing.id, categoryKey: cat.key }));
+    const params = new URLSearchParams({ id: listing.id, ref: userId });
+    window.location.href = 'listing.html?' + params.toString();
+  }
+
+  // copy helper
+  async function copyToClipboard(text){
+    try { await navigator.clipboard.writeText(text); showToast('Link copied to clipboard ✅'); }
+    catch(e){ prompt('Copy this link', text); }
+  }
+
+  // toast
+  function showToast(msg, ms=2000){
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    setTimeout(()=> toastEl.classList.remove('show'), ms);
+  }
+
+  // admin analytics panel
+  function maybeShowAnalytics(){
+    const p = new URLSearchParams(location.search);
+    if (p.get('admin') === '1'){
+      const ap = document.getElementById('analyticsPanel');
+      ap.classList.remove('hidden');
+      ap.classList.add('block');
+      renderAnalyticsPanel();
+      document.getElementById('closeAnalytics').addEventListener('click', ()=> { ap.classList.add('hidden'); ap.classList.remove('block'); });
+    }
+  }
+  function renderAnalyticsPanel(){
+    const raw = localStorage.getItem(ANALYTICS_KEY) || '[]';
+    const arr = JSON.parse(raw);
+    const total = arr.length;
+    const catCounts = arr.reduce((acc,ev)=>{ if (ev.eventType==='category_click' && ev.payload && ev.payload.category){ acc[ev.payload.category] = (acc[ev.payload.category]||0)+1; } return acc; }, {});
+    const topCats = Object.entries(catCounts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+    const refCounts = arr.reduce((acc,ev)=>{ const ref = ev.payload && (ev.payload.userId || ev.payload.ref); if (ref) acc[ref] = (acc[ref]||0)+1; return acc; }, {});
+    const topRefs = Object.entries(refCounts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+    const body = document.getElementById('analyticsBody');
+    body.innerHTML = `
+      <div>Total events: <strong>${total}</strong></div>
+      <div class="mt-2"><strong>Top categories</strong>
+        <ul class="text-sm mt-1">${topCats.map(([k,v])=>`<li>${k} — ${v}</li>`).join('')}</ul>
+      </div>
+      <div class="mt-2"><strong>Top referrers</strong>
+        <ul class="text-sm mt-1">${topRefs.map(([k,v])=>`<li>${k} — ${v}</li>`).join('')}</ul>
+      </div>
+      <div class="mt-2"><button id="downloadAnalytics" class="px-3 py-1 rounded border">Download JSON</button></div>
+    `;
+    document.getElementById('downloadAnalytics').addEventListener('click', ()=> {
+      const blob = new Blob([JSON.stringify(arr, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'cc_analytics.json'; a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // hamburger
+  document.getElementById('hamburger').addEventListener('click', ()=> {
+    const m = document.getElementById('mobileMenu'); m.classList.toggle('hidden');
+  });
+  document.getElementById('mobileBrowse').addEventListener('click', ()=> window.location.href = 'listings.html');
+  document.getElementById('mobileAdd').addEventListener('click', ()=> window.location.href = 'listings.html#create');
+  document.getElementById('btnAddTop').addEventListener('click', ()=> window.location.href = 'listings.html#create');
+
+  // initial render - if your actual dataset is larger, replace CATEGORIES with the full list
+  function init(){
+    // if categories less than visibleCount, adjust
+    visibleCount = Math.min(8, CATEGORIES.length);
+    renderGrid();
+    maybeShowAnalytics();
+
+    // hero micro-anim using GSAP
+    gsap.to('.floating-hero', { y: -6, duration: 3, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 0.3 });
+
+    // keyboard accessibility: open preview with Enter on focused card
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (!previewModal.classList.contains('hidden')) { previewModal.classList.add('hidden'); previewModal.classList.remove('flex'); }
+      }
+    });
+  }
+
+  init();
+
+  </script>
+
+  <!-- AOS refresh -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script> AOS.refresh(); </script>
+</body>
+</html>

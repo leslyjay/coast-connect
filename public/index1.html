@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Explore Categories | Coast Connect</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <style>
+    /* Custom hover effect enhancements */
+    .category-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      border-width: 1px;
+      border-style: solid;
+      border-color: #e5e7eb; /* gray-200 */
+      border-radius: 0.75rem; /* rounded-xl */
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+    }
+    .category-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 10px 15px rgb(0 0 0 / 0.15);
+      border-color: #facc15; /* yellow-400 */
+      z-index: 10;
+    }
+    .category-card img {
+      transition: transform 0.4s ease;
+      width: 100%;
+      height: 12rem; /* h-48 */
+      object-fit: cover;
+    }
+    .category-card img:hover {
+      transform: scale(1.05);
+    }
+    /* Scrollbar smooth for whole page */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<section class="bg-white py-20 px-6 border-t border-gray-200">
+  <div class="container mx-auto max-w-7xl">
+    <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-16 tracking-tight" data-aos="fade-down" data-aos-duration="800">
+      🌍 Explore All Service Categories
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+
+      <!-- Accommodation -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="100">
+        <img src="images/categories/accommodation.webp" alt="Accommodation" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Accommodation</h3>
+          <p class="text-gray-600 mb-4 text-sm">Find a place to stay across the coast, from budget-friendly hostels to luxury beach resorts.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Hotels:</strong> Standard or luxury stay options</li>
+            <li><strong>Guest Houses:</strong> Homely accommodations often run by locals</li>
+            <li><strong>B&Bs:</strong> Bed & Breakfasts for overnight guests</li>
+            <li><strong>Lodges:</strong> Often nature-surrounded and tourism-focused</li>
+            <li><strong>Apartments:</strong> Short or long-stay furnished rentals</li>
+            <li><strong>Hostels:</strong> Affordable dorm-style stays, ideal for backpackers</li>
+            <li><strong>Camps & Lodges:</strong> Outdoor camps and tourist lodges</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Food & Dining -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="150">
+        <img src="images/categories/food_dining.webp" alt="Food & Dining" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Food & Dining</h3>
+          <p class="text-gray-600 mb-4 text-sm">Explore diverse dining spots including traditional Swahili cuisines and modern eateries.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Restaurants:</strong> Dine-in experiences with varied cuisines</li>
+            <li><strong>Local Kitchens:</strong> Authentic local dishes at affordable prices</li>
+            <li><strong>Fast Food:</strong> Quick service meals, local or global brands</li>
+            <li><strong>Cafés & Coffee Shops:</strong> Chill spots for coffee, snacks, and remote work</li>
+            <li><strong>Food Delivery:</strong> Services offering meals delivered to your door</li>
+            <li><strong>Juice & Smoothie Bars:</strong> Healthy refreshment stops</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Transport & Travel -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="200">
+        <img src="images/categories/transport_travel.webp" alt="Transport & Travel" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Transport & Travel</h3>
+          <p class="text-gray-600 mb-4 text-sm">Move around easily with local and tourist-friendly transport options.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Car Hire:</strong> Rent vehicles for self-drive or chauffeur</li>
+            <li><strong>Tuk Tuks:</strong> Affordable 3-wheel rides within town</li>
+            <li><strong>Boda Bodas:</strong> Motorbike transport for short quick trips</li>
+            <li><strong>Tour Operators:</strong> Guided trip planners for tourists</li>
+            <li><strong>Airport Shuttles:</strong> Transfers to and from the airport</li>
+            <li><strong>Boat Services:</strong> Local sea transport for island hops</li>
+            <li><strong>Boat Tours:</strong> Leisure cruises and excursions</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Jobs & Gigs -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="250">
+        <img src="images/categories/jobs.webp" alt="Jobs & Gigs" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Jobs & Gigs</h3>
+          <p class="text-gray-600 mb-4 text-sm">Discover career and side hustle opportunities across the region.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Full Time:</strong> Salaried roles across industries</li>
+            <li><strong>Part Time:</strong> Flexible job roles</li>
+            <li><strong>Internships:</strong> Training positions for students and graduates</li>
+            <li><strong>Remote:</strong> Online job opportunities</li>
+            <li><strong>Daily Hustles:</strong> Short-term or one-day gigs</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Shopping -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="300">
+        <img src="images/categories/shopping.webp" alt="Shopping" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Shopping</h3>
+          <p class="text-gray-600 mb-4 text-sm">Shop from a variety of stores, boutiques, and markets.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Boutiques:</strong> Fashion stores for men, women, and kids</li>
+            <li><strong>Supermarkets:</strong> Full-service retail stores for groceries and household items</li>
+            <li><strong>Local Markets:</strong> Fresh produce and open-air shopping</li>
+            <li><strong>Electronics Stores:</strong> Phones, computers, and accessories</li>
+            <li><strong>Beauty & Cosmetic Shops:</strong> Makeup, skincare, and beauty products</li>
+            <li><strong>Art & Curio Shops:</strong> Souvenirs and handmade crafts</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Health & Wellness -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="350">
+        <img src="images/categories/health_wellness.webp" alt="Health & Wellness" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Health & Wellness</h3>
+          <p class="text-gray-600 mb-4 text-sm">Clinics, pharmacies, hospitals, gyms, labs and mental health support.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Hospitals:</strong> Major medical facilities</li>
+            <li><strong>Clinics:</strong> Localized care providers</li>
+            <li><strong>Pharmacies:</strong> Medicines and consultations</li>
+            <li><strong>Therapists:</strong> Licensed mental health professionals</li>
+            <li><strong>Counselors:</strong> Guidance and emotional support</li>
+            <li><strong>Laboratories:</strong> Medical test centers</li>
+            <li><strong>Wellness Centers:</strong> Holistic and preventive health</li>
+            <li><strong>Mental Health Services:</strong> Access to psychiatric and support programs</li>
+            <li><strong>Gyms & Fitness Studios:</strong> Physical health facilities</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Beauty & Grooming -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="400">
+        <img src="images/categories/beauty_grooming.webp" alt="Beauty & Grooming" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Beauty & Grooming</h3>
+          <p class="text-gray-600 mb-4 text-sm">Barbers, salons, spas, massage, nails, cosmetics and more.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Salons:</strong> Hair and styling services</li>
+            <li><strong>Barbers:</strong> Men's grooming</li>
+            <li><strong>Spas:</strong> Relaxation and rejuvenation</li>
+            <li><strong>Massage Therapists:</strong> Body therapy services</li>
+            <li><strong>Nail Studios:</strong> Mani-pedis and nail art</li>
+            <li><strong>Cosmetic Services:</strong> Beauty enhancement treatments</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Financial Services -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="450">
+        <img src="images/categories/financial.webp" alt="Financial Services" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Financial Services</h3>
+          <p class="text-gray-600 mb-4 text-sm">Banks, SACCOs, MPESA, insurance, credit, Forex.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Banks:</strong> Financial institutions</li>
+            <li><strong>SACCOs:</strong> Member-based savings groups</li>
+            <li><strong>Forex Bureaus:</strong> Currency exchange services</li>
+            <li><strong>Insurance Agencies:</strong> Protection and risk coverage</li>
+            <li><strong>MPESA Agents:</strong> Mobile money access</li>
+            <li><strong>Loan & Credit Services:</strong> Lending institutions</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Construction & Real Estate -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="500">
+        <img src="images/categories/real_estate.webp" alt="Construction & Real Estate" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Construction & Real Estate</h3>
+          <p class="text-gray-600 mb-4 text-sm">Contractors, listings, plumbers, electricians, materials, land.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Contractors:</strong> Building experts</li>
+            <li><strong>Real Estate Agents:</strong> Property finders</li>
+            <li><strong>Interior Design:</strong> Space aesthetics</li>
+            <li><strong>Materials:</strong> Hardware & supplies</li>
+            <li><strong>Plumbers:</strong> Water systems specialists</li>
+            <li><strong>Electricians:</strong> Wiring and power solutions</li>
+            <li><strong>Land for Sale:</strong> Plot listings</li>
+            <li><strong>Properties for Rent:</strong> Homes and spaces</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Education & Learning -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="550">
+        <img src="images/categories/education.webp" alt="Education & Learning" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Education & Learning</h3>
+          <p class="text-gray-600 mb-4 text-sm">Schools, colleges, ICT training, tutors, driving, languages.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Primary Schools:</strong> Basic education</li>
+            <li><strong>Colleges & Universities:</strong> Higher education</li>
+            <li><strong>ICT Training:</strong> Computer & digital skills</li>
+            <li><strong>Tutors:</strong> Private educators</li>
+            <li><strong>Driving Schools:</strong> Licensed trainers</li>
+            <li><strong>Computer Training Centers:</strong> IT skill centers</li>
+            <li><strong>Vocational Institutions:</strong> Practical skills</li>
+            <li><strong>Language Centers:</strong> Foreign & local language learning</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Tech & Digital Services -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="600">
+        <img src="images/categories/tech_digital.webp" alt="Tech & Digital Services" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Tech & Digital Services</h3>
+          <p class="text-gray-600 mb-4 text-sm">Developers, cyber cafes, Wi-Fi setup, repairs, freelancers.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Cyber Cafes:</strong> Internet access</li>
+            <li><strong>Dev Agencies:</strong> Software teams</li>
+            <li><strong>App Developers:</strong> Mobile/web solutions</li>
+            <li><strong>Laptop Repair:</strong> PC servicing</li>
+            <li><strong>Wi-Fi Setup:</strong> Home/office connectivity</li>
+            <li><strong>TV/Satellite Installers:</strong> Entertainment setup</li>
+            <li><strong>Mobile Repair:</strong> Smartphone services</li>
+            <li><strong>Freelance Tech Support:</strong> On-demand help</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- WiFi & Local Digital Services -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="650">
+        <img src="images/categories/wifi_digital.webp" alt="WiFi & Local Digital Services" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">WiFi & Local Digital Services</h3>
+          <p class="text-gray-600 mb-4 text-sm">Free WiFi, printing, online payment, SIM registration, tech hubs.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Free/Public WiFi:</strong> Open access internet zones</li>
+            <li><strong>WiFi Installation:</strong> Home and office setups</li>
+            <li><strong>MPESA Help Desks:</strong> Transaction assistance points</li>
+            <li><strong>Sim Registration Support:</strong> Phone line verification</li>
+            <li><strong>Printing & Scanning:</strong> Document services</li>
+            <li><strong>Online Payment Points:</strong> Bill and service payment stations</li>
+            <li><strong>Tech Hubs & Innovation Centers:</strong> Co-working and startup support spaces</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Entertainment & Nightlife -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="700">
+        <img src="images/categories/entertainment_events.webp" alt="Entertainment & Nightlife" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Entertainment & Nightlife</h3>
+          <p class="text-gray-600 mb-4 text-sm">Bars, lounges, DJs, clubs, live music, photography and events.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Clubs & Lounges:</strong> Nightlife destinations</li>
+            <li><strong>Bars:</strong> Casual drinking spots</li>
+            <li><strong>DJs & Sound Providers:</strong> Entertainment setups</li>
+            <li><strong>Adult Venues:</strong> Age-restricted leisure</li>
+            <li><strong>Live Music:</strong> Performances and sessions</li>
+            <li><strong>Event Planners:</strong> Event logistics and design</li>
+            <li><strong>Wedding Services:</strong> Bridal planning and catering</li>
+            <li><strong>Photography & Videography:</strong> Event coverage</li>
+            <li><strong>Party Supplies:</strong> Decorations and rentals</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Personal Services -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="750">
+        <img src="images/categories/personal_services.webp" alt="Personal Services" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Personal Services</h3>
+          <p class="text-gray-600 mb-4 text-sm">Cleaning, laundry, repair, tailoring, home help and more.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Cleaning Services:</strong> Home and office cleaning</li>
+            <li><strong>Laundry & Dry Cleaning:</strong> Clothing care</li>
+            <li><strong>Tailoring & Alterations:</strong> Custom clothing services</li>
+            <li><strong>Car Wash & Detailing:</strong> Vehicle cleaning</li>
+            <li><strong>Gardening & Landscaping:</strong> Outdoor care</li>
+            <li><strong>Handyman & Repairs:</strong> General fix-it jobs</li>
+            <li><strong>Home Help & Care:</strong> Elderly and child care</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sports & Fitness -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="800">
+        <img src="images/categories/sports_fitness.webp" alt="Sports & Fitness" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Sports & Fitness</h3>
+          <p class="text-gray-600 mb-4 text-sm">Gyms, trainers, clubs, yoga, martial arts, swimming, athletics.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Gyms & Fitness Centers:</strong> Workout facilities</li>
+            <li><strong>Personal Trainers:</strong> Coaching and guidance</li>
+            <li><strong>Yoga & Pilates Studios:</strong> Wellness classes</li>
+            <li><strong>Martial Arts & Boxing:</strong> Combat training</li>
+            <li><strong>Sports Clubs & Teams:</strong> Organized sports</li>
+            <li><strong>Swimming Pools & Lessons:</strong> Aquatic activities</li>
+            <li><strong>Athletics & Track Events:</strong> Running and competitions</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Automotive -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="850">
+        <img src="images/categories/automotive.webp" alt="Automotive" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Automotive</h3>
+          <p class="text-gray-600 mb-4 text-sm">Garages, parts, towing, rentals, repairs and accessories.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Garages & Workshops:</strong> Vehicle servicing</li>
+            <li><strong>Spare Parts:</strong> Replacement components</li>
+            <li><strong>Towing & Recovery:</strong> Emergency vehicle transport</li>
+            <li><strong>Car Rental & Leasing:</strong> Short or long-term hire</li>
+            <li><strong>Auto Accessories:</strong> Enhancements and add-ons</li>
+            <li><strong>Tyre Shops:</strong> Sales and repair</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Events & Celebrations -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="900">
+        <img src="images/categories/events_celebrations.webp" alt="Events & Celebrations" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Events & Celebrations</h3>
+          <p class="text-gray-600 mb-4 text-sm">Weddings, parties, conferences, catering, venues, DJs and more.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Wedding Planning:</strong> Complete bridal coordination</li>
+            <li><strong>Party Rentals:</strong> Chairs, tents, decor</li>
+            <li><strong>Conference Venues:</strong> Professional event spaces</li>
+            <li><strong>Catering Services:</strong> Food & beverage provision</li>
+            <li><strong>Event DJs & MCs:</strong> Entertainment hosts</li>
+            <li><strong>Photographers & Videographers:</strong> Event documentation</li>
+            <li><strong>Florists & Decorators:</strong> Event styling</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Arts & Crafts -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="950">
+        <img src="images/categories/arts_crafts.webp" alt="Arts & Crafts" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Arts & Crafts</h3>
+          <p class="text-gray-600 mb-4 text-sm">Handmade art, souvenirs, local crafts, galleries and supplies.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Art Galleries:</strong> Exhibitions and sales</li>
+            <li><strong>Handmade Crafts:</strong> Local artisan products</li>
+            <li><strong>Souvenir Shops:</strong> Gifts and memorabilia</li>
+            <li><strong>Art Supplies:</strong> Materials and tools</li>
+            <li><strong>Workshops & Classes:</strong> Learn art skills</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Religious & Spiritual -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="1000">
+        <img src="images/categories/religious_spiritual.webp" alt="Religious & Spiritual" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Religious & Spiritual</h3>
+          <p class="text-gray-600 mb-4 text-sm">Places of worship, spiritual guidance, religious groups and events.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Churches:</strong> Christian worship centers</li>
+            <li><strong>Mosques:</strong> Muslim places of prayer</li>
+            <li><strong>Temples:</strong> Hindu and other faiths</li>
+            <li><strong>Spiritual Leaders:</strong> Guidance and counseling</li>
+            <li><strong>Religious Events:</strong> Gatherings and celebrations</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Legal & Consultancy -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="1050">
+        <img src="images/categories/legal_consultancy.webp" alt="Legal & Consultancy" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Legal & Consultancy</h3>
+          <p class="text-gray-600 mb-4 text-sm">Lawyers, notaries, consultants, financial advisors and more.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Law Firms:</strong> Legal representation</li>
+            <li><strong>Consulting Agencies:</strong> Business advice</li>
+            <li><strong>Financial Advisors:</strong> Money management</li>
+            <li><strong>Notaries:</strong> Document authentication</li>
+            <li><strong>Tax Consultants:</strong> Tax planning and compliance</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Home & Appliances -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="1100">
+        <img src="images/categories/home_appliances.webp" alt="Home & Appliances" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Home & Appliances</h3>
+          <p class="text-gray-600 mb-4 text-sm">Furniture, electronics, repairs, cleaning and home maintenance services.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Furniture Stores:</strong> Home and office furnishings</li>
+            <li><strong>Appliance Repair:</strong> Fix electronics and gadgets</li>
+            <li><strong>Home Cleaning:</strong> Professional cleaning services</li>
+            <li><strong>Handyman Services:</strong> Home repairs and maintenance</li>
+            <li><strong>Electrical Repairs:</strong> Home electrical work</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Travel & Tours -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="1150">
+        <img src="images/categories/travel_tours.webp" alt="Travel & Tours" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Travel & Tours</h3>
+          <p class="text-gray-600 mb-4 text-sm">Tour companies, safaris, guides, boat rides and more.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Safari Tours:</strong> Wildlife excursions</li>
+            <li><strong>City Tours:</strong> Local sightseeing</li>
+            <li><strong>Boat Cruises:</strong> Leisure water trips</li>
+            <li><strong>Travel Agencies:</strong> Booking and planning</li>
+            <li><strong>Guided Tours:</strong> Expert local guides</li>
+            <li><strong>Adventure Activities:</strong> Hiking, diving, and more</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pets & Animals -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="1200">
+        <img src="images/categories/pets_animals.webp" alt="Pets & Animals" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Pets & Animals</h3>
+          <p class="text-gray-600 mb-4 text-sm">Veterinary clinics, pet shops, grooming, training and adoption.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Veterinary Clinics:</strong> Animal healthcare</li>
+            <li><strong>Pet Grooming:</strong> Bathing and styling</li>
+            <li><strong>Pet Training:</strong> Behavior and obedience</li>
+            <li><strong>Pet Supplies:</strong> Food, toys, accessories</li>
+            <li><strong>Animal Adoption:</strong> Find your new friend</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Miscellaneous -->
+      <div class="category-card" data-aos="fade-up" data-aos-delay="1250">
+        <img src="images/categories/miscellaneous.webp" alt="Miscellaneous" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-3">Miscellaneous</h3>
+          <p class="text-gray-600 mb-4 text-sm">Various other services and offers that don’t fit categories above.</p>
+          <ul class="list-disc list-inside space-y-1 text-gray-500 text-sm">
+            <li><strong>Event Staffing:</strong> Temporary event workers</li>
+            <li><strong>Courier Services:</strong> Parcel delivery</li>
+            <li><strong>Photography:</strong> Personal and commercial shoots</li>
+            <li><strong>Translation Services:</strong> Language interpretation</li>
+            <li><strong>Security Services:</strong> Guards and surveillance</li>
+            <li><strong>Custom Orders:</strong> Tailored and bespoke services</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    once: true,
+    duration: 600,
+    easing: 'ease-in-out'
+  });
+</script>
+
+</body>
+</html>

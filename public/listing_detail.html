@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legendary Listings</title>
+  <link rel="icon" href="images/logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #fdfcfb, #e2d1c3);
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-nav {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.6);
+    }
+  </style>
+</head>
+<body class="text-gray-800">
+
+  <!-- 🌟 Navigation -->
+  <nav class="glass-nav fixed w-full z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="#" class="text-2xl font-bold text-yellow-600">Legendary Listings</a>
+      <ul class="hidden md:flex gap-8">
+        <li><a href="#" class="hover:text-yellow-500 transition">Home</a></li>
+        <li><a href="#" class="hover:text-yellow-500 transition">Listings</a></li>
+        <li><a href="#" class="hover:text-yellow-500 transition">About</a></li>
+        <li><a href="#" class="hover:text-yellow-500 transition">Contact</a></li>
+      </ul>
+      <button class="md:hidden bg-yellow-500 text-white px-4 py-2 rounded-full">Menu</button>
+    </div>
+  </nav>
+
+  <!-- 🌟 Hero Section -->
+  <section class="h-screen flex flex-col justify-center items-center text-center relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full -z-10">
+      <div class="absolute w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse" style="top:10%; left:15%;"></div>
+      <div class="absolute w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse" style="bottom:10%; right:10%;"></div>
+    </div>
+    <h1 class="text-5xl md:text-7xl font-extrabold mb-6" data-aos="fade-down">Discover Coastal Gems</h1>
+    <p class="max-w-xl mx-auto text-lg md:text-xl mb-8" data-aos="fade-up" data-aos-delay="200">
+      Explore, connect, and experience the finest listings along the coast with style and ease.
+    </p>
+    <a href="#listings" class="bg-yellow-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-yellow-600 transition-all transform hover:scale-105">
+      Browse Listings →
+    </a>
+  </section>
+
+  <!-- 🌟 Listings -->
+  <section id="listings" class="py-20 max-w-7xl mx-auto px-6">
+    <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Featured Listings</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition" data-aos="zoom-in">
+        <img src="https://source.unsplash.com/400x300/?beach" alt="Listing" class="w-full h-48 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-2">Beachfront Villa</h3>
+          <p class="text-gray-600 mb-4">Luxury villa with stunning sea views and modern amenities.</p>
+          <a href="#" class="text-yellow-600 font-semibold hover:underline">View Details →</a>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition" data-aos="zoom-in" data-aos-delay="100">
+        <img src="https://source.unsplash.com/400x300/?hotel" alt="Listing" class="w-full h-48 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-2">Coastal Resort</h3>
+          <p class="text-gray-600 mb-4">Enjoy a luxurious stay with world-class services and facilities.</p>
+          <a href="#" class="text-yellow-600 font-semibold hover:underline">View Details →</a>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition" data-aos="zoom-in" data-aos-delay="200">
+        <img src="https://source.unsplash.com/400x300/?restaurant" alt="Listing" class="w-full h-48 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold mb-2">Seaside Restaurant</h3>
+          <p class="text-gray-600 mb-4">Dine with a breathtaking ocean view and delicious cuisine.</p>
+          <a href="#" class="text-yellow-600 font-semibold hover:underline">View Details →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🌟 Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-8">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+      <p>&copy; 2025 Legendary Listings. All rights reserved.</p>
+      <div class="flex gap-4 mt-4 md:mt-0">
+        <a href="#" class="hover:text-white">Facebook</a>
+        <a href="#" class="hover:text-white">Instagram</a>
+        <a href="#" class="hover:text-white">Twitter</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 1000, once: true });
+    gsap.from("nav", { y: -80, opacity: 0, duration: 1, ease: "power4.out" });
+  </script>
+</body>
+</html>
