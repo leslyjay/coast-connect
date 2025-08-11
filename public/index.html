@@ -107,7 +107,7 @@
       </p>
   
       <!-- CTA Button -->
-      <a href="add-listing.html" class="mt-8 inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-full shadow-xl hover:scale-105 transition">
+      <a href="listings.html" class="mt-8 inline-block bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-full shadow-xl hover:scale-105 transition">
         🚀 List Your Service
       </a>
     </div>
@@ -317,6 +317,17 @@
               <option value="repair-maintenance">Repair & Maintenance</option>
               <option value="delivery-errands">Delivery & Errands</option>
               <option value="professional-services">Professional Services</option>
+              <option value="events-celebrations">Events & Celebrations</option>
+              <option value="personal-services">Personal Services</option>
+              <option value="sports-fitness">Sports & Fitness</option>
+              <option value="automotive">Automotive</option>
+              <option value="arts-crafts">Arts & Crafts</option>
+              <option value="religious-spiritual">Religious & Spiritual</option>
+              <option value="legal-consultancy">Legal & Consultancy</option>
+              <option value="home-appliances">Home & Appliances</option>
+              <option value="travel-tours">Travel & Tours</option>
+              <option value="pets-animals">Pets & Animals</option>
+              <option value="miscellaneous">Miscellaneous</option>
             </select>
           </div>
 
@@ -1011,10 +1022,10 @@
       <div>
         <h3 class="text-white font-semibold mb-2">Quick Links</h3>
         <ul class="text-sm space-y-1 text-gray-400">
-          <li><a href="#" class="hover:text-yellow-400">Home</a></li>
-          <li><a href="#" class="hover:text-yellow-400">Listings</a></li>
-          <li><a href="#" class="hover:text-yellow-400">Contact</a></li>
-          <li><a href="#" class="hover:text-yellow-400">Privacy Policy</a></li>
+          <li><a href="index.html" class="hover:text-yellow-400">Home</a></li>
+          <li><a href="listings.html" class="hover:text-yellow-400">Listings</a></li>
+          <li><a href="contact.html" class="hover:text-yellow-400">Contact</a></li>
+          <li><a href="privacypolicy.html" class="hover:text-yellow-400">Privacy Policy</a></li>
         </ul>
       </div>
 
@@ -1031,7 +1042,7 @@
     </div>
     
     <div class="border-t border-gray-700 mt-10 pt-4 text-center text-xs text-gray-500">
-      © 2025 Coast Connect. All rights reserved. | Built with ❤️ by the Coast Connect Team.
+      © 2025 Coast Connect. All rights reserved. | Built with ❤️ by Code MORE.
     </div>
   </div>
 </footer>
@@ -1105,6 +1116,14 @@
   });
 </script>
 
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+
+  btn.addEventListener('click', () => {
+    menu.classList.toggle('hidden');
+  });
+</script>
 
   <!-- AOS Script Init -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
