@@ -1,0 +1,438 @@
+{
+    "version": "1.1",
+    "last_updated": "2025-08-11",
+    "total_categories": 29,
+    "categories": [
+      {
+        "id": "accommodation",
+        "title": "Accommodation",
+        "description": "Find a place to stay across the coast, from budget-friendly hostels to luxury beach resorts.",
+        "icon": "fa-solid fa-bed",
+        "image": "images/categories/accommodation.webp",
+        "tags": ["hotels", "lodges", "apartments", "guest houses", "stays"],
+        "subcategories": [
+          {"name": "Hotels", "description": "Standard or luxury stay options"},
+          {"name": "Guest Houses", "description": "Homely accommodations often run by locals"},
+          {"name": "B&Bs", "description": "Bed & Breakfasts for overnight guests"},
+          {"name": "Lodges", "description": "Often nature-surrounded and tourism-focused"},
+          {"name": "Apartments", "description": "Short or long-stay furnished rentals"},
+          {"name": "Hostels", "description": "Affordable dorm-style stays, ideal for backpackers"},
+          {"name": "Camps & Lodges", "description": "Outdoor camps and tourist lodges"}
+        ]
+      },
+      {
+        "id": "food-dining",
+        "title": "Food & Dining",
+        "description": "Explore diverse dining spots including traditional Swahili cuisines and modern eateries.",
+        "icon": "fa-solid fa-utensils",
+        "image": "images/categories/food_dining.webp",
+        "tags": ["restaurants", "cafes", "fast food", "delivery", "local kitchens"],
+        "subcategories": [
+          {"name": "Restaurants", "description": "Dine-in experiences with varied cuisines"},
+          {"name": "Local Kitchens", "description": "Authentic local dishes at affordable prices"},
+          {"name": "Fast Food", "description": "Quick service meals, local or global brands"},
+          {"name": "Cafés & Coffee Shops", "description": "Chill spots for coffee, snacks, and remote work"},
+          {"name": "Food Delivery", "description": "Services offering meals delivered to your door"},
+          {"name": "Juice & Smoothie Bars", "description": "Healthy refreshment stops"},
+          {"name": "Butchers & Fish Shops", "description": "Fresh meat, fish, poultry, and pork vendors"}
+        ]
+      },
+      {
+        "id": "transport-travel",
+        "title": "Transport & Travel",
+        "description": "Move around easily with local and tourist-friendly transport options.",
+        "icon": "fa-solid fa-bus",
+        "image": "images/categories/transport_travel.webp",
+        "tags": ["car hire", "tuk tuks", "boda boda", "tour operators", "shuttles"],
+        "subcategories": [
+          {"name": "Car Hire", "description": "Rent vehicles for self-drive or chauffeur"},
+          {"name": "Tuk Tuks", "description": "Affordable 3-wheel rides within town"},
+          {"name": "Boda Bodas", "description": "Motorbike transport for short quick trips"},
+          {"name": "Tour Operators", "description": "Guided trip planners for tourists"},
+          {"name": "Airport Shuttles", "description": "Transfers to and from the airport"},
+          {"name": "Boat Services", "description": "Local sea transport for island hops"},
+          {"name": "Boat Tours", "description": "Scenic water trips and excursions"},
+          {"name": "Travel Agencies", "description": "Booking and travel planning"}
+        ]
+      },
+      {
+        "id": "jobs-gigs",
+        "title": "Jobs & Gigs",
+        "description": "Discover career and side hustle opportunities across the region.",
+        "icon": "fa-solid fa-briefcase",
+        "image": "images/categories/jobs.webp",
+        "tags": ["jobs", "gigs", "freelance", "remote work", "internships"],
+        "subcategories": [
+          {"name": "Full Time", "description": "Salaried roles across industries"},
+          {"name": "Part Time", "description": "Flexible job roles"},
+          {"name": "Internships", "description": "Training positions for students and graduates"},
+          {"name": "Remote", "description": "Online job opportunities"},
+          {"name": "Daily Hustles", "description": "Short-term or one-day gigs"}
+        ]
+      },
+      {
+        "id": "shopping",
+        "title": "Shopping",
+        "description": "Shop from a variety of stores, boutiques, and markets.",
+        "icon": "fa-solid fa-shopping-bag",
+        "image": "images/categories/shopping.webp",
+        "tags": ["boutiques", "supermarkets", "markets", "electronics", "fashion"],
+        "subcategories": [
+          {"name": "Boutiques", "description": "Fashion stores for men, women, and kids"},
+          {"name": "Supermarkets", "description": "Full-service retail stores for groceries and household items"},
+          {"name": "Local Markets", "description": "Fresh produce and open-air shopping"},
+          {"name": "Electronics Stores", "description": "Phones, computers, and accessories"},
+          {"name": "Beauty & Cosmetic Shops", "description": "Makeup, skincare, and beauty products"},
+          {"name": "Art & Curio Shops", "description": "Souvenirs and handmade crafts"}
+        ]
+      },
+      {
+        "id": "health-wellness",
+        "title": "Health & Wellness",
+        "description": "Healthcare, fitness, and wellness services for both residents and visitors.",
+        "icon": "fa-solid fa-heartbeat",
+        "image": "images/categories/health_wellness.webp",
+        "tags": ["hospitals", "pharmacies", "clinics", "gyms", "spas"],
+        "subcategories": [
+          {"name": "Hospitals", "description": "Full-service medical facilities"},
+          {"name": "Clinics", "description": "Small healthcare centers"},
+          {"name": "Pharmacies", "description": "Medicine and health supplies"},
+          {"name": "Gyms", "description": "Fitness training facilities"},
+          {"name": "Spas", "description": "Relaxation and beauty treatments"},
+          {"name": "Yoga Studios", "description": "Mindfulness and wellness classes"},
+          {"name": "Dental Clinics", "description": "Oral health and dentistry"},
+          {"name": "Therapy Centers", "description": "Physical and mental health therapy"}
+        ]
+      },
+      {
+        "id": "education-training",
+        "title": "Education & Training",
+        "description": "Schools, colleges, and training centers offering quality education.",
+        "icon": "fa-solid fa-graduation-cap",
+        "image": "images/categories/education_training.webp",
+        "tags": ["schools", "colleges", "universities", "training", "tutors"],
+        "subcategories": [
+          {"name": "Primary Schools", "description": "Foundational learning institutions"},
+          {"name": "Secondary Schools", "description": "Middle and high-level education"},
+          {"name": "Colleges", "description": "Professional and diploma courses"},
+          {"name": "Universities", "description": "Degree-awarding institutions"},
+          {"name": "Vocational Training", "description": "Skill-based learning centers"},
+          {"name": "Private Tutors", "description": "One-on-one learning assistance"}
+        ]
+      },
+      {
+        "id": "events-entertainment",
+        "title": "Events & Entertainment",
+        "description": "Social gatherings, concerts, and fun activities.",
+        "icon": "fa-solid fa-music",
+        "image": "images/categories/events_entertainment.webp",
+        "tags": ["events", "concerts", "festivals", "clubs", "cinemas"],
+        "subcategories": [
+          {"name": "Concerts", "description": "Live music performances"},
+          {"name": "Festivals", "description": "Cultural and music festivals"},
+          {"name": "Night Clubs", "description": "Party and dance venues"},
+          {"name": "Theatres", "description": "Live drama and shows"},
+          {"name": "Cinemas", "description": "Movie watching spots"},
+          {"name": "Community Events", "description": "Local organized activities"}
+        ]
+      },
+      {
+        "id": "tourism-attractions",
+        "title": "Tourism & Attractions",
+        "description": "Discover popular destinations, parks, and scenic spots.",
+        "icon": "fa-solid fa-umbrella-beach",
+        "image": "images/categories/tourism_attractions.webp",
+        "tags": ["beaches", "parks", "museums", "historical sites", "wildlife"],
+        "subcategories": [
+          {"name": "Beaches", "description": "Sandy shores and coastal relaxation"},
+          {"name": "Museums", "description": "Cultural and historical collections"},
+          {"name": "Historical Sites", "description": "Landmarks with heritage value"},
+          {"name": "Wildlife Parks", "description": "Safari and animal reserves"},
+          {"name": "Nature Trails", "description": "Hiking and exploration routes"},
+          {"name": "Water Sports", "description": "Surfing, diving, and other sea activities"}
+        ]
+      },
+      {
+        "id": "real-estate",
+        "title": "Real Estate",
+        "description": "Buy, rent, or lease property with ease.",
+        "icon": "fa-solid fa-house",
+        "image": "images/categories/real_estate.webp",
+        "tags": ["rentals", "buying", "plots", "commercial", "residential"],
+        "subcategories": [
+          {"name": "Houses for Sale", "description": "Residential properties available for purchase"},
+          {"name": "Houses for Rent", "description": "Rental homes and apartments"},
+          {"name": "Commercial Spaces", "description": "Shops, offices, and business premises"},
+          {"name": "Plots & Land", "description": "Vacant land for sale"},
+          {"name": "Holiday Homes", "description": "Short-term rental properties"},
+          {"name": "Property Agents", "description": "Licensed real estate brokers"}
+        ]
+      },
+      {
+        "id": "automotive",
+        "title": "Automotive",
+        "description": "Vehicle sales, repair, and maintenance services.",
+        "icon": "fa-solid fa-car",
+        "image": "images/categories/automotive.webp",
+        "tags": ["car sales", "mechanics", "spare parts", "car wash", "motorbikes"],
+        "subcategories": [
+          {"name": "Car Sales", "description": "New and used vehicles for sale"},
+          {"name": "Motorbike Sales", "description": "New and used motorcycles"},
+          {"name": "Mechanics", "description": "Vehicle repair and servicing"},
+          {"name": "Car Wash", "description": "Cleaning and detailing services"},
+          {"name": "Spare Parts Shops", "description": "Vehicle spare parts and accessories"}
+        ]
+      },
+      {
+        "id": "construction-repair",
+        "title": "Construction & Repair",
+        "description": "Building, renovation, and repair services.",
+        "icon": "fa-solid fa-tools",
+        "image": "images/categories/construction_repair.webp",
+        "tags": ["builders", "electricians", "plumbers", "painters", "welders"],
+        "subcategories": [
+          {"name": "Builders", "description": "House and commercial building contractors"},
+          {"name": "Electricians", "description": "Electrical installation and repair"},
+          {"name": "Plumbers", "description": "Water and sanitation services"},
+          {"name": "Painters", "description": "Interior and exterior painting"},
+          {"name": "Welders", "description": "Metal fabrication and repair"},
+          {"name": "Roofing Experts", "description": "Roof installation and maintenance"}
+        ]
+      },
+      {
+        "id": "technology-it",
+        "title": "Technology & IT",
+        "description": "Gadgets, repairs, and IT services.",
+        "icon": "fa-solid fa-laptop",
+        "image": "images/categories/technology_it.webp",
+        "tags": ["computers", "phones", "IT services", "cyber cafes", "repairs"],
+        "subcategories": [
+          {"name": "Computer Shops", "description": "Desktops, laptops, and accessories"},
+          {"name": "Phone Shops", "description": "Smartphones, feature phones, and repairs"},
+          {"name": "IT Services", "description": "Networking, security, and consultancy"},
+          {"name": "Cyber Cafés", "description": "Internet access and printing services"},
+          {"name": "Repair Services", "description": "Electronics and device repairs"}
+        ]
+      },
+      {
+        "id": "finance-legal",
+        "title": "Finance & Legal",
+        "description": "Banking, loans, and legal support services.",
+        "icon": "fa-solid fa-scale-balanced",
+        "image": "images/categories/finance_legal.webp",
+        "tags": ["banks", "lawyers", "loans", "insurance", "sacco"],
+        "subcategories": [
+          {"name": "Banks", "description": "Full-service banking institutions"},
+          {"name": "SACCOs", "description": "Savings and Credit Cooperative Organizations"},
+          {"name": "Insurance Agencies", "description": "Health, car, and life insurance providers"},
+          {"name": "Lawyers", "description": "Legal representation and advice"},
+          {"name": "Loan Services", "description": "Personal and business loans"}
+        ]
+      },
+      {
+        "id": "beauty-fashion",
+        "title": "Beauty & Fashion",
+        "description": "Salons, barber shops, and clothing stores.",
+        "icon": "fa-solid fa-shirt",
+        "image": "images/categories/beauty_fashion.webp",
+        "tags": ["salons", "barbers", "clothing", "makeup", "tailoring"],
+        "subcategories": [
+          {"name": "Hair Salons", "description": "Hair styling and treatment"},
+          {"name": "Barber Shops", "description": "Men's grooming services"},
+          {"name": "Clothing Shops", "description": "Men's, women's, and children's clothing"},
+          {"name": "Makeup Artists", "description": "Professional makeup services"},
+          {"name": "Tailors", "description": "Custom tailoring and alterations"}
+        ]
+      },
+      {
+        "id": "agriculture-farming",
+        "title": "Agriculture & Farming",
+        "description": "Farming products and services.",
+        "icon": "fa-solid fa-tractor",
+        "image": "images/categories/agriculture_farming.webp",
+        "tags": ["farm produce", "livestock", "agrovet", "seeds", "tools"],
+        "subcategories": [
+          {"name": "Farm Produce", "description": "Fresh vegetables, fruits, and grains"},
+          {"name": "Livestock", "description": "Cattle, goats, poultry, and more"},
+          {"name": "Agrovets", "description": "Animal drugs and feeds"},
+          {"name": "Seeds & Seedlings", "description": "Planting seeds and seedlings"},
+          {"name": "Farming Tools", "description": "Equipment for small and large farms"}
+        ]
+      },
+      {
+        "id": "charity-community",
+        "title": "Charity & Community",
+        "description": "Organizations and initiatives supporting the community.",
+        "icon": "fa-solid fa-hand-holding-heart",
+        "image": "images/categories/charity_community.webp",
+        "tags": ["ngo", "nonprofit", "donations", "community groups", "fundraising"],
+        "subcategories": [
+          {"name": "NGOs", "description": "Non-Governmental Organizations"},
+          {"name": "Community Groups", "description": "Local support initiatives"},
+          {"name": "Donation Centers", "description": "Places to give clothing, food, and more"},
+          {"name": "Fundraising Events", "description": "Activities to raise funds for causes"}
+        ]
+      },
+      {
+        "id": "religion-faith",
+        "title": "Religion & Faith",
+        "description": "Places of worship and faith-based services.",
+        "icon": "fa-solid fa-place-of-worship",
+        "image": "images/categories/religion_faith.webp",
+        "tags": ["churches", "mosques", "temples", "faith groups", "worship"],
+        "subcategories": [
+          {"name": "Churches", "description": "Christian places of worship"},
+          {"name": "Mosques", "description": "Islamic places of worship"},
+          {"name": "Temples", "description": "Hindu, Buddhist, and other religious temples"},
+          {"name": "Faith Groups", "description": "Religious and spiritual gatherings"}
+        ]
+      },
+      {
+        "id": "sports-recreation",
+        "title": "Sports & Recreation",
+        "description": "Clubs, gyms, and outdoor activities.",
+        "icon": "fa-solid fa-futbol",
+        "image": "images/categories/sports_recreation.webp",
+        "tags": ["sports clubs", "gyms", "swimming", "adventure", "indoor games"],
+        "subcategories": [
+          {"name": "Sports Clubs", "description": "Local and regional sports associations"},
+          {"name": "Swimming Pools", "description": "Indoor and outdoor swimming facilities"},
+          {"name": "Adventure Parks", "description": "Outdoor thrill activities"},
+          {"name": "Indoor Games", "description": "Pool, darts, and other indoor sports"},
+          {"name": "Fitness Trainers", "description": "Personal training services"}
+        ]
+      },
+      {
+        "id": "pets-animals",
+        "title": "Pets & Animals",
+        "description": "Pet sales, care, and veterinary services.",
+        "icon": "fa-solid fa-paw",
+        "image": "images/categories/pets_animals.webp",
+        "tags": ["pets", "vets", "pet food", "pet grooming", "animal care"],
+        "subcategories": [
+          {"name": "Pet Shops", "description": "Pets, cages, and accessories"},
+          {"name": "Veterinary Clinics", "description": "Animal healthcare services"},
+          {"name": "Pet Grooming", "description": "Washing, trimming, and styling pets"},
+          {"name": "Pet Food Stores", "description": "Food and nutrition for pets"}
+        ]
+      },
+      {
+        "id": "home-living",
+        "title": "Home & Living",
+        "description": "Furniture, décor, and household essentials.",
+        "icon": "fa-solid fa-couch",
+        "image": "images/categories/home_living.webp",
+        "tags": ["furniture", "decor", "appliances", "kitchen", "bedding"],
+        "subcategories": [
+          {"name": "Furniture Shops", "description": "Beds, sofas, tables, and more"},
+          {"name": "Home Décor", "description": "Interior decoration items"},
+          {"name": "Appliance Stores", "description": "Household electrical appliances"},
+          {"name": "Kitchenware", "description": "Cooking and dining essentials"},
+          {"name": "Bedding & Linens", "description": "Sheets, duvets, and pillowcases"}
+        ]
+      },
+      {
+        "id": "media-communications",
+        "title": "Media & Communications",
+        "description": "Radio, TV, and advertising services.",
+        "icon": "fa-solid fa-bullhorn",
+        "image": "images/categories/media_communications.webp",
+        "tags": ["radio", "tv", "advertising", "printing", "media agencies"],
+        "subcategories": [
+          {"name": "Radio Stations", "description": "FM and online radio services"},
+          {"name": "TV Stations", "description": "Local and national TV channels"},
+          {"name": "Advertising Agencies", "description": "Marketing and promotional services"},
+          {"name": "Printing Services", "description": "Business cards, banners, and flyers"},
+          {"name": "Media Production", "description": "Video and audio content creation"}
+        ]
+      },
+      {
+        "id": "security-safety",
+        "title": "Security & Safety",
+        "description": "Security services, systems, and emergency support.",
+        "icon": "fa-solid fa-shield-halved",
+        "image": "images/categories/security_safety.webp",
+        "tags": ["guards", "cctv", "alarms", "emergency", "fire safety"],
+        "subcategories": [
+          {"name": "Security Guards", "description": "Manned security services"},
+          {"name": "CCTV Installation", "description": "Surveillance camera setup"},
+          {"name": "Alarm Systems", "description": "Home and business alarm installations"},
+          {"name": "Emergency Services", "description": "Ambulance, fire, and rescue"},
+          {"name": "Fire Safety Equipment", "description": "Extinguishers, alarms, and safety gear"}
+        ]
+      },
+      {
+        "id": "cleaning-laundry",
+        "title": "Cleaning & Laundry",
+        "description": "Professional cleaning and laundry services.",
+        "icon": "fa-solid fa-soap",
+        "image": "images/categories/cleaning_laundry.webp",
+        "tags": ["laundry", "dry cleaning", "home cleaning", "office cleaning", "maid services"],
+        "subcategories": [
+          {"name": "Laundry Services", "description": "Clothes washing and ironing"},
+          {"name": "Dry Cleaning", "description": "Specialized cleaning for delicate fabrics"},
+          {"name": "Home Cleaning", "description": "Domestic cleaning services"},
+          {"name": "Office Cleaning", "description": "Corporate and commercial cleaning"},
+          {"name": "Maid Services", "description": "Full or part-time domestic helpers"}
+        ]
+      },
+      {
+        "id": "energy-utilities",
+        "title": "Energy & Utilities",
+        "description": "Power, water, and renewable energy solutions.",
+        "icon": "fa-solid fa-bolt",
+        "image": "images/categories/energy_utilities.webp",
+        "tags": ["electricity", "water", "solar", "plumbing", "gas"],
+        "subcategories": [
+          {"name": "Electricity Providers", "description": "Power supply companies"},
+          {"name": "Water Supply", "description": "Piped and bottled water services"},
+          {"name": "Solar Energy", "description": "Solar panels and installation"},
+          {"name": "Gas Suppliers", "description": "Cooking and industrial gas distribution"},
+          {"name": "Plumbing Services", "description": "Water system installations and repairs"}
+        ]
+      },
+      {
+        "id": "public-services",
+        "title": "Public Services",
+        "description": "Government and administrative offices.",
+        "icon": "fa-solid fa-landmark",
+        "image": "images/categories/public_services.webp",
+        "tags": ["government", "police", "fire", "immigration", "registries"],
+        "subcategories": [
+          {"name": "Government Offices", "description": "Administrative and public offices"},
+          {"name": "Police Stations", "description": "Law enforcement services"},
+          {"name": "Fire Stations", "description": "Emergency fire services"},
+          {"name": "Immigration Offices", "description": "Passport and visa services"},
+          {"name": "Registry Offices", "description": "Birth, marriage, and death registrations"}
+        ]
+      },
+      {
+        "id": "waste-management",
+        "title": "Waste Management",
+        "description": "Garbage collection and recycling services.",
+        "icon": "fa-solid fa-recycle",
+        "image": "images/categories/waste_management.webp",
+        "tags": ["garbage collection", "recycling", "environment", "waste disposal", "cleaning"],
+        "subcategories": [
+          {"name": "Garbage Collection", "description": "Household and business waste collection"},
+          {"name": "Recycling Centers", "description": "Plastic, paper, and metal recycling"},
+          {"name": "Waste Disposal Services", "description": "Safe waste disposal"},
+          {"name": "Environmental Groups", "description": "Clean-up and eco-awareness organizations"}
+        ]
+      },
+      {
+        "id": "other-services",
+        "title": "Other Services",
+        "description": "Miscellaneous services not listed in other categories.",
+        "icon": "fa-solid fa-ellipsis-h",
+        "image": "images/categories/other_services.webp",
+        "tags": ["miscellaneous", "general services", "custom requests", "freelance", "one-off"],
+        "subcategories": [
+          {"name": "Custom Requests", "description": "Tailored services for unique needs"},
+          {"name": "General Freelance", "description": "Independent professionals"},
+          {"name": "Temporary Services", "description": "Short-term assistance for events or tasks"}
+        ]
+      }
+    ]
+  }
+  

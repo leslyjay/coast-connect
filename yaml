@@ -1,0 +1,44 @@
+name: Build and Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main  # Change if your default branch is different
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          if [ -f package.json ]; then
+            npm install
+          else
+            echo "No package.json found, skipping install"
+          fi
+
+      - name: Build project
+        run: |
+          if [ -f package.json ]; then
+            npm run build
+          else
+            echo "No build script found, skipping build"
+          fi
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: your-vercel-org-id        # Replace with your Vercel Org ID
+          vercel-project-id: your-vercel-project-id  # Replace with your Vercel Project ID
+          working-directory: ./                      # Change if your code is in a subfolder
+          vercel-args: '--prod'                      # Deploy to production
