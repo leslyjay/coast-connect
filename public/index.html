@@ -2,9 +2,10 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Coast Connect — Home</title>
   <link rel="icon" href="images/coast_logo.png" />
+
   <!-- Tailwind (cdn) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -17,45 +18,84 @@
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- SEO & Social -->
   <meta name="description" content="Coast Connect — connecting coastal businesses and people along Kenya's coast" />
+  <meta property="og:title" content="Coast Connect — Home" />
+  <meta property="og:description" content="Discover and list businesses across Kenya's coast. Fast, local, trusted." />
+  <meta property="og:image" content="images/og-card.jpg" />
+  <meta property="og:type" content="website" />
 
   <style>
-    /* ---------- Custom UI touches ---------- */
-    /* Glassmorphism */
-    .glass {
-      background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.18));
-      backdrop-filter: blur(8px) saturate(120%);
-      -webkit-backdrop-filter: blur(8px) saturate(120%);
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-    /* Dark glass */
-    .glass-dark {
-      background: linear-gradient(135deg, rgba(17,24,39,0.6), rgba(17,24,39,0.18));
-      border: 1px solid rgba(255,255,255,0.04);
-    }
-
-    /* Category pill */
-    .pill {
-      @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium;
-    }
-
-    /* small helpers */
-    .smooth-shadow { box-shadow: 0 8px 30px rgba(15,23,42,0.06); }
+    /* ---------- Global ---------- */
+    html, body { height: 100%; }
+    .smooth-shadow { box-shadow: 0 10px 40px rgba(2,6,23,.08); }
     .micro { transition: all .28s cubic-bezier(.2,.9,.2,1); }
-    .micro:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 40px rgba(15,23,42,0.08); }
+    .micro:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 42px rgba(2,6,23,.12); }
 
-    /* hero right quick categories */
-    .quick-cat::-webkit-scrollbar { width: 8px; }
-    .quick-cat::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 999px; }
+    /* ---------- Loading Screen ---------- */
+    #loader {
+      position: fixed; inset: 0; display: grid; place-items: center; background: #0b1020; z-index: 9999;
+      background-image: radial-gradient(1200px 600px at 50% -10%, rgba(88,81,219,.22), transparent),
+                        radial-gradient(800px 600px at 10% 110%, rgba(245,158,11,.18), transparent),
+                        radial-gradient(800px 600px at 100% 110%, rgba(16,185,129,.16), transparent);
+    }
+    #loader .logo { width: 90px; height: 90px; border-radius: 20px; filter: drop-shadow(0 10px 30px rgba(0,0,0,.35)); }
+    .ring { width: 120px; height: 120px; border: 3px solid rgba(255,255,255,.12); border-top-color: #facc15; border-radius: 9999px; animation: spin 1.2s linear infinite; position: absolute; }
+    @keyframes spin { to { transform: rotate(360deg);} }
 
-    /* dark mode overrides in tailwind classes are handled through the 'dark' class on <html> */
+    /* ---------- Glass ---------- */
+    .glass { background: linear-gradient(135deg, rgba(255,255,255,0.65), rgba(255,255,255,0.22)); backdrop-filter: blur(8px) saturate(120%); -webkit-backdrop-filter: blur(8px) saturate(120%); border: 1px solid rgba(255,255,255,0.16); }
+    .glass-dark { background: linear-gradient(135deg, rgba(17,24,39,0.6), rgba(17,24,39,0.18)); border: 1px solid rgba(255,255,255,0.04); }
+
+    /* ---------- Hero ---------- */
+    .hero-bg { background-image: url('images/hero_sunset.jpg'); background-size: cover; background-position: center; }
+
+    /* ---------- Ribbons ---------- */
+    .ribbon { position: absolute; top: .75rem; left: -.25rem; padding: .25rem .6rem; color: #111827; font-weight: 800; font-size: .7rem; border-radius: .375rem; }
+    .ribbon-gold { background: linear-gradient(135deg,#facc15,#f59e0b); color:#111827; box-shadow: 0 8px 20px rgba(245,158,11,.35); }
+    .ribbon-silver { background: linear-gradient(135deg,#e5e7eb,#9ca3af); color:#111827; }
+    .ribbon-bronze { background: linear-gradient(135deg,#f59e0b,#b45309); color:#111827; }
+
+    /* ---------- Shimmer ---------- */
+    .skeleton { position: relative; overflow: hidden; background: rgba(0,0,0,.06); }
+    .skeleton::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgba(255,255,255,.38), transparent); animation: shimmer 1.2s infinite; }
+    @keyframes shimmer { 100% { transform: translateX(100%);} }
+
+    /* ---------- Gold shine for featured ---------- */
+    .gold-frame { position: relative; border-radius: 1rem; padding: 2px; background: linear-gradient(135deg,rgba(250,204,21,.8),rgba(245,158,11,.3)); }
+    .gold-frame::before { content:""; position:absolute; inset:-2px; background: conic-gradient(from 0deg, #fde68a, #f59e0b, #fde68a); filter: blur(14px); opacity:.35; border-radius: 1.1rem; }
+
+    /* ---------- Equal heights helper ---------- */
+    .equal-grid { align-items: stretch; }
+
+    /* ---------- Marquee ---------- */
+    .marquee { white-space: nowrap; }
+
+    /* ---------- Sticky section headers ---------- */
+    .sticky-title { position: sticky; top: 0; z-index: 5; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900 selection:bg-indigo-300 selection:text-white dark:bg-gray-900 dark:text-gray-100">
+  <!-- ===== Loader ===== -->
+  <div id="loader">
+    <div class="relative grid place-items-center gap-5">
+      <div class="ring"></div>
+      <img src="images/coast_logo.png" alt="Coast Connect" class="logo" />
+      <div class="text-center">
+        <p class="text-white/90 font-semibold tracking-wide">Coast Connect</p>
+        <p class="text-white/60 text-xs">Loading opportunities…</p>
+      </div>
+    </div>
+  </div>
+
   <!-- ========== Header ========== -->
   <header class="sticky top-0 z-50">
-    <nav class="backdrop-blur-md glass dark:glass-dark container mx-auto px-6 py-3 rounded-b-2xl flex items-center justify-between gap-4">
+    <nav class="backdrop-blur-md glass dark:glass-dark container mx-auto px-6 py-3 rounded-b-2xl flex items-center justify-between gap-4 mt-2">
       <div class="flex items-center gap-3">
         <a href="index.html" class="flex items-center gap-3">
           <img src="images/coast_logo.png" alt="Coast Connect" class="w-10 h-10 rounded" />
@@ -75,7 +115,6 @@
         </ul>
         <div class="flex items-center gap-3">
           <button id="dark-toggle" aria-label="Toggle dark mode" class="p-2 rounded-full micro bg-white dark:bg-gray-800/60">
-            <!-- icon replaced in JS -->
             <svg id="dark-icon" class="w-5 h-5 text-indigo-600 dark:text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-10h-1M4.34 12h-1M18.36 6.36l-.7.7M6.34 18.36l-.7.7M18.36 17.64l-.7-.7M6.34 5.64l-.7-.7M12 6a6 6 0 000 12 6 6 0 000-12z"/></svg>
           </button>
           <a href="listings.html" class="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-semibold shadow">🚀 List Your Service</a>
@@ -106,7 +145,7 @@
 
   <!-- ========== HERO (split) ========== -->
   <section class="relative overflow-hidden">
-    <div class="absolute inset-0 bg-[url('images/hero_sunset.jpg')] bg-cover bg-center brightness-75"></div>
+    <div class="absolute inset-0 hero-bg brightness-75"></div>
     <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-white/10 mix-blend-multiply"></div>
 
     <div class="container mx-auto max-w-7xl relative z-20 py-20 px-6">
@@ -124,7 +163,7 @@
 
             <div class="mt-6 flex flex-col sm:flex-row gap-3 items-center" data-aos="fade-up" data-aos-delay="220">
               <a href="listings.html" class="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-500 text-black px-5 py-3 rounded-full font-semibold shadow-lg transform hover:scale-105 transition">List Your Service</a>
-              <a href="#categories" class="inline-flex items-center gap-2 border border-white/30 text-white px-4 py-3 rounded-full hover:bg-white/5 transition">Explore Categories</a>
+              <a href="#popular-categories" class="inline-flex items-center gap-2 border border-white/30 text-white px-4 py-3 rounded-full hover:bg-white/5 transition">Explore Categories</a>
             </div>
 
             <!-- Animated Counters -->
@@ -145,70 +184,116 @@
           </div>
         </div>
 
-        <!-- Right: Quick Categories (glass panel) -->
+        <!-- Right: Rotating categories (hero quick categories) -->
         <aside class="lg:col-span-5">
-          <div class="glass rounded-2xl p-4 sm:p-6 max-h-[520px] overflow-y-auto quick-cat" data-aos="fade-left">
-            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100 mb-3">Quick Categories</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Tap a category to filter listings instantly.</p>
-
-            <div id="quick-categories" class="space-y-3">
-              <!-- js will inject pill items -->
+            <div class="glass rounded-2xl p-4 sm:p-6 max-h-[520px] overflow-y-auto quick-cat" data-aos="fade-left">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">Trending Categories</h3>
+                <button id="start-rotator" class="text-xs px-2 py-1 rounded bg-black/10 dark:bg-white/10">▶</button>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">They rotate here with smooth transitions — click any to filter below.</p>
+              <div id="hero-rotator" class="space-y-3"></div>
+              <div class="mt-6">
+                <input id="quick-search" type="search" placeholder="Search categories or listings…" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-500" />
+              </div>
+              <div class="mt-6 text-center">
+                <a href="categories.html" class="text-sm text-indigo-600 font-semibold hover:underline">View all categories</a>
+              </div>
             </div>
+          </aside>
+        </div>
+      </div>
 
-            <div class="mt-6">
-              <input id="quick-search" type="search" placeholder="Search categories or listings..." class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-500" />
-            </div>
-
-            <div class="mt-6 text-center">
-              <a href="categories.html" class="text-sm text-indigo-600 font-semibold hover:underline">View all categories</a>
-            </div>
-          </div>
-        </aside>
+    <!-- Rotating category ticker -->
+    <div class="absolute bottom-0 left-0 right-0">
+      <div class="overflow-hidden">
+        <div id="cat-marquee" class="flex gap-6 py-3 px-6 bg-black/30 backdrop-blur text-white whitespace-nowrap marquee"></div>
       </div>
     </div>
   </section>
 
-  <!-- ========== Regions + Featured Listings + Map ========== -->
-  <main class="container mx-auto max-w-7xl px-6 -mt-8">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Left column: categories grid (collapsible on mobile) -->
-      <section id="categories" class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow micro" data-aos="fade-up">
-        <h3 class="font-bold text-lg text-gray-800 dark:text-gray-100 mb-3">Categories</h3>
-        <div id="categories-list" class="flex flex-col gap-3 max-h-[64vh] overflow-y-auto py-1">
-          <!-- dynamically injected -->
-          <div class="text-sm text-gray-500">Loading categories…</div>
+  <!-- ===== Featured Gold Partners ===== -->
+<section class="container mx-auto max-w-7xl px-6 py-12" data-aos="fade-up">
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">🏆</span>
+        <h2 class="text-2xl font-extrabold text-amber-600 dark:text-amber-400">Featured Gold Partners</h2>
+      </div>
+      <a href="#featured" class="text-xs px-3 py-1 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 transition">Jump</a>
+    </div>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-6">Top-tier visibility. Premium placement. Maximum reach.</p>
+  
+    <!-- Swiper Gold Carousel -->
+    <div class="swiper goldSwiper rounded-2xl overflow-hidden shadow-lg">
+      <div class="swiper-wrapper" id="gold-swiper-wrapper">
+        <div class="swiper-slide flex flex-col items-center justify-center text-gray-500 py-10">
+          Loading featured gold listings…
         </div>
-        <div class="mt-4">
-          <button id="clear-filters" class="w-full py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm">Clear filters</button>
+      </div>
+      <div class="swiper-pagination mt-4"></div>
+    </div>
+  </section>
+
+  <!-- ========== Popular Categories + Silver/Bronze + Map ========== -->
+  <main class="container mx-auto max-w-7xl px-6 -mt-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 equal-grid">
+
+      <!-- Left: Popular Categories (full, sticky) -->
+      <section id="popular-categories" class="lg:col-span-3 bg-white dark:bg-gray-800 rounded-2xl shadow micro flex flex-col" data-aos="fade-up">
+        <div class="p-4 sticky-title bg-white/80 dark:bg-gray-800/60 rounded-t-2xl">
+          <h3 class="font-bold text-lg text-gray-800 dark:text-gray-100">Popular Categories</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-300">Top & trending — tap to filter listings.</p>
+        </div>
+        <div id="categories-list" class="flex-1 overflow-y-auto p-4 pt-2 space-y-3 max-h-[68vh]">
+          <!-- Loading placeholders -->
+          <div class="skeleton h-10 w-full"></div>
+          <div class="skeleton h-10 w-full"></div>
+          <div class="skeleton h-10 w-full"></div>
+        </div>
+        <div class="p-4 border-t border-gray-100 dark:border-gray-700 rounded-b-2xl">
+          <button id="more-categories" class="w-full py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm hover:bg-indigo-50 dark:hover:bg-gray-700 transition">Show more</button>
         </div>
       </section>
 
-      <!-- Middle column: Featured Swiper -->
-      <section class="lg:col-span-2 space-y-6">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow micro" data-aos="fade-up">
-          <div class="flex items-center justify-between">
-            <h3 class="font-bold text-lg dark:text-gray-100">Featured Listings</h3>
-            <div class="text-sm text-gray-500">Selected by Coast Connect</div>
-          </div>
+      <!-- Middle: Silver & Bronze listings (priority before map) -->
+       
 
-          <!-- Swiper -->
-          <div class="mt-4">
-            <div class="swiper mySwiper">
-              <div class="swiper-wrapper" id="swiper-wrapper">
-                <!-- slides injected from listings.json -->
-                <div class="swiper-slide flex items-center justify-center text-sm text-gray-500">Loading featured listings...</div>
-              </div>
-              <!-- controls -->
-              <div class="swiper-pagination !mt-4"></div>
+
+      <section class="lg:col-span-6 space-y-6 flex flex-col" id="priority-listings">
+        
+
+        <!-- Silver & Bronze side-by-side -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" data-aos="fade-up">
+          <section class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow flex flex-col">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-gray-400">🥈</span>
+              <h4 class="font-extrabold text-gray-700 dark:text-gray-300">Silver Listings</h4>
             </div>
-          </div>
+            <div id="tier-silver" class="grid grid-cols-1 gap-4 overflow-y-auto max-h-[52vh] pr-1">
+              <div class="skeleton h-24 rounded-xl"></div>
+              <div class="skeleton h-24 rounded-xl"></div>
+            </div>
+            <div class="mt-4">
+              <button id="more-silver" class="w-full py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm">More Silver</button>
+            </div>
+          </section>
+
+          <section class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow flex flex-col">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-orange-500">🥉</span>
+              <h4 class="font-extrabold text-orange-600 dark:text-orange-400">Bronze Listings</h4>
+            </div>
+            <div id="tier-bronze" class="grid grid-cols-1 gap-4 overflow-y-auto max-h-[52vh] pr-1"></div>
+            <div class="mt-4">
+              <button id="more-bronze" class="w-full py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm">More Bronze</button>
+            </div>
+          </section>
         </div>
 
-        <!-- Listings grid + map row -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow micro" data-aos="fade-up">
+        <!-- Unified Listings grid (distance / region filter ready) -->
+        <section class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow micro mt-8" data-aos="fade-up">
             <div class="flex items-center justify-between mb-4">
-              <h4 class="font-semibold">Listings</h4>
+              <h4 class="font-semibold">All Listings</h4>
               <div class="flex items-center gap-2">
                 <select id="region-filter" class="rounded-lg border border-gray-200 dark:border-gray-700 px-3 py-2 text-sm">
                   <option value="">All Regions</option>
@@ -218,31 +303,32 @@
                 </select>
               </div>
             </div>
-
             <div id="listings-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- listing cards injected -->
               <div class="text-sm text-gray-500">Loading listings…</div>
             </div>
-
             <div class="mt-4 text-center">
-              <a id="view-more" href="listings.html" class="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-indigo-600 text-white">View All Listings</a>
+              <a id="view-more" href="listings.html" class="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition">View All Listings</a>
             </div>
-          </div>
-
-          <aside class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow micro" data-aos="fade-up">
-            <h4 class="font-semibold mb-2">Coastal Map</h4>
-            <div id="map" class="w-full h-64 rounded-lg overflow-hidden"></div>
-            <p class="text-xs text-gray-500 mt-2">Click a pin to view regional listings.</p>
-          </aside>
-        </div>
+          </section>
       </section>
+
+      <!-- Right: Map (same height column) -->
+      <aside class="lg:col-span-3 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow micro flex flex-col" data-aos="fade-up">
+        <div class="flex items-center justify-between">
+          <h4 class="font-semibold">Coastal Map</h4>
+          <button id="recenter" class="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700">Recenter</button>
+        </div>
+        <div id="map" class="w-full rounded-lg overflow-hidden mt-2" style="height: 68vh"></div>
+        <p class="text-xs text-gray-500 mt-2">Click a pin to filter regional listings.</p>
+      </aside>
+
     </div>
   </main>
 
-  <!-- ========== Testimonials & CTA ========== -->
+  <!-- ========== Impact / Testimonials / CTA ========== -->
   <section class="container mx-auto max-w-7xl px-6 py-16">
     <div class="bg-gradient-to-r from-indigo-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-2xl p-8" data-aos="fade-up">
-      <h3 class="text-2xl font-extrabold mb-6">What Coastal Business Owners Say</h3>
+      <h3 class="text-2xl font-extrabold mb-6">Real Impact on the Coast</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <blockquote class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow micro">
           <p class="text-gray-700 dark:text-gray-200">“Coast Connect brought my guest house bookings back to life. Simple to use and local customers respond fast.”</p>
@@ -294,7 +380,7 @@
 
       <div>
         <h4 class="font-semibold mb-2">Contact</h4>
-        <p class="text-sm">Email: hello@coastconnect.example</p>
+        <p class="text-sm">Email: jumalesly01@gmail.com</p>
         <p class="text-sm">Mombasa, Kenya</p>
       </div>
     </div>
@@ -303,6 +389,11 @@
       © <span id="year"></span> Coast Connect · Built for the Coast.
     </div>
   </footer>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 hidden z-[60]">
+    <div class="glass dark:glass-dark px-4 py-2 rounded-xl shadow text-sm"></div>
+  </div>
 
   <!-- ========== External Scripts ========== -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
@@ -316,7 +407,14 @@
     const els = (sel) => Array.from(document.querySelectorAll(sel));
     const formatK = (n) => n >= 1000 ? (n/1000).toFixed(1) + 'k' : ''+n;
 
-    // ---------- Dark mode (auto + toggle) ----------
+    const showToast = (msg, ms=2200) => {
+      const t = el('#toast');
+      if (!t) return; const box = t.firstElementChild; box.textContent = msg; t.classList.remove('hidden');
+      gsap.fromTo(t, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .35, ease: 'power3.out' });
+      setTimeout(()=> gsap.to(t, { opacity: 0, y: 20, duration: .35, onComplete: ()=>{ t.classList.add('hidden'); t.style.opacity = 1; } }), ms);
+    };
+
+    // ---------- Dark mode ----------
     (function setupDark(){
       const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
       const stored = localStorage.getItem('cc-dark');
@@ -341,7 +439,12 @@
     // ---------- AOS init ----------
     AOS.init({ once: true, duration: 850, easing: 'ease-in-out' });
 
-    // ---------- Typewriter (phrases rotation) ----------
+    // ---------- Loader hide ----------
+    window.addEventListener('load', () => {
+      gsap.to('#loader', { opacity: 0, duration: .45, onComplete: () => el('#loader')?.remove() });
+    });
+
+    // ---------- Typewriter & rotating hero category pills ----------
     const phrases = [
       "Connect. Serve. Uplift the Coast.",
       "Empower Locals. Inspire Change.",
@@ -354,13 +457,10 @@
     function showPhrase(){
       const txt = phrases[pIndex++];
       typeEl.textContent = '';
-      let i = 0;
+      let i = 0; const speed = 28 + Math.floor(Math.random()*6);
       const t = setInterval(()=> {
-        if (i <= txt.length) {
-          typeEl.textContent = txt.slice(0,i);
-          i++;
-        } else { clearInterval(t); }
-      }, 28);
+        if (i <= txt.length) { typeEl.textContent = txt.slice(0,i); i++; } else { clearInterval(t); }
+      }, speed);
       if (pIndex >= phrases.length) pIndex = 0;
     }
     showPhrase();
@@ -387,38 +487,98 @@
 
         CATEGORIES = Array.isArray(catData.categories) ? catData.categories : (catData || []);
         LISTINGS = Array.isArray(listData.listings) ? listData.listings : (listData || []);
+
+        // soft normalize
+        LISTINGS = LISTINGS.map((l,i)=> ({
+          id: l.id ?? i+1,
+          title: l.title ?? 'Untitled',
+          image: l.image ?? 'images/listings/placeholder.webp',
+          region: l.region ?? '',
+          category: l.category ?? '',
+          categoryId: l.categoryId ?? '',
+          subcategory: l.subcategory ?? '',
+          excerpt: l.excerpt ?? '',
+          url: l.url ?? 'listing_detail.html',
+          reviews: l.reviews ?? 0,
+          featured: !!l.featured,
+          tier: (l.tier || '').toLowerCase(), // gold | silver | bronze | ''
+          lat: l.lat ?? null,
+          lng: l.lng ?? null,
+        }));
       } catch (err) {
         console.error('Failed to load JSON:', err);
-        // fallback to minimal sets (if you want, inject sample)
+        showToast('Could not load data. Using empty state.');
         CATEGORIES = CATEGORIES.length ? CATEGORIES : [];
         LISTINGS = LISTINGS.length ? LISTINGS : [];
       }
     }
 
-    // ---------- Render quick categories (right hero) ----------
-    function renderQuickCategories(){
-      const container = el('#quick-categories');
-      container.innerHTML = '';
-      CATEGORIES.slice(0,12).forEach(cat => {
+    // ---------- Marquee ----------
+    function renderMarquee(){
+      const bar = el('#cat-marquee');
+      if (!bar) return;
+      bar.innerHTML = '';
+      const items = CATEGORIES.slice(0,18).map(c=> c.title || c.name || c.id);
+      if (!items.length) return;
+      const loop = [...items, ...items];
+      loop.forEach((t)=>{
+        const pill = document.createElement('span');
+        pill.className = 'px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur text-sm';
+        pill.textContent = t;
+        bar.appendChild(pill);
+      });
+      const totalWidth = bar.scrollWidth;
+      gsap.to(bar, { x: () => -(totalWidth/2), ease: 'none', duration: 18, repeat: -1 });
+    }
+
+    // ---------- Hero Rotator ----------
+    let rotatorIdx = 0, rotatorTimer = null;
+    function renderHeroRotator(){
+      const box = el('#hero-rotator');
+      if (!box) return;
+      box.innerHTML = '';
+      const pick = (CATEGORIES || []).slice(0, 8);
+      pick.forEach((cat, i) => {
         const btn = document.createElement('button');
         btn.className = 'w-full text-left px-3 py-2 rounded-lg flex items-center gap-3 hover:bg-indigo-50 dark:hover:bg-gray-700 micro';
         btn.innerHTML = `
           <img src="${cat.image || 'images/categories/placeholder.webp'}" alt="${cat.title}" class="w-10 h-10 rounded-lg object-cover"/>
           <div>
-            <div class="font-semibold text-sm">${cat.title}</div>
+            <div class="font-semibold text-sm">${cat.title || cat.name || 'Category'}</div>
             <div class="text-xs text-gray-500 dark:text-gray-300">${cat.description ? cat.description.slice(0,60) : ''}</div>
-          </div>
-        `;
-        btn.addEventListener('click', () => {
-          applyFilter({ category: cat.id || cat.title });
-          // scroll to listings
-          window.scrollTo({ top: document.querySelector('#listings-grid').getBoundingClientRect().top + window.scrollY - 120, behavior: 'smooth' });
-        });
-        container.appendChild(btn);
+          </div>`;
+        btn.addEventListener('click', () => applyFilter({ category: cat.id || cat.title || cat.name }));
+        box.appendChild(btn);
       });
+
+      // rotation animation
+      function cycle(){
+        const items = Array.from(box.children);
+        if (!items.length) return;
+        const first = items[0];
+        gsap.to(first, { height: 0, opacity: 0, margin: 0, duration: .35, ease: 'power2.in', onComplete: ()=>{
+          first.remove();
+          const nextCat = CATEGORIES[(rotatorIdx++) % CATEGORIES.length] || {};
+          const btn = document.createElement('button');
+          btn.className = 'w-full text-left px-3 py-2 rounded-lg flex items-center gap-3 hover:bg-indigo-50 dark:hover:bg-gray-700 micro';
+          btn.innerHTML = `
+            <img src="${nextCat.image || 'images/categories/placeholder.webp'}" alt="${nextCat.title || 'Category'}" class="w-10 h-10 rounded-lg object-cover"/>
+            <div>
+              <div class="font-semibold text-sm">${nextCat.title || nextCat.name || 'Category'}</div>
+              <div class="text-xs text-gray-500 dark:text-gray-300">${nextCat.description ? nextCat.description.slice(0,60) : ''}</div>
+            </div>`;
+          btn.addEventListener('click', () => applyFilter({ category: nextCat.id || nextCat.title || nextCat.name }));
+          btn.style.height = '0px'; btn.style.opacity = '0';
+          box.appendChild(btn);
+          gsap.to(btn, { height: '48px', opacity: 1, duration: .35, ease: 'power2.out' });
+        }});
+      }
+      rotatorTimer && clearInterval(rotatorTimer);
+      rotatorTimer = setInterval(cycle, 2200);
+      el('#start-rotator')?.addEventListener('click', ()=>{ cycle(); });
     }
 
-    // ---------- Render categories sidebar list (left) ----------
+    // ---------- Popular Categories list ----------
     function renderCategoriesList(){
       const container = el('#categories-list');
       container.innerHTML = '';
@@ -426,53 +586,54 @@
         container.innerHTML = '<div class="text-sm text-gray-500">No categories found.</div>';
         return;
       }
-      CATEGORIES.forEach(cat => {
+      const MAX = 40; // initial
+      (CATEGORIES.slice(0,MAX)).forEach(cat => {
         const li = document.createElement('div');
         li.className = 'flex items-start gap-3 p-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-gray-700 cursor-pointer micro';
         li.innerHTML = `
           <img src="${cat.image || 'images/categories/placeholder.webp'}" alt="${cat.title}" class="w-10 h-10 rounded-lg object-cover"/>
           <div class="flex-1">
             <div class="flex items-center justify-between">
-              <div class="font-semibold text-sm">${cat.title}</div>
+              <div class="font-semibold text-sm">${cat.title || cat.name}</div>
               <div class="text-xs text-gray-400">${cat.subcategories ? cat.subcategories.length : 0}</div>
             </div>
             <div class="text-xs text-gray-500 mt-1">${cat.description ? cat.description.slice(0,80) : ''}</div>
-            <div class="mt-2 flex flex-wrap gap-2">
-              ${(cat.subcategories || []).slice(0,6).map(s => `<span class="px-2 py-0.5 text-xs bg-indigo-50 dark:bg-gray-700 text-indigo-600 rounded-full">${s.name}</span>`).join('')}
-            </div>
-          </div>
-        `;
-        li.addEventListener('click', () => {
-          applyFilter({ category: cat.id || cat.title });
-        });
+            <div class="mt-2 flex flex-wrap gap-2">${(cat.subcategories || []).slice(0,6).map(s => `<span class='px-2 py-0.5 text-xs bg-indigo-50 dark:bg-gray-700 text-indigo-600 rounded-full'>${s.name}</span>`).join('')}</div>
+          </div>`;
+        li.addEventListener('click', () => applyFilter({ category: cat.id || cat.title || cat.name }));
         container.appendChild(li);
       });
-    }
 
-    // ---------- Fill region select based on listings regions ----------
-    function populateRegionSelects(){
-      const regions = new Set(LISTINGS.map(l => l.region).filter(Boolean));
-      const regionFilter = el('#region-filter');
-      const quickRegion = el('#region-filter'); // same for now
-      regions.forEach(r => {
-        const opt = document.createElement('option');
-        opt.value = r;
-        opt.textContent = r;
-        regionFilter.appendChild(opt);
-      });
-    }
-
-    // ---------- Render listings grid ----------
-    function renderListings(filtered = null){
-      const container = el('#listings-grid');
-      const arr = filtered || LISTINGS;
-      if (!arr.length) {
-        container.innerHTML = '<div class="text-center text-gray-500">No listings match your filters.</div>';
-        return;
+      // show more
+      el('#more-categories').onclick = () => {
+        const remain = CATEGORIES.slice(container.children.length);
+        remain.slice(0, 40).forEach(cat => {
+          const li = document.createElement('div');
+          li.className = 'flex items-start gap-3 p-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-gray-700 cursor-pointer micro';
+          li.innerHTML = `
+            <img src="${cat.image || 'images/categories/placeholder.webp'}" alt="${cat.title}" class="w-10 h-10 rounded-lg object-cover"/>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <div class="font-semibold text-sm">${cat.title || cat.name}</div>
+                <div class="text-xs text-gray-400">${cat.subcategories ? cat.subcategories.length : 0}</div>
+              </div>
+              <div class="text-xs text-gray-500 mt-1">${cat.description ? cat.description.slice(0,80) : ''}</div>
+            </div>`;
+          li.addEventListener('click', () => applyFilter({ category: cat.id || cat.title || cat.name }));
+          container.appendChild(li);
+        });
+        if (container.children.length >= CATEGORIES.length) el('#more-categories').setAttribute('disabled','true');
       }
-      container.innerHTML = arr.slice(0,24).map(item => `
-        <article class="bg-white dark:bg-gray-800 rounded-xl shadow micro overflow-hidden">
-          <img loading="lazy" src="${item.image || 'images/listings/placeholder.webp'}" alt="${item.title}" class="w-full h-36 object-cover"/>
+    }
+
+    // ---------- Card template ----------
+    function cardHTML(item){
+      const ribbon = item.tier === 'gold' ? 'ribbon ribbon-gold' : item.tier === 'silver' ? 'ribbon ribbon-silver' : item.tier === 'bronze' ? 'ribbon ribbon-bronze' : '';
+      const ribbonText = item.tier ? item.tier.toUpperCase() : (item.featured ? 'FEATURED' : '');
+      return `
+        <article class="relative bg-white dark:bg-gray-800 rounded-xl shadow micro overflow-hidden">
+          ${ ribbonText ? `<span class="${ribbon}">${ribbonText}</span>` : '' }
+          <img loading="lazy" src="${item.image}" alt="${item.title}" class="w-full h-36 object-cover"/>
           <div class="p-4">
             <div class="flex items-start justify-between gap-3">
               <div>
@@ -483,51 +644,109 @@
             </div>
             <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">${item.excerpt || ''}</p>
             <div class="mt-3 flex items-center justify-between">
-              <a href="${item.url || 'listing_detail.html'}" class="text-sm text-white bg-indigo-600 px-3 py-1 rounded">View</a>
+              <a href="${item.url}" class="text-sm text-white bg-indigo-600 px-3 py-1 rounded">View</a>
               <div class="text-xs text-gray-400">${item.reviews ? item.reviews + ' reviews' : ''}</div>
             </div>
           </div>
-        </article>
-      `).join('');
+        </article>`;
     }
 
-    // ---------- Featured listings (swiper) ----------
-    let swiperInstance = null;
-    function renderFeatured(){
-      const wrapper = el('#swiper-wrapper');
-      const featured = LISTINGS.filter(l => l.featured).slice(0,8);
-      if (!featured.length) {
-        wrapper.innerHTML = `<div class="swiper-slide flex items-center justify-center text-gray-500">No featured listings yet.</div>`;
-      } else {
-        wrapper.innerHTML = featured.map(item => `
-          <div class="swiper-slide p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow micro overflow-hidden flex gap-4">
-              <img loading="lazy" src="${item.image || 'images/listings/placeholder.webp'}" alt="${item.title}" class="w-40 h-32 object-cover rounded-l-xl"/>
-              <div class="p-4 flex-1">
-                <h4 class="font-semibold">${item.title}</h4>
-                <p class="text-xs text-gray-500 dark:text-gray-300">${item.excerpt || ''}</p>
-                <div class="mt-3 flex items-center justify-between">
-                  <a href="${item.url || 'listing_detail.html'}" class="text-sm bg-indigo-600 text-white px-3 py-1 rounded">View</a>
-                  <div class="text-xs text-gray-400">${item.region || ''}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `).join('');
-      }
+    // ---------- Legendary Gold Swiper with Staggered Animation ----------
+    function renderFeatured() {
+    const wrapper = el('#gold-swiper-wrapper');
+    const featured = LISTINGS.filter(l => l.tier === 'gold' || l.featured);
 
-      // init or re-init swiper
-      setTimeout(()=> {
-        if (swiperInstance) swiperInstance.destroy(true, true);
-        swiperInstance = new Swiper('.mySwiper', {
-          slidesPerView: 1,
-          spaceBetween: 16,
-          loop: true,
-          autoplay: { delay: 4200, disableOnInteraction: false },
-          pagination: { el: '.swiper-pagination', clickable: true },
-          breakpoints: { 768: { slidesPerView: 1.3 }, 1024: { slidesPerView: 1.6 } }
+    if (!featured.length) {
+        wrapper.innerHTML = `<div class='swiper-slide flex items-center justify-center text-gray-500'>No featured listings yet.</div>`;
+        return;
+    }
+
+    // Populate slides with animation wrapper
+    wrapper.innerHTML = featured.map((item, index) => `
+        <div class='swiper-slide p-2'>
+        <div class='bg-white dark:bg-gray-800 rounded-2xl shadow micro overflow-hidden flex gap-4 relative transform scale-90 opacity-0 transition-transform transition-opacity duration-500 delay-${index*100}'>
+            <span class='ribbon ribbon-gold'>GOLD</span>
+            <img loading='lazy' src='${item.image || "images/listings/placeholder.webp"}' alt='${item.title}' class='w-32 h-24 md:w-40 md:h-32 object-cover rounded-l-xl'/>
+            <div class='p-3 flex-1'>
+            <h4 class='font-semibold text-sm md:text-base'>${item.title}</h4>
+            <p class='text-xs text-gray-500 dark:text-gray-300 line-clamp-2'>${item.excerpt || ''}</p>
+            <div class='mt-2 flex items-center justify-between'>
+                <a href='${item.url || "listing_detail.html"}' class='text-xs md:text-sm bg-indigo-600 text-white px-2 py-1 rounded'>View</a>
+                <div class='text-xs text-gray-400'>${item.region || ''}</div>
+            </div>
+            </div>
+        </div>
+        </div>
+    `).join('');
+
+    // Animate cards after DOM update
+    setTimeout(() => {
+        wrapper.querySelectorAll('.swiper-slide > div').forEach((el, i) => {
+        setTimeout(() => {
+            el.classList.remove('scale-90', 'opacity-0');
+            el.classList.add('scale-100', 'opacity-100');
+        }, i * 150);
         });
-      }, 80);
+    }, 50);
+
+    // Destroy previous Swiper if exists
+    if (window.goldSwiper) goldSwiper.destroy(true, true);
+
+    // Initialize Swiper
+    window.goldSwiper = new Swiper('.goldSwiper', {
+        slidesPerView: 5,
+        spaceBetween: 16,
+        loop: true,
+        speed: 2500,
+        autoplay: { delay: 0, disableOnInteraction: false }, // continuous
+        freeMode: true,
+        freeModeMomentum: false,
+        breakpoints: {
+        320: { slidesPerView: 1.2 },
+        640: { slidesPerView: 2.2 },
+        768: { slidesPerView: 3.2 },
+        1024: { slidesPerView: 5 },
+        }
+    });
+    }
+
+    // Call this after LISTINGS data is loaded
+    renderFeatured();
+
+
+    // ---------- Tiers rendering (Silver, Bronze) ----------
+    let visibleSilver = 8, visibleBronze = 8;
+    function renderTiers(){
+      const silver = LISTINGS.filter(l=> l.tier==='silver');
+      const bronze = LISTINGS.filter(l=> l.tier==='bronze');
+
+      const fill = (id, items, visible)=>{
+        const box = el(id);
+        if (!box) return;
+        if (!items.length) { box.innerHTML = '<div class="text-sm text-gray-500">No partners yet.</div>'; return; }
+        const subset = items.slice(0,visible);
+        const html = subset.map(item => cardHTML(item)).join('');
+        box.innerHTML = html;
+        els(`${id} article`).forEach((node, i)=> {
+          gsap.from(node, { y: 16, opacity: 0, duration: .45, delay: i*0.04, ease: 'power2.out' });
+        });
+      };
+
+      fill('#tier-silver', silver, visibleSilver);
+      fill('#tier-bronze', bronze, visibleBronze);
+
+      el('#more-silver').onclick = ()=> { visibleSilver += 6; fill('#tier-silver', silver, visibleSilver); };
+      el('#more-bronze').onclick = ()=> { visibleBronze += 6; fill('#tier-bronze', bronze, visibleBronze); };
+    }
+
+    // ---------- Unified listings grid ----------
+    function renderListings(filtered = null){
+      const container = el('#listings-grid');
+      const arr = filtered || LISTINGS;
+      if (!arr.length) { container.innerHTML = '<div class="text-center text-gray-500">No listings match your filters.</div>'; return; }
+      const score = (l)=> (l.tier==='gold'?3:l.tier==='silver'?2:l.tier==='bronze'?1:0) + (l.featured?0.25:0);
+      const sorted = [...arr].sort((a,b)=> score(b)-score(a));
+      container.innerHTML = sorted.slice(0,24).map(cardHTML).join('');
     }
 
     // ---------- Map (Leaflet) ----------
@@ -543,207 +762,144 @@
     function initMap(){
       map = L.map('map', { scrollWheelZoom: false }).setView([-3.5, 39.8], 7);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
+
       COUNTY_PINS.forEach(pin => {
         const marker = L.marker(pin.coords).addTo(map);
         marker.bindPopup(`<div class="text-sm font-semibold">${pin.popup}</div><div class="text-xs text-gray-500">Click to filter</div>`);
-        marker.on('click', () => {
-          applyFilter({ region: pin.id });
-        });
+        marker.on('click', () => { applyFilter({ region: pin.id }); });
       });
     }
 
     // ---------- Filters & search ----------
     function applyFilter({ category=null, region=null, q=null } = {}){
-      // set selects UI
-      if (category) {
-        const catSelect = el('#category-filter');
-        if (catSelect) catSelect.value = category;
-      }
-      if (region) {
-        const regSelect = el('#region-filter');
-        if (regSelect) regSelect.value = region;
-      }
-      // get global filters
+      if (category) { const catSelect = el('#category-filter'); if (catSelect) catSelect.value = category; }
+      if (region) { const regSelect = el('#region-filter'); if (regSelect) regSelect.value = region; }
       const c = (category || el('#category-filter').value || '').trim();
       const r = (region || el('#region-filter').value || '').trim();
-      const qv = (q || el('#quick-search').value || el('#quick-search').value || el('#search-query')?.value || '').trim().toLowerCase();
+      const qv = (q || el('#quick-search').value || '').trim().toLowerCase();
 
       const filtered = LISTINGS.filter(l => {
         let ok = true;
-        if (c) {
-          ok = ok && ((l.category && (l.category === c || l.category.toLowerCase() === c.toLowerCase())) ||
-                     (l.categoryId && l.categoryId === c) ||
-                     (l.subcategory && l.subcategory === c));
-        }
+        if (c) { ok = ok && ((l.category && (l.category === c || l.category.toLowerCase() === c.toLowerCase())) || (l.categoryId && l.categoryId === c) || (l.subcategory && l.subcategory === c)); }
         if (r) ok = ok && (l.region && l.region.toLowerCase() === r.toLowerCase());
-        if (qv) {
-          ok = ok && (
-            (l.title && l.title.toLowerCase().includes(qv)) ||
-            (l.excerpt && l.excerpt.toLowerCase().includes(qv)) ||
-            (l.category && l.category.toLowerCase().includes(qv))
-          );
-        }
+        if (qv) ok = ok && ((l.title && l.title.toLowerCase().includes(qv)) || (l.excerpt && l.excerpt.toLowerCase().includes(qv)) || (l.category && l.category.toLowerCase().includes(qv)));
         return ok;
       });
 
       renderListings(filtered);
-      // scroll to results if they clicked category quickly
-      if (document.querySelector('#listings-grid')) {
-        document.querySelector('#listings-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      document.querySelector('#listings-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // event binds for dropdowns and search
     function bindFilters(){
       el('#category-filter').addEventListener('change', () => applyFilter({}));
       el('#region-filter').addEventListener('change', () => applyFilter({}));
       el('#quick-search').addEventListener('input', () => {
-        // simple category search: also find categories matching query
         const qv = el('#quick-search').value.trim().toLowerCase();
-        if (!qv) {
-          renderQuickCategories();
-          renderFeatured();
-          renderListings();
-          return;
-        }
-        const matched = CATEGORIES.filter(c => (c.title + ' ' + (c.description||'')).toLowerCase().includes(qv));
+        if (!qv) { renderHeroRotator(); renderFeatured(); renderListings(); return; }
+        const matched = CATEGORIES.filter(c => ((c.title||'') + ' ' + (c.description||'')).toLowerCase().includes(qv));
         if (matched.length) {
-          // show top 6 matched in quick panel
-          const container = el('#quick-categories');
+          const container = el('#hero-rotator');
           container.innerHTML = matched.slice(0,10).map(cat => `
             <button class="w-full text-left px-3 py-2 rounded-lg flex items-center gap-3 hover:bg-indigo-50 dark:hover:bg-gray-700 micro" data-cat="${cat.id || cat.title}">
               <img src="${cat.image || 'images/categories/placeholder.webp'}" alt="${cat.title}" class="w-10 h-10 rounded-lg object-cover"/>
               <div>
-                <div class="font-semibold text-sm">${cat.title}</div>
+                <div class="font-semibold text-sm">${cat.title || cat.name}</div>
                 <div class="text-xs text-gray-500 dark:text-gray-300">${cat.description ? cat.description.slice(0,60) : ''}</div>
               </div>
             </button>
           `).join('');
-          // add click delegation
-          container.querySelectorAll('button[data-cat]').forEach(b => {
-            b.addEventListener('click', () => applyFilter({ category: b.dataset.cat }));
-          });
+          container.querySelectorAll('button[data-cat]').forEach(b => { b.addEventListener('click', () => applyFilter({ category: b.dataset.cat })); });
         } else {
           applyFilter({ q: qv });
         }
       });
 
-      // clear filters
-      el('#clear-filters').addEventListener('click', () => {
-        el('#category-filter').value = '';
-        el('#region-filter').value = '';
-        el('#quick-search').value = '';
-        renderQuickCategories();
-        renderListings();
-        renderFeatured();
+      el('#more-categories').addEventListener('click', () => {}); // handled inside render
+
+      window.addEventListener('keydown', (e)=>{
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='k') { e.preventDefault(); el('#quick-search').focus(); showToast('Search ready (⌘/Ctrl + K)'); }
       });
-
-      // region filter in top search form (if exists)
-      const regionFilter = el('#region');
-      if (regionFilter) {
-        // not used in this build but keep compatibility
-        regionFilter.addEventListener('change', () => applyFilter({ region: regionFilter.value }));
-      }
     }
 
-    // ---------- Counters animation ----------
+    // ---------- Counters ----------
     function animateCounter(id, target, duration=1100){
-      const elc = document.getElementById(id);
-      if (!elc) return;
-      let start = 0;
-      const step = Math.ceil(target / (duration / 20));
-      const t = setInterval(()=> {
-        start += step;
-        if (start >= target) {
-          start = target;
-          clearInterval(t);
-        }
-        elc.textContent = formatK(start);
-      }, 20);
+      const elc = document.getElementById(id); if (!elc) return;
+      let start = 0; const step = Math.max(1, Math.ceil(target / (duration / 22)));
+      const t = setInterval(()=> { start += step; if (start >= target) { start = target; clearInterval(t); } elc.textContent = formatK(start); }, 22);
     }
 
-    // ---------- Boot sequence ----------
+    // ---------- Equal-Height Columns (on resize) ----------
+    function equalizeColumns(){
+      // The three main columns: Popular (left), Priority (middle), Map (right)
+      const left = document.querySelector('#popular-categories');
+      const mid = document.querySelector('#priority-listings');
+      const right = document.querySelector('aside #map')?.parentElement?.parentElement;
+      if (!left || !mid || !right) return;
+      const maxH = Math.max(left.offsetHeight, mid.offsetHeight, right.offsetHeight);
+      left.style.minHeight = right.style.minHeight = mid.style.minHeight = maxH + 'px';
+    }
+
+    // ---------- Boot ----------
     (async function init(){
-      // load data
       await loadData();
 
-      // Provide some graceful defaults if JSON not structured as expected
-      if (!CATEGORIES.length) {
-        // you told me you have categories.json — but in case it's nested differently:
-        // attempt to read window.CATEGORIES injected or fallback to sample
-        CATEGORIES = window.CATEGORIES || [];
-      }
-      if (!LISTINGS.length) {
-        LISTINGS = window.LISTINGS || [];
-      }
+      if (!CATEGORIES.length) { CATEGORIES = window.CATEGORIES || []; }
+      if (!LISTINGS.length) { LISTINGS = window.LISTINGS || []; }
 
-      // Render UI pieces
-      renderQuickCategories();
+      renderHeroRotator();
       renderCategoriesList();
-      populateRegionSelects();
+      renderMarquee();
       renderFeatured();
+      renderTiers();
       renderListings();
 
-      // init map
+      // populate selects
+      const catSelect = el('#category-filter');
+      CATEGORIES.forEach(c => { const o = document.createElement('option'); o.value = c.title || c.id || c.name; o.textContent = c.title || c.name; catSelect.appendChild(o); });
+      const regionSel = el('#region-filter');
+      Array.from(new Set(LISTINGS.map(l => l.region).filter(Boolean))).forEach(r => { const o = document.createElement('option'); o.value = r; o.textContent = r; regionSel.appendChild(o); });
+
+      // Map
       initMap();
 
-      // bindings
-      bindFilters();
-
-      // set year
+      // Counters
       el('#year').textContent = new Date().getFullYear();
-
-      // animate counters from listings length and regions count
       const businessCount = LISTINGS.length || 0;
       const regionsCount = new Set(LISTINGS.map(l => l.region).filter(Boolean)).size || 6;
-      const clientsCount = Math.max(1200, Math.round(businessCount*12)); // example alg
+      const clientsCount = Math.max(1200, Math.round(businessCount*12));
       animateCounter('count-businesses', businessCount);
       animateCounter('count-regions', regionsCount);
       animateCounter('count-clients', clientsCount);
 
-      // fill select options for categories (top)
-      const catSelect = el('#category-filter');
-      if (catSelect && CATEGORIES.length) {
-        CATEGORIES.forEach(c => {
-          const o = document.createElement('option');
-          o.value = c.title || c.id;
-          o.textContent = c.title;
-          catSelect.appendChild(o);
-        });
-      }
+      // Equalize columns on load + resize
+      setTimeout(equalizeColumns, 200);
+      window.addEventListener('resize', () => { setTimeout(equalizeColumns, 120); });
 
-      // quick-populate #region-filter
-      const regionSet = new Set(LISTINGS.map(l => l.region).filter(Boolean));
-      const regionSel = el('#region-filter');
-      if (regionSel && regionSet.size) {
-        regionSet.forEach(r => {
-          const o = document.createElement('option');
-          o.value = r;
-          o.textContent = r;
-          regionSel.appendChild(o);
-        });
-      }
+      // subtle hero float
+      gsap.to('.glass', { y: -2, duration: 2, repeat: -1, yoyo: true, ease: 'sine.inOut' });
 
-      // wire quick category buttons (delegated)
-      document.querySelectorAll('#quick-categories button').forEach(b => {
-        b.addEventListener('click', () => {
-          const title = b.querySelector('.font-semibold')?.textContent;
-          if (title) applyFilter({ category: title });
-        });
-      });
-
-      // if no JSON available, show helpful console message
-      if (!CATEGORIES.length || !LISTINGS.length) {
-        console.warn('Categories or Listings are empty — ensure categories.json and listings.json exist and contain arrays named "categories" and "listings".');
-      }
+      bindFilters();
     })();
   </script>
 
-  <!-- ========== AOS & extras ========== -->
+  <!-- ========== AOS refresh ========== -->
   <script>
-    // initialize any AOS changes after dynamic content gets injected
     setTimeout(()=> AOS.refresh(), 900);
   </script>
 
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Coast Connect",
+    "url": "https://example.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://example.com/listings.html?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
 </body>
 </html>
